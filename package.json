@@ -1,13 +1,14 @@
 {
   "name": "snippets",
   "version": "1.0.0",
-  "description": "Create and convert snippets for your preferred code editor",
+  "description": "Create, convert, and download snippets for your preferred code editor",
   "scripts": {
     "start": "node ./app"
   },
   "author": "reimagin8d",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^1.0.3",
     "body-parser": "^1.18.2",
     "bootstrap": "^4.0.0",
     "connect-mongo": "^2.0.1",
