@@ -2,11 +2,11 @@ extends layout
 
 block content
     #library-container.container.page-container
-        .row
+        .row.justify-content-center
             - var snips = snippets;
             - console.log(`Library snips? ${snips}`);
-            if snips.length > 0
-                each snip in snips.length
+            if snips.length
+                each snip in snips
                     .col-sm-4
                         .card.bg-dark.mb-5
                             .card-header.text-info
@@ -23,7 +23,9 @@ block content
                             .card-footer.text-right                            
                                 a.card-link.text-green.hover-ltgrey(href='#', target='_blank') add
             else
-                .col-12
-                    h1.text-center No snippets
+                .col-md-6.p-t-2.text-center
+                    i.icn-person.material-icons error
+                    h1 oops!
+                    p.lead.m-t-2 No snippets found for #{editor}
 
 

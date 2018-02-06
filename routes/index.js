@@ -109,7 +109,7 @@ router.get('/library/:editor', (req, res, next) => {
         .exec((err, snippets) => {
             if (err) return next(err);
             // console.log(`Found snippets: ${snippets}`);
-            res.render('library', { title: 'Library | Snippets', desc, canonical: `${path}library`, bgColor: '#ffffff', snippets});
+            res.render('library', { title: 'Library | Snippets', desc, canonical: `${path}library`, bgColor: '#ffffff', snippets, editor});
         });
 });
 
