@@ -3,6 +3,7 @@
 const express = require('express');
 const router = express.Router();
 var User = require('../models/user');
+var Snippet = require('../models/snippet');
 var mid = require('../middleware');
 
 const path = 'http://localhost:3000'
@@ -12,56 +13,70 @@ const date = new Date();
 const year = date.getFullYear();
 
 
+// GET /register
+router.get('/save-snippet', (req, res, next) => {
+    return res.render('library', { title: 'Library', bgColor: '#ffffff' });
+});
+
 // POST /save-snippet
 router.post('/save-snippet', (req, res, next) => {
-    if (req.body.editor && 
-        req.body.scope && 
-        req.body.description && 
-        req.body.trigger && 
-        req.body.content)
-    {
-        var snippetData = {
-            userId: req.session.userId ? req.session.userId : '',
-            editor: req.body.editor,
-            scope: req.body.scope,
-            description: req.body.description,
-            trigger: req.body.trigger,
-            content: req.body.content
-        };
+    console.log('Save snippet route called!');
 
-       
-        // use schema's  `create` method to insert document in Mongo
-        Snippet.create(snippetData, (error, snippet) => {
+    console.log(`req.body? ${req.body.code_editor}`);
 
-            console.log(`Created snippet! ${snippet}`);
+    var snippetData = {
+        userId: req.session.userId ? req.session.userId : '',
+        editor: req.body.code_editor,
+        scope: req.body.code_scope,
+        description: req.body.code_description,
+        trigger: req.body.code_trigger,
+        content: req.body.snippet_output
+    };
+
+   
+    // use schema's  `create` method to insert document in Mongo
+    Snippet.create(snippetData, (error, snippet) => {
+        
+        if (error) {
+
+            console.log(`Error creating snippet! ${error}`);
+
+            // return error response
+            res.send({
+                success: null,
+                error: `There was an error saving this snippet. ${error}`,
+                snippet: snippet
+            });
+
+            // return next(error);
+        } else {
             
-            if (error) {
+            console.log(`Created snippet! ${snippet}`);
 
-                // return error response
-                res.send({
-                    success: null,
-                    error: 'There was an error saving this snippet.',
-                    snippet: snippet
-                });
+            // return success response
+            res.send({
+                success: `Successfully saved snippet.`,
+                error: null,
+                snippet: snippet
+            });
 
-                // return next(error);
-            } else {
-                
-                // return success response
-                res.send({
-                    success: `Successfully saved snippet.`,
-                    error: null,
-                    snippet: snippet
-                });
+        }
+    });
+    // if (req.body.code_editor && 
+    //     req.body.code_scope && 
+    //     req.body.code_description && 
+    //     req.body.code_trigger && 
+    //     req.body.snippet_output)
+    // {
+        
 
-            }
-        });
+    // } else {
 
-    } else {
-        const err = new Error('All fields required.')
-        err.status = 400;
-        return next(err);
-    }
+    //     console.log('Error!  All fields required!!');
+    //     const err = new Error('All fields required.')
+    //     err.status = 400;
+    //     return next(err);
+    // }
 });
 
 // GET /logout

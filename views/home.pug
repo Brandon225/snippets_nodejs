@@ -8,11 +8,11 @@ block content
             label#migration-btn.btn.btn-primary.btn-brblue Migration
                 input#migration(type='radio', name='options', data-type='migration', autocomplete='off')
 
-    //- // CONVERSION CONTAINER
-    #conversion-container.container.mt-4
+    //- // CREATION CONTAINER
+    #creation-container.container.mt-4
         h4.lead.text-white.text-center.my-5 Create code snippets formatted for your code editor!
         hr
-        form#code-form.row
+        form#code-form.row(action="/save-snippet", method="POST")
             .col-sm
                 // Allow user to select From text editor
                 .form-group

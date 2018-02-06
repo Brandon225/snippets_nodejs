@@ -149,7 +149,7 @@ footer {
 
 /****** CONTENT STYLES ******/
 .page-container {
-  margin-top: 116; }
+  margin-top: 116px; }
 
 #about-container .row:first-of-type, #details-container .row:first-of-type {
   min-height: 100vh; }
@@ -178,7 +178,7 @@ input {
 #migration-container, #migration-container .scope-select {
   display: none; }
 
-#conversion-container, #migration-container {
+#creation-container, #migration-container {
   min-height: 100vh; }
 
 .share-overlay {

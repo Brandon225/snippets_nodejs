@@ -64,24 +64,34 @@ $('#converter-form').submit(function(event)
         ////console.log('Convert from is atom!');
 
         var snipObj = parseAtom(snipText);
+        console.log(`parseAtom snipObj? ${snipObj.error}`);
+        
         if (snipObj)
         {
-            if (to === 'sublime')
+            if (!snipObj.error) 
             {
-                populateToText('textarea[name=convert_to_text]', createSublime(snipObj.content, snipObj.trigger, snipObj.scope, snipObj.description));
-            }
+                if (to === 'sublime')
+                {
+                    populateToText('textarea[name=convert_to_text]', createSublime(snipObj.content, snipObj.trigger, snipObj.scope, snipObj.description));
+                }
 
-            if (to === 'brackets')
-            {
-                populateToText('textarea[name=convert_to_text]', createBrackets(snipObj.content, snipObj.trigger, snipObj.scope, snipObj.description));
-            }
+                if (to === 'brackets')
+                {
+                    populateToText('textarea[name=convert_to_text]', createBrackets(snipObj.content, snipObj.trigger, snipObj.scope, snipObj.description));
+                }
 
-            if (to === 'visual_code')
-            {
-                console.log('snipObj content? ', snipObj.content);
+                if (to === 'visual_code')
+                {
+                    console.log('snipObj content? ', snipObj.content);
 
-                populateToText('textarea[name=convert_to_text]', createVisualCode(snipObj.content, snipObj.trigger, snipObj.scope, snipObj.description));
+                    populateToText('textarea[name=convert_to_text]', createVisualCode(snipObj.content, snipObj.trigger, snipObj.scope, snipObj.description));
+                }
+            } else {
+                
+                error = true;
+                toggleInputError('#from-fg', true, 'atom');
             }
+            
         } else {
             error = true;
             toggleInputError('#from-fg', true, 'atom');
@@ -329,7 +339,7 @@ function parseAtom(snipText)
         snipText = $.trim(snipText);
         // console.log('SnipText? ', snipText);
         var snippet = snipText.split('\n');
-        // console.log('snippet? ', snippet);
+        console.log('snippet? ', snippet);
         for (var i = 0; i < snippet.length; i++)
         {
             var row = $.trim(snippet[i]);
@@ -351,7 +361,6 @@ function parseAtom(snipText)
 
             } else if (i === snippet.length-1)
             {
-
                 if (snippet.length > 4)
                 {
                     var content = '';
@@ -359,16 +368,25 @@ function parseAtom(snipText)
                     {
                         var contentRow = snippet[idx];
 
-                        //console.log('contentRow? ' + contentRow + ' idx? ' + idx);
+                        // console.log('contentRow? ' + contentRow + ' idx? ' + idx);
                         if (idx === 3)
                         {
                             contentRow = contentRow.split(`":`);
 
-                            // console.log('contentRow: ', contentRow[1]);
+                            console.log(`idx 3 contentRow: ${contentRow}`);
+                            
+                            try {
 
-                            // var updatedRow = $.trim(row.replace(value[1], ''));
+                                content += $.trim(removeTripleQuotes(contentRow[1]));
 
-                            content += $.trim(removeTripleQuotes(contentRow[1]));
+                            } catch (error) {
+
+                                // Atom snippet doesn't have the scope (first line)
+                                const err = new Error('Missing snippet scope!');
+                                err.status = 401;
+                                snipObj.error = err;
+                                return snipObj;
+                            }
 
                         } else {
 
