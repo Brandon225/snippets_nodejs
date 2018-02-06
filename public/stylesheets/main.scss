@@ -5,11 +5,12 @@ $trublack: #080808;
 $red: #D85360;
 $green: #85B861;
 $blue: #51b6c3;
-// $blue: #5daef2;
+$blue2: #5daef2;
 $yellow: #C6884F;
 $brblue: #4fb1be;
-// $yellow: #c775df;
+$purple: #c775df;
 $ltgrey: #9d9d9d;
+$dkgrey: #3f3f3f;
 
 /****** TEXT STYLES ******/
 .text-black
@@ -20,6 +21,11 @@ $ltgrey: #9d9d9d;
 .text-trueblack
 {
     color: $trublack;
+}
+
+.text-dkgrey
+{
+    color: $dkgrey;
 }
 
 .text-red
@@ -303,7 +309,7 @@ footer
     // margin-top: 60px;
 }
 
-#about-container, #details-container
+#about-container, #details-container, .page-container
 {
     .row:first-of-type
     {

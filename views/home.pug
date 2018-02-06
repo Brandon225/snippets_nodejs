@@ -4,7 +4,7 @@ block content
     .container.page-container.text-center
         .btn-group.btn-group-toggle.mx-auto(data-toggle='buttons')
             label.btn.btn-primary.btn-brblue.active Creation
-                input#conversion-btn(type='radio', name='options', data-type='conversion', autocomplete='off', checked)
+                input#creation-btn(type='radio', name='options', data-type='creation', autocomplete='off', checked)
             label#migration-btn.btn.btn-primary.btn-brblue Migration
                 input#migration(type='radio', name='options', data-type='migration', autocomplete='off')
 
@@ -101,8 +101,8 @@ block content
                     input#code-trigger.text-yellow.custom-input(type='text', name='code_trigger', required='')
                 // Allow user to select To text editor
                 #code-content-fg.form-group
-                    label.text-white(for='code_content') Code
-                    textarea#code-content.text-yellow(name='code_content', rows='5', required='')
+                    label.text-white(for='code_text') Code
+                    textarea#code-content.text-yellow(name='code_text', rows='5', required='')
             .col-sm
                 // Allow user to select To text editor
                 .form-group

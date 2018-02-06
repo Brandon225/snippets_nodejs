@@ -13,9 +13,15 @@ const date = new Date();
 const year = date.getFullYear();
 
 
-// GET /register
-router.get('/save-snippet', (req, res, next) => {
-    return res.render('library', { title: 'Library', bgColor: '#ffffff', scroll: 'scroll', scrollTarget: '#sidebar-content-lib'});
+// GET /library
+router.get('/library', (req, res, next) => {
+
+    Snippet.find({})
+        .exec((err, snippets) => {
+            if (err) return next(err);
+            console.log(`Found snippets: ${snippets}`);
+            res.render('library', { title: 'Library', bgColor: '#ffffff', snippets});
+        });
 });
 
 // POST /save-snippet
@@ -33,6 +39,7 @@ router.post('/save-snippet', (req, res, next) => {
         scope: req.body.code_scope,
         description: req.body.code_description,
         trigger: req.body.code_trigger,
+        code: req.body.code_text,
         content: req.body.snippet_output
     };
 
@@ -117,7 +124,7 @@ router.post('/login', (req, res, next) => {
             } else {
 
                 req.session.userId = user._id;                
-                return res.redirect('/profile');
+                return res.redirect('/');
             }
         });
         
@@ -157,7 +164,6 @@ router.post('/register', (req, res, next) => {
             codeEditor: req.body.codeEditor,
             password: req.body.password
         };
-
        
         // use schema's  `create` method to insert document in Mongo
         User.create(userData, (error, user) => {
@@ -168,7 +174,7 @@ router.post('/register', (req, res, next) => {
                 return next(error);
             } else {
                 req.session.userId = user._id;
-                return res.redirect('/home');
+                return res.redirect('/');
             }
         });
 

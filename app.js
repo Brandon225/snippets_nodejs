@@ -7,7 +7,7 @@ const MongoStore = require('connect-mongo')(session);
 const app = express();
 
 // mongodb connection
-mongoose.connect("mongodb://localhost:27017/snippets");
+mongoose.connect("mongodb://localhost:27017/snippets_db");
 var db = mongoose.connection;
 // mongo error
 db.on('error', console.error.bind(console, 'connection error: '));

@@ -103,35 +103,17 @@
 		"oO": 0,
 		"oS": 1
 		},
-	"\/middleware\/index.js": {
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "\/middleware\/index-min.js",
-		"oF": 0,
-		"sC": 3,
-		"tS": 0
+	"\/middleware": {
+		"ft": 65536,
+		"oA": 1,
+		"oAP": "\/build\/middleware",
+		"oF": 0
 		},
-	"\/models\/snippet.js": {
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "\/models\/snippet-min.js",
-		"oF": 0,
-		"sC": 3,
-		"tS": 0
-		},
-	"\/models\/user.js": {
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "\/models\/user-min.js",
-		"oF": 0,
-		"sC": 3,
-		"tS": 0
+	"\/models": {
+		"ft": 65536,
+		"oA": 1,
+		"oAP": "\/build\/models",
+		"oF": 0
 		},
 	"\/mstile-144x144.png": {
 		"ft": 32768,
@@ -415,15 +397,11 @@
 		"rFN": 0,
 		"uCM": 0
 		},
-	"\/routes\/index.js": {
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "\/routes\/index-min.js",
-		"oF": 0,
-		"sC": 3,
-		"tS": 0
+	"\/routes": {
+		"ft": 65536,
+		"oA": 1,
+		"oAP": "\/build\/routes",
+		"oF": 0
 		},
 	"\/safari-pinned-tab.svg": {
 		"ft": 2097152,
@@ -442,86 +420,11 @@
 		"oAP": "\/sitemap.xml",
 		"oF": 0
 		},
-	"\/views\/about.pug": {
-		"cB": 0,
-		"cOD": 1,
-		"ft": 512,
-		"oA": 0,
-		"oAP": "\/views\/about.html",
-		"oF": 0,
-		"oS": 0
-		},
-	"\/views\/details.pug": {
-		"cB": 0,
-		"cOD": 1,
-		"ft": 512,
-		"oA": 0,
-		"oAP": "\/views\/details.html",
-		"oF": 0,
-		"oS": 0
-		},
-	"\/views\/error.pug": {
-		"cB": 0,
-		"cOD": 1,
-		"ft": 512,
-		"oA": 0,
-		"oAP": "\/views\/error.html",
-		"oF": 0,
-		"oS": 0
-		},
-	"\/views\/footer.pug": {
-		"cB": 0,
-		"cOD": 1,
-		"ft": 512,
+	"\/views": {
+		"ft": 65536,
 		"oA": 1,
-		"oAP": "\/views\/footer.html",
-		"oF": 0,
-		"oS": 0
-		},
-	"\/views\/home.pug": {
-		"cB": 0,
-		"cOD": 1,
-		"ft": 512,
-		"oA": 0,
-		"oAP": "\/views\/home.html",
-		"oF": 0,
-		"oS": 0
-		},
-	"\/views\/layout.pug": {
-		"cB": 0,
-		"cOD": 1,
-		"ft": 512,
-		"oA": 1,
-		"oAP": "\/views\/layout.html",
-		"oF": 0,
-		"oS": 0
-		},
-	"\/views\/login.pug": {
-		"cB": 0,
-		"cOD": 1,
-		"ft": 512,
-		"oA": 0,
-		"oAP": "\/views\/login.html",
-		"oF": 0,
-		"oS": 0
-		},
-	"\/views\/navbar.pug": {
-		"cB": 0,
-		"cOD": 1,
-		"ft": 512,
-		"oA": 1,
-		"oAP": "\/views\/navbar.html",
-		"oF": 0,
-		"oS": 0
-		},
-	"\/views\/register.pug": {
-		"cB": 0,
-		"cOD": 1,
-		"ft": 512,
-		"oA": 0,
-		"oAP": "\/views\/register.html",
-		"oF": 0,
-		"oS": 0
+		"oAP": "\/build\/views",
+		"oF": 0
 		}
 	},
 "hooks": [
@@ -2512,7 +2415,7 @@
 		],
 	"overrideExternalServerCSS": 0,
 	"previewPathAddition": "",
-	"skippedFoldersString": "log, _logs, logs, _cache, cache, .idea, \/storage\/framework\/sessions, node_modules",
+	"skippedFoldersString": "log, _logs, logs, _cache, cache, .idea, \/storage\/framework\/sessions, node_modules, \/routes\/, \/routes, \/views, \/models, \/middleware",
 	"sourceFolderName": "source",
 	"susyVersion": 3,
 	"uglifyDefinesString": "",

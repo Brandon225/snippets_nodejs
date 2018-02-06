@@ -4,15 +4,15 @@ $('input[name="options"]').on('change', function()
 
     switch ($(this).attr('data-type'))
     {
-        case 'conversion':
-            //console.log('conversion clicked! ', $(this).attr('name'));
-            $('#conversion-container').toggle();
+        case 'creation':
+            //console.log('creation clicked! ', $(this).attr('name'));
+            $('#creation-container').toggle();
             $('#migration-container').toggle();
             break;
 
         case 'migration':
             //console.log('migration clicked! ', $(this).attr('name'));
-            $('#conversion-container').toggle();
+            $('#creation-container').toggle();
             $('#migration-container').toggle();
             break;
     }
