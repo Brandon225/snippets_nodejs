@@ -11,6 +11,59 @@ const path = 'http://localhost:3000'
 const date = new Date();
 const year = date.getFullYear();
 
+
+// POST /save-snippet
+router.post('/save-snippet', (req, res, next) => {
+    if (req.body.editor && 
+        req.body.scope && 
+        req.body.description && 
+        req.body.trigger && 
+        req.body.content)
+    {
+        var snippetData = {
+            userId: req.session.userId ? req.session.userId : '',
+            editor: req.body.editor,
+            scope: req.body.scope,
+            description: req.body.description,
+            trigger: req.body.trigger,
+            content: req.body.content
+        };
+
+       
+        // use schema's  `create` method to insert document in Mongo
+        Snippet.create(snippetData, (error, snippet) => {
+
+            console.log(`Created snippet! ${snippet}`);
+            
+            if (error) {
+
+                // return error response
+                res.send({
+                    success: null,
+                    error: 'There was an error saving this snippet.',
+                    snippet: snippet
+                });
+
+                // return next(error);
+            } else {
+                
+                // return success response
+                res.send({
+                    success: `Successfully saved snippet.`,
+                    error: null,
+                    snippet: snippet
+                });
+
+            }
+        });
+
+    } else {
+        const err = new Error('All fields required.')
+        err.status = 400;
+        return next(err);
+    }
+});
+
 // GET /logout
 // ERROR FIX: downgraded from Mongoose 5 to 4.50 to prevent error when destroying session
 router.get("/logout", (req, res, next) =>
