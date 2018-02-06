@@ -10,8 +10,14 @@ router.get('/', (req, res, next) => {
 
     const date = new Date();
     const year = date.getFullYear();
-
-    return res.render('home', {title: 'Home', canonical: path, year: year, bgColor: '#222'});
+    const code = `<snippet><content><![CDATA[
+console.log('$1: ', $2);
+]]></content>
+	<tabTrigger>log</tabTrigger>
+	<scope>source.js</scope>
+	<description>Log to the Console</description>
+</snippet>`;
+    return res.render('home', {title: 'Home', canonical: path, year: year, bgColor: '#222', code});
 });
 
 router.get('/details', (req, res, next) => {

@@ -314,6 +314,26 @@
 		"plM": 3758088159,
 		"prP": 0
 		},
+	"\/public\/scripts\/client-min.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "\/public\/scripts\/client-min-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"\/public\/scripts\/client.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "\/public\/scripts\/client-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
 	"\/public\/stylesheets\/main.css": {
 		"aP": 1,
 		"bl": 0,
