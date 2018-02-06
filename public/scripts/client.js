@@ -51,9 +51,6 @@ $('#code-form').submit(function(event)
     }
 
     
-    var form = $(this),
-    url = form.attr('action');
-    
     const formData = {
         code_editor: $('[name=code_editor]').val(),
         code_scope: $('[name=code_scope]').val(),
@@ -64,19 +61,24 @@ $('#code-form').submit(function(event)
 
     console.log(`formData? ${formData}`);
 
+    
+    var form = $(this),
+    url = form.attr('action');
+    
     // Send the data using post
-    var posting = $.post( url, JSON.stringify(formData),
-        function( data )
+    var posting = $.post( url, form.serialize(),
+    function( data )
+    {
+    
+        // if data returned no errors
+        if (data.success)
         {
-            // if data returned no errors
-            if (data.success)
-            {
-                console.log('Successfully posted data!', data.success);
-            } else {
-                console.log('Error posted data!', data.error);
-            }
-
-        } ,'json' );
+            console.log('Successfully loaded data!', data.success);
+        } else {
+            console.log('Error loading data!', data.error);
+        }
+    } ,'json' );
+    
     
 });
 

@@ -15,7 +15,7 @@ const year = date.getFullYear();
 
 // GET /register
 router.get('/save-snippet', (req, res, next) => {
-    return res.render('library', { title: 'Library', bgColor: '#ffffff' });
+    return res.render('library', { title: 'Library', bgColor: '#ffffff', scroll: 'scroll', scrollTarget: '#sidebar-content-lib'});
 });
 
 // POST /save-snippet
@@ -23,6 +23,9 @@ router.post('/save-snippet', (req, res, next) => {
     console.log('Save snippet route called!');
 
     console.log(`req.body? ${req.body.code_editor}`);
+
+    // SETTING HEADER IS NECESSARY FOR AJAX CLIENTSIDE CALLS
+    res.setHeader('Content-Type', 'application/json');
 
     var snippetData = {
         userId: req.session.userId ? req.session.userId : '',
