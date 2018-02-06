@@ -3,8 +3,11 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
+const logger = require('morgan');
 
 const app = express();
+
+app.use(logger('dev'));
 
 // mongodb connection
 mongoose.connect("mongodb://localhost:27017/snippets_db");

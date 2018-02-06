@@ -4,13 +4,28 @@ nav.navbar.navbar-expand-lg.navbar-dark.back-black.fixed-top(role="navigation")
         button.navbar-toggler(type="button", data-toggle="collapse", data-target="#nav-collapse", aria-controls="navbarNavAltMarkup", aria-expanded="false", aria-label="Toggle navigation")
             span.navbar-toggler-icon
         div#nav-collapse.collapse.navbar-collapse
-            .navbar-nav.ml-auto
-                a#nav-library.nav-item.nav-link(href="library") Library
-                a#nav-details.nav-item.nav-link(href="details") Details
-                a#nav-about.nav-item.nav-link(href="about") About
-                if !currentUser
-                    a.nav-item.nav-link(href='login') Login
-                    a.nav-item.nav-link(href='register') Register
-                else
-                    a.nav-item.nav-link(href='login') Logout
+            ul.navbar-nav.mx-auto
+                //- a#nav-library.nav-item.nav-link(href="library") Library
+                li.nav-item.dropdown
+                    a#navbarDropdown.nav-link.dropdown-toggle(href='#', role='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
+                        | Library
+                    .dropdown-menu(aria-labelledby='navbarDropdown')
+                        a.dropdown-item(href='/library/atom') Atom
+                        a.dropdown-item(href='/library/brackets') Brackets
+                        a.dropdown-item(href='/library/sublime') Sublime Text
+                        a.dropdown-item(href='/library/visual_code') Visual Studio Code
+                li.nav-item
+                    a#nav-details.nav-link(href="details") Details
+                li.nav-item                
+                    a#nav-about.nav-item.nav-link(href="about") About
+            if !currentUser
+                ul.navbar-nav.mr-2
+                    li.nav-item
+                        a.nav-item.nav-link(href='login') Login
+                    li.nav-item
+                        a.nav-item.nav-link(href='register') Register
+            else
+                ul.navbar-nav.mr-2
+                    li.nav-item
+                        a.nav-item.nav-link(href='login') Logout
                     

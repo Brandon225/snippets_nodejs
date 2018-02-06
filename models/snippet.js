@@ -37,6 +37,8 @@ SnippetSchema.pre('save', function(next)
     var snippet = this;
     if (snippet.editor === 'visual_code') {
         snippet.editor = 'Visual Studio Code';
+    } else if(snippet.editor === 'sublime') {
+        snippet.editor = 'Sublime Text';
     } else {
         snippet.editor = snippet.editor.toUpperCase();
     }

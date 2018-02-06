@@ -5,23 +5,25 @@ block content
         .row
             - var snips = snippets;
             - console.log(`Library snips? ${snips}`);
-            each snip in snips.length ? snips : ['There are no snippets']
-                .col-sm-4
-                    .card.bg-dark.mb-5
-                        .card-header.text-info
-                            h5 #{snip.description}
-                        .card-body
-                            //- p.card-text.text-yellow code: 
-                            //-     span.text-offwhite
-                            //-         != snip.code
-                            p.card-text.text-offwhite
-                                    != snip.content
-                            p.card-text.text-yellow.mb-0 editor: 
-                                span.text-ltgrey #{snip.editor}
-                            p.card-text.text-yellow.mb-0 scope: 
-                                span.text-ltgrey #{snip.scope}
-                            p.card-text.text-yellow trigger: 
-                                span.text-ltgrey #{snip.trigger}
-                        .card-footer.text-right                            
-                            a.card-link.text-green.hover-ltgrey(href='#', target='_blank') add
+            if snips.length > 0
+                each snip in snips.length
+                    .col-sm-4
+                        .card.bg-dark.mb-5
+                            .card-header.text-info
+                                h5 #{snip.description}
+                            .card-body
+                                p.card-text.text-offwhite
+                                        != snip.content
+                                p.card-text.text-yellow.mb-0 editor: 
+                                    span.text-ltgrey #{snip.editor}
+                                p.card-text.text-yellow.mb-0 scope: 
+                                    span.text-ltgrey #{snip.scope}
+                                p.card-text.text-yellow trigger: 
+                                    span.text-ltgrey #{snip.trigger}
+                            .card-footer.text-right                            
+                                a.card-link.text-green.hover-ltgrey(href='#', target='_blank') add
+            else
+                .col-12
+                    h1.text-center No snippets
+
 

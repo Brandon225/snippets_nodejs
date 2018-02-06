@@ -14,6 +14,20 @@ const year = date.getFullYear();
 
 const desc = 'A software develper tool. Create, convert, and download code snippets for your preferred code editor.';
 
+router.param('editor', (req, res, next, editor) => {
+    Snippet.find({editor: editor}, (err, snippets) => {
+        if(err) return next(err);
+        if (!snippets) {
+            err = new Error('Not Found');
+            err.status = 404;
+            return next(err);
+        }
+        req.snippets = snippets;
+
+        console.log(`Snippets? ${snippets}`);
+        return next();      
+    });
+});
 
 // GET /
 router.get('/', (req, res, next) => {
@@ -69,6 +83,7 @@ router.get('/login', (req, res, next) => {
 // GET /library
 router.get('/library', (req, res, next) => {
 
+    console.log(`editor? ${req.param.editor}`);
     Snippet.find({})
         .exec((err, snippets) => {
             if (err) return next(err);
@@ -77,6 +92,26 @@ router.get('/library', (req, res, next) => {
         });
 });
 
+// GET /library
+router.get('/library/:editor', (req, res, next) => {
+
+    let { editor } = req.params;
+    if (editor === 'visual_code') 
+    {
+        editor = 'Visual Studio Code';
+
+    } else if (editor === 'sublime') {
+        editor = 'Sublime Text';        
+    }
+
+    console.log(`editor? ${editor}`);
+    Snippet.find({editor: editor})
+        .exec((err, snippets) => {
+            if (err) return next(err);
+            // console.log(`Found snippets: ${snippets}`);
+            res.render('library', { title: 'Library | Snippets', desc, canonical: `${path}library`, bgColor: '#ffffff', snippets});
+        });
+});
 
 // POST /save-snippet
 router.post('/save-snippet', (req, res, next) => {
