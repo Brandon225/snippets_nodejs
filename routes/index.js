@@ -12,6 +12,59 @@ const path = 'http://localhost:3000'
 const date = new Date();
 const year = date.getFullYear();
 
+const desc = 'A software develper tool. Create, convert, and download code snippets for your preferred code editor.';
+
+
+// GET /
+router.get('/', (req, res, next) => {
+
+    // create constants
+    const code = `<snippet><content><![CDATA[
+console.log('$1: ', $2);
+]]></content>
+	<tabTrigger>log</tabTrigger>
+	<scope>source.js</scope>
+	<description>Log to the Console</description>
+</snippet>`;
+    return res.render('home', {title: 'Home | Snippets', desc, canonical: path, year: year, bgColor: '#222', code});
+});
+
+// GET /details
+router.get('/details', (req, res, next) => {
+    return res.render('details', {title: 'Details | Snippets', desc, canonical: `${path}details`, year: year, bgColor: '#ffffff', scroll: 'scroll', scrollTarget: '#sidebar-content'});
+});
+
+// GET /about
+router.get('/about', (req, res, next) => {
+    return res.render('about', {title: 'About | Snippets', desc, canonical: `${path}about`, year: year, bgColor: '#ffffff'});
+});
+
+// GET /register
+router.get('/register', (req, res, next) => {
+    return res.render('register', { title: 'Sign Up | Snippets', desc, canonical: `${path}register`,  bgColor: '#ffffff' });
+});
+
+// GET /logout
+// ERROR FIX: downgraded from Mongoose 5 to 4.50 to prevent error when destroying session
+router.get("/logout", (req, res, next) =>
+{
+    if (req.session) {
+        // delete session object
+        req.session.destroy(function(err) {
+          if(err) {
+            return next(err);
+          } else {
+            return res.redirect('/');
+          }
+        });
+      }
+});
+
+// GET /login
+router.get('/login', (req, res, next) => {
+    return res.render('login', { title: 'Log In | Snippets', desc, canonical: `${path}login`, bgColor: '#ffffff' });
+});
+
 
 // GET /library
 router.get('/library', (req, res, next) => {
@@ -20,9 +73,10 @@ router.get('/library', (req, res, next) => {
         .exec((err, snippets) => {
             if (err) return next(err);
             console.log(`Found snippets: ${snippets}`);
-            res.render('library', { title: 'Library', bgColor: '#ffffff', snippets});
+            res.render('library', { title: 'Library | Snippets', desc, canonical: `${path}library`, bgColor: '#ffffff', snippets});
         });
 });
+
 
 // POST /save-snippet
 router.post('/save-snippet', (req, res, next) => {
@@ -72,42 +126,6 @@ router.post('/save-snippet', (req, res, next) => {
 
         }
     });
-    // if (req.body.code_editor && 
-    //     req.body.code_scope && 
-    //     req.body.code_description && 
-    //     req.body.code_trigger && 
-    //     req.body.snippet_output)
-    // {
-        
-
-    // } else {
-
-    //     console.log('Error!  All fields required!!');
-    //     const err = new Error('All fields required.')
-    //     err.status = 400;
-    //     return next(err);
-    // }
-});
-
-// GET /logout
-// ERROR FIX: downgraded from Mongoose 5 to 4.50 to prevent error when destroying session
-router.get("/logout", (req, res, next) =>
-{
-    if (req.session) {
-        // delete session object
-        req.session.destroy(function(err) {
-          if(err) {
-            return next(err);
-          } else {
-            return res.redirect('/');
-          }
-        });
-      }
-});
-
-// GET /login
-router.get('/login', (req, res, next) => {
-    return res.render('login', { title: 'Log In', bgColor: '#ffffff' });
 });
 
 // POST /login
@@ -134,12 +152,6 @@ router.post('/login', (req, res, next) => {
         err.status = 401;
         return next(err);
     }
-});
-
-
-// GET /register
-router.get('/register', (req, res, next) => {
-    return res.render('register', { title: 'Sign Up', bgColor: '#ffffff' });
 });
 
 // POST /register
@@ -183,30 +195,6 @@ router.post('/register', (req, res, next) => {
         err.status = 400;
         return next(err);
     }
-});
-
-// GET /
-router.get('/', (req, res, next) => {
-
-    // create constants
-    const code = `<snippet><content><![CDATA[
-console.log('$1: ', $2);
-]]></content>
-	<tabTrigger>log</tabTrigger>
-	<scope>source.js</scope>
-	<description>Log to the Console</description>
-</snippet>`;
-    return res.render('home', {title: 'Home', canonical: path, year: year, bgColor: '#222', code});
-});
-
-// GET /details
-router.get('/details', (req, res, next) => {
-    return res.render('details', {title: 'Details', canonical: `${path}details`, year: year, bgColor: '#ffffff', scroll: 'scroll', scrollTarget: '#sidebar-content'});
-});
-
-// GET /about
-router.get('/about', (req, res, next) => {
-    return res.render('about', {title: 'About', canonical: `${path}about`, year: year, bgColor: '#ffffff'});
 });
 
 module.exports = router;

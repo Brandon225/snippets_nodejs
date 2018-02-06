@@ -10,6 +10,7 @@ $yellow: #C6884F;
 $brblue: #4fb1be;
 $purple: #c775df;
 $ltgrey: #9d9d9d;
+$offwhite: #f1f1f1;
 $dkgrey: #3f3f3f;
 
 /****** TEXT STYLES ******/
@@ -26,6 +27,11 @@ $dkgrey: #3f3f3f;
 .text-dkgrey
 {
     color: $dkgrey;
+}
+
+.text-offwhite
+{
+    color: $offwhite;
 }
 
 .text-red

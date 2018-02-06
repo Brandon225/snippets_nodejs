@@ -1,7 +1,7 @@
 {
   "name": "snippets",
   "version": "1.0.0",
-  "description": "Create, convert, and download snippets for your preferred code editor",
+  "description": "A software develper tool. Create, convert, and download code snippets for your preferred code editor.",
   "scripts": {
     "start": "node ./app"
   },

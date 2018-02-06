@@ -3,19 +3,25 @@ extends layout
 block content
     #library-container.container.page-container
         .row
-            .col-md-8
+            - var snips = snippets;
+            - console.log(`Library snips? ${snips}`);
+            each snip in snips.length ? snips : ['There are no snippets']
                 .col-sm-4
-                    - var snips = snippets;
-                    - console.log(`Library snips? ${snips}`);
-                    each snip in snips.length ? snips : ['There are no snippets']
-                        .card.bg-dark.mb-5
-                            .card-header.text-info
-                                != snip.code
-                            .card-body
-                                pre.text-white
+                    .card.bg-dark.mb-5
+                        .card-header.text-info
+                            h5 #{snip.description}
+                        .card-body
+                            //- p.card-text.text-yellow code: 
+                            //-     span.text-offwhite
+                            //-         != snip.code
+                            p.card-text.text-offwhite
                                     != snip.content
-                                p.card-text.text-yellow.mb-0 scope: #{snip.scope}
-                                p.card-text.text-yellow trigger: #{snip.trigger}
-                            .card-footer.text-right                            
-                                a.card-link.text-red(href='#', target='_blank') add
+                            p.card-text.text-yellow.mb-0 editor: 
+                                span.text-ltgrey #{snip.editor}
+                            p.card-text.text-yellow.mb-0 scope: 
+                                span.text-ltgrey #{snip.scope}
+                            p.card-text.text-yellow trigger: 
+                                span.text-ltgrey #{snip.trigger}
+                        .card-footer.text-right                            
+                            a.card-link.text-green.hover-ltgrey(href='#', target='_blank') add
 
