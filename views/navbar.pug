@@ -5,5 +5,11 @@ nav.navbar.navbar-expand-lg.navbar-dark.back-black.fixed-top(role="navigation")
             span.navbar-toggler-icon
         div#nav-collapse.collapse.navbar-collapse
             .navbar-nav.ml-auto
-                a#nav-details.nav-item.nav-link(href="/details") Details
-                a#nav-about.nav-item.nav-link(href="/about") About
+                a#nav-details.nav-item.nav-link(href="details") Details
+                a#nav-about.nav-item.nav-link(href="about") About
+                if !currentUser
+                    a.nav-item.nav-link(href='login') Login
+                    a.nav-item.nav-link(href='register') Register
+                else
+                    a.nav-item.nav-link(href='login') Log Out
+                    
