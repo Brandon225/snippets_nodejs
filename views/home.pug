@@ -1,0 +1,230 @@
+extends layout
+
+block content
+    .container.page-container.text-center
+        .btn-group.btn-group-toggle.mx-auto(data-toggle='buttons')
+            label.btn.btn-primary.btn-brblue.active Creation
+                input#conversion-btn(type='radio', name='options', data-type='conversion', autocomplete='off', checked)
+            label#migration-btn.btn.btn-primary.btn-brblue Migration
+                input#migration(type='radio', name='options', data-type='migration', autocomplete='off')
+
+    //- // CONVERSION CONTAINER
+    #conversion-container.container.mt-4
+        h4.lead.text-white.text-center.my-5 Create code snippets formatted for your code editor!
+        hr
+        form#code-form.row
+            .col-sm
+                // Allow user to select From text editor
+                .form-group
+                    label.text-white(for='code_editor') Editor
+                    select#code-editor.form-control.custom-select(name='code_editor', required='')
+                        option(value='')
+                        option(value='atom') Atom
+                        option(value='brackets') Brackets
+                        option(value='sublime', selected='') Sublime Text
+                        option(value='visual_code') Visual Studio Code
+                // List of scopes to apply to snippet
+                .form-group.scope-select
+                    label.text-white(for='code_scope') Scope/Source
+                    select#code-scope.form-control.custom-select(name='code_scope', required='')
+                        option(value='')
+                        option(value='source.actionscript.2') ActionScript: source.actionscript.2
+                        option(value='source.applescript') AppleScript: source.applescript
+                        option(value='source.asp') ASP: source.asp
+                        option(value='source.dosbatch') Batch FIle: source.dosbatch
+                        option(value='source.cs') C#: source.cs
+                        option(value='source.c++') C++: source.c++
+                        option(value='source.clojure') Clojure: source.clojure
+                        option(value='source.coffee') CoffeeScript: source.coffee
+                        option(value='source.css') CSS: source.css
+                        option(value='source.d') D: source.d
+                        option(value='source.diff') Diff: source.diff
+                        option(value='source.erlang') Erlang: source.erlang
+                        option(value='source.go') Go: source.go
+                        option(value='source.dot') GraphViz: source.dot
+                        option(value='source.groovy') Groovy: source.groovy
+                        option(value='source.haskell') Haskell: source.haskell
+                        option(value='text.html') HTML: text.html
+                        option(value='text.html.jsp') JSP: text.html.jsp
+                        option(value='source.java') Java: source.java
+                        option(value='source.java-props') Java Properties: source.java-props
+                        option(value='text.html.javadoc') Java Doc: text.html.javadoc
+                        option(value='source.json') JSON: source.json
+                        option(value='source.js', selected='') Javascript: source.js
+                        option(value='source.bibtex') BibTex: source.bibtex
+                        option(value='text.log.latex') Latex Log: text.log.latex
+                        option(value='text.tex.latex.memoir') Latex Memoir: text.tex.latex.memoir
+                        option(value='text.tex.latex') Latex: text.tex.latex
+                        option(value='source.css.less') LESS: source.css.less
+                        option(value='text.tex') TeX: text.tex
+                        option(value='source.lisp') Lisp: source.lisp
+                        option(value='source.lua') Lua: source.lua
+                        option(value='source.makefile') MakeFile: source.makefile
+                        option(value='text.html.markdown') Markdown: text.html.markdown
+                        option(value='text.html.markdown.multimarkdown') Multi Markdown: text.html.markdown.multimarkdown
+                        option(value='source.matlab') Matlab: source.matlab
+                        option(value='source.objc') Objective-C: source.objc
+                        option(value='source.objc++') Objective-C++: source.objc++
+                        option(value='source.camlp4.ocaml') OCaml campl4: source.camlp4.ocaml
+                        option(value='source.ocaml') OCaml: source.ocaml
+                        option(value='source.ocamllex') OCamllex: source.ocamllex
+                        option(value='source.perl') Perl: source.perl
+                        option(value='source.php') PHP: source.php
+                        option(value='source.regexp.python') Regular Expression(python): source.regexp.python
+                        option(value='source.python') Python: source.python
+                        option(value='source.r-console') R Console: source.r-console
+                        option(value='source.r') R: source.r
+                        option(value='source.ruby.rails') Ruby on Rails: source.ruby.rails
+                        option(value='text.haml') Ruby HAML: text.haml
+                        option(value='source.sql.ruby') SQL(Ruby): source.sql.ruby
+                        option(value='source.regexp') Regular Expression: source.regexp
+                        option(value='text.restructuredtext') RestructuredText: text.restructuredtext
+                        option(value='source.ruby') Ruby: source.ruby
+                        option(value='source.sass') SASS: source.sass
+                        option(value='source.scala') Scala: source.scala
+                        option(value='source.shell') Shell Script: source.shell
+                        option(value='source.sql') SQL: source.sql
+                        option(value='source.stylus') Stylus: source.stylus
+                        option(value='source.tcl') TCL: source.tcl
+                        option(value='text.html.tcl') HTML(TCL): text.html.tcl
+                        option(value='text.plain') Plain text: text.plain
+                        option(value='text.html.textile') Textile: text.html.textile
+                        option(value='text.xml') XML: text.xml
+                        option(value='text.xml.xsl') XSL: text.xml.xsl
+                        option(value='source.yaml') YAML: source.yaml
+                .form-group
+                    label.text-white(for='code_description') Description
+                    textarea#code-description.text-yellow(name='code_description', rows='2', required='')
+                .form-group
+                    label.text-white(for='code_trigger') Trigger 
+                        em (a keyword to trigger the snippet)
+                    input#code-trigger.text-yellow.custom-input(type='text', name='code_trigger', required='')
+                // Allow user to select To text editor
+                #code-content-fg.form-group
+                    label.text-white(for='code_content') Code
+                    textarea#code-content.text-yellow(name='code_content', rows='5', required='')
+            .col-sm
+                // Allow user to select To text editor
+                .form-group
+                    label.title.text-green(for='snippet_output') snippet
+                    textarea#snippet-output.text-green(name='snippet_output', rows='20')
+            .col-sm-12
+                // Submit button
+                button.btn.btn-success.btn-block(type='submit') Convert
+    // MIGRATION CONTAINER
+    //- #migration-container.container.mt-4r
+        h4.lead.text-white.text-center.my-5 Migrate code snippets from your old code editor to your new code editor!
+        hr
+        form#converter-form.row
+            .col-sm
+            // Allow user to select From text editor
+            .form-group
+                label.title.text-green(for='convert_from') from
+                select#convert-from.form-control.custom-select(name='convert_from', required='')
+                option(value='')
+                option(value='atom') Atom
+                option(value='brackets') Brackets
+                option(value='sublime', selected='') Sublime Text
+                option(value='visual_code') Visual Studio Code
+            // List of scopes to apply to snippet
+            .form-group.scope-select
+                label.text-white(for='scope_from') Scope/Source
+                select.form-control.custom-select(name='scope_from')
+                option(value='')
+                option(value='source.actionscript.2') ActionScript: source.actionscript.2
+                option(value='source.applescript') AppleScript: source.applescript
+                option(value='source.asp') ASP: source.asp
+                option(value='source.dosbatch') Batch FIle: source.dosbatch
+                option(value='source.cs') C#: source.cs
+                option(value='source.c++') C++: source.c++
+                option(value='source.clojure') Clojure: source.clojure
+                option(value='source.coffee') CoffeeScript: source.coffee
+                option(value='source.css') CSS: source.css
+                option(value='source.d') D: source.d
+                option(value='source.diff') Diff: source.diff
+                option(value='source.erlang') Erlang: source.erlang
+                option(value='source.go') Go: source.go
+                option(value='source.dot') GraphViz: source.dot
+                option(value='source.groovy') Groovy: source.groovy
+                option(value='source.haskell') Haskell: source.haskell
+                option(value='text.html') HTML: text.html
+                option(value='text.html.jsp') JSP: text.html.jsp
+                option(value='source.java') Java: source.java
+                option(value='source.java-props') Java Properties: source.java-props
+                option(value='text.html.javadoc') Java Doc: text.html.javadoc
+                option(value='source.json') JSON: source.json
+                option(value='source.js') Javascript: source.js
+                option(value='source.bibtex') BibTex: source.bibtex
+                option(value='text.log.latex') Latex Log: text.log.latex
+                option(value='text.tex.latex.memoir') Latex Memoir: text.tex.latex.memoir
+                option(value='text.tex.latex') Latex: text.tex.latex
+                option(value='source.css.less') LESS: source.css.less
+                option(value='text.tex') TeX: text.tex
+                option(value='source.lisp') Lisp: source.lisp
+                option(value='source.lua') Lua: source.lua
+                option(value='source.makefile') MakeFile: source.makefile
+                option(value='text.html.markdown') Markdown: text.html.markdown
+                option(value='text.html.markdown.multimarkdown') Multi Markdown: text.html.markdown.multimarkdown
+                option(value='source.matlab') Matlab: source.matlab
+                option(value='source.objc') Objective-C: source.objc
+                option(value='source.objc++') Objective-C++: source.objc++
+                option(value='source.camlp4.ocaml') OCaml campl4: source.camlp4.ocaml
+                option(value='source.ocaml') OCaml: source.ocaml
+                option(value='source.ocamllex') OCamllex: source.ocamllex
+                option(value='source.perl') Perl: source.perl
+                option(value='source.php') PHP: source.php
+                option(value='source.regexp.python') Regular Expression(python): source.regexp.python
+                option(value='source.python') Python: source.python
+                option(value='source.r-console') R Console: source.r-console
+                option(value='source.r') R: source.r
+                option(value='source.ruby.rails') Ruby on Rails: source.ruby.rails
+                option(value='text.haml') Ruby HAML: text.haml
+                option(value='source.sql.ruby') SQL(Ruby): source.sql.ruby
+                option(value='source.regexp') Regular Expression: source.regexp
+                option(value='text.restructuredtext') RestructuredText: text.restructuredtext
+                option(value='source.ruby') Ruby: source.ruby
+                option(value='source.sass') SASS: source.sass
+                option(value='source.scala') Scala: source.scala
+                option(value='source.shell') Shell Script: source.shell
+                option(value='source.sql') SQL: source.sql
+                option(value='source.stylus') Stylus: source.stylus
+                option(value='source.tcl') TCL: source.tcl
+                option(value='text.html.tcl') HTML(TCL): text.html.tcl
+                option(value='text.plain') Plain text: text.plain
+                option(value='text.html.textile') Textile: text.html.textile
+                option(value='text.xml') XML: text.xml
+                option(value='text.xml.xsl') XSL: text.xml.xsl
+                option(value='source.yaml') YAML: source.yaml
+            // Allow user to select To text editor
+            #from-fg.form-group
+                textarea#convert-from-text.text-green(name='convert_from_text', rows='10', aria-describedby='from-error')
+                snippet
+                    content
+                    //
+                        [CDATA[
+                        console.log('$1: ', $2);
+                        ]]
+                    tabtrigger log
+                    scope source.js
+                    description Log to the Console
+                span#from-error.error-block.text-red
+                | Invalid format for selected editor. 
+                a#error-link.text-ltgrey.hover-red(href='/details/', target='_blank')
+                    u For more info on formatting.
+            .col-sm
+            // Allow user to select To text editor
+            #from-fg.form-group
+                label.text-yellow.title(for='convert_to') to
+                select#convert-to.form-control.custom-select(name='convert_to', required='')
+                option(value='')
+                option(value='atom') Atom
+                option(value='brackets') Brackets
+                option(value='sublime', disabled='') Sublime Text
+                option(value='visual_code') Visual Studio Code
+            // Allow user to select To text editor
+            .form-group
+                textarea.text-yellow(name='convert_to_text', rows='10')
+            .col-sm-12
+            // Submit button
+            button#submit-btn.btn.btn-success.btn-block(type='submit') Convert
+
