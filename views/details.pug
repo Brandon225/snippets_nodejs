@@ -1,0 +1,94 @@
+extends layout
+
+block content
+    #details-container.container.page-container
+        .row
+            #details-content.col-md-8
+                #atom.card.mb-5
+                    .card-body
+                        h2.card-title Atom
+                        p.card-subtitle.mb-2.text-muted Atom snippets should be formatted using CoffeeScript.
+                        p.card-text
+                            | There is a text file in your ~/.atom directory called snippets.cson that contains all your custom snippets that are loaded when you launch Atom. You can also easily open up that file by selecting the Atom > Snippets menu.
+                        .card.mb-3
+                            .card-header Example
+                            .card-body
+                                pre.text-green.
+                                    \n'.source.js':
+                                        'console.log':
+                                            'prefix': 'log'
+                                            'body': 'console.log($1);$2'                                
+                        a.btn.btn-primary(href='http://flight-manual.atom.io/using-atom/sections/snippets/', target='_blank') more info
+                #brackets.card.mb-5
+                    .card-body
+                        h2.card-title Brackets
+                        p.card-subtitle.mb-2.text-muted
+                            | This is formatting information for the Brackets 
+                            a.text-yellow.hover-ltgrey(href='https://github.com/jrowny/brackets-snippets', target='_blank') Snippets
+                            |  extension.
+                        p.card-text
+                            | In Brackets each .json file corresponds to a set of snippets. You can use whatever names you would like, but it makes sense to follow Jonathan’s lead and name your files based on the category of snippet used. If you open up one of the files you can see it is a JSON-structured array of objects.
+                        .card.mb-3
+                            .card-header Example
+                            .card-body
+                                pre.text-green.
+                                    \n[
+                                    {
+                                        "name":"Log to the Console",
+                                        "trigger":"log",
+                                        "usage":"source.js",
+                                        "description":"Log to the Console",
+                                        "template":"\nconsole.log('$1: ', $2);\n"
+                                    }
+                                    ]                                
+                        a.btn.btn-primary(href='http://blog.brackets.io/2012/12/19/snippets-brackets-extension/?lang=en', target='_blank') more info
+                #sublime.card.mb-5
+                    .card-body
+                        h2.card-title Sublime Text
+                        p.card-text
+                            | To create a new snippet, select Tools | New Snippet…. Sublime Text will present you with an skeleton for a new snippet.
+                        p.card-text
+                            | Snippets can be stored under any package’s folder, but to keep it simple while you’re learning, you can save them to your Packages/User folder.
+                        .card.mb-3
+                            .card-header Example
+                            .card-body
+                                pre.text-green.
+                                    \n<snippet>
+                                        <content><![CDATA[console.log('$1: ', $2)]]></content>
+                                        <tabTrigger>log</tabTrigger>
+                                        <scope>source.js</scope>
+                                        <description>Log to the Console</description>
+                                    </snippet>                                
+                        a.btn.btn-primary(href='http://sublimetext.info/docs/en/extensibility/snippets.html', target='_blank') more info
+                #viscode.card.mb-5
+                    .card-body
+                        h2.card-title Visual Studio Code
+                        p.card-text
+                            | Snippets are defined in a JSON format and stored in a per user (languageId).json file. For example, Markdown snippets go in a markdown.json file.
+                        p.card-text
+                            | You can define your own snippets for specific languages. To open up a snippet file for editing, open User Snippets under File > Preferences (Code > Preferences on Mac) and select the language for which the snippets should appear.
+                        .card.mb-3
+                            .card-header Example
+                            .card-body
+                                pre.text-green.
+                                    \n{
+                                        "Console Log": {
+                                            "prefix": "log",
+                                            "body": [
+                                                "console.log('$1: ', $2)"
+                                            ],
+                                            "description": "Log to console"
+                                        }
+                                    }                                
+                        a.btn.btn-primary(href='https://code.visualstudio.com/docs/editor/userdefinedsnippets', target='_blank') more info
+            #sidebar.col.d-none.d-sm-block
+                ul#sidebar-content.nav.flex-column.sticky-top
+                    li#nav-atom.nav-item
+                        a.nav-link.active(href='#atom', data-scroll='') Atom
+                    li#nav-brackets.nav-item
+                        a.nav-link(href='#brackets', data-scroll='') Brackets
+                    li#nav-sublime.nav-item
+                        a.nav-link(href='#sublime', data-scroll='') Sublime Text
+                    li#nav-viscode.nav-item
+                        a.nav-link(href='#viscode', data-scroll='') Visual Studio Code
+
