@@ -3,6 +3,7 @@ var mongoose = require('mongoose');
 var SnippetSchema = new mongoose.Schema({
     userId: {
         type: String,
+        required: false
     },
     editor: {
         type: String,
@@ -42,6 +43,7 @@ SnippetSchema.pre('save', function(next)
     } else {
         snippet.editor = snippet.editor.toUpperCase();
     }
+    next();
 });
 
 var Snippet = mongoose.model('Snippet', SnippetSchema);

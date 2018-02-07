@@ -14,20 +14,20 @@ const year = date.getFullYear();
 
 const desc = 'A software develper tool. Create, convert, and download code snippets for your preferred code editor.';
 
-router.param('editor', (req, res, next, editor) => {
-    Snippet.find({editor: editor}, (err, snippets) => {
-        if(err) return next(err);
-        if (!snippets) {
-            err = new Error('Not Found');
-            err.status = 404;
-            return next(err);
-        }
-        req.snippets = snippets;
+// router.param('editor', (req, res, next, editor) => {
+//     Snippet.find({editor: editor}, (err, snippets) => {
+//         if(err) return next(err);
+//         if (!snippets) {
+//             err = new Error('Not Found');
+//             err.status = 404;
+//             return next(err);
+//         }
+//         req.snippets = snippets;
 
-        console.log(`Snippets? ${snippets}`);
-        return next();      
-    });
-});
+//         console.log(`Snippets? ${snippets}`);
+//         return next();      
+//     });
+// });
 
 // GET /
 router.get('/', (req, res, next) => {
@@ -115,13 +115,10 @@ router.get('/library/:editor', (req, res, next) => {
 
 // POST /save-snippet
 router.post('/save-snippet', (req, res, next) => {
-    console.log('Save snippet route called!');
-
-    console.log(`req.body? ${req.body.code_editor}`);
 
     // SETTING HEADER IS NECESSARY FOR AJAX CLIENTSIDE CALLS
     res.setHeader('Content-Type', 'application/json');
-
+    
     var snippetData = {
         userId: req.session.userId ? req.session.userId : '',
         editor: req.body.code_editor,

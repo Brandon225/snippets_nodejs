@@ -12,8 +12,7 @@ block content
                             .card-header.text-info
                                 h5 #{snip.description}
                             .card-body
-                                p.card-text.text-offwhite
-                                        != snip.content
+                                p.card-text.text-offwhite= snip.content
                                 p.card-text.text-yellow.mb-0 editor: 
                                     span.text-ltgrey #{snip.editor}
                                 p.card-text.text-yellow.mb-0 scope: 

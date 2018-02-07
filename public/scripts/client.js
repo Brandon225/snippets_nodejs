@@ -50,18 +50,6 @@ $('#code-form').submit(function(event)
 
     }
 
-    
-    const formData = {
-        code_editor: $('[name=code_editor]').val(),
-        code_scope: $('[name=code_scope]').val(),
-        code_description: $('[name=code_description]').val(),
-        code_trigger: $('[name=code_trigger]').val(),     
-        snippet_output: $('[name=snippet_output]').val(),
-    };
-
-    console.log(`formData? ${formData}`);
-
-    
     var form = $(this),
     url = form.attr('action');
     
