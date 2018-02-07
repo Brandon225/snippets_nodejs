@@ -54,6 +54,13 @@
     background-color: #4fb1be;
     border-color: #4fb1be; }
 
+.library-add {
+  background-color: transparent;
+  border: none; }
+  .library-add:disabled {
+    color: #9d9d9d;
+    opacity: .5; }
+
 .format {
   display: none; }
 

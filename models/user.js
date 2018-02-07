@@ -52,6 +52,7 @@ UserSchema.statics.authenticate = function(email, password, callback)
             if (error) {
                 return callback(error);
             } else if (!user) {
+                console.log(`User not found!`);
                 const error = new Error('User not found.');
                 error.status = 401;
                 return callback(error);
@@ -61,18 +62,14 @@ UserSchema.statics.authenticate = function(email, password, callback)
                     {
                         return callback(null, user);
                     } else {
+                        console.log(`Password wrong! ${result}`);
+                        
                         return callback();
                     }
                 });
             }
         });
 }
-
-// UserSchema.method('update', function(updates, callback)
-// {
-//     Object.assign(this, updates, {updatedAt: new Date()});
-//     this.parent().save(callback);
-// });
 
 var User = mongoose.model('User', UserSchema);
 module.exports = User;

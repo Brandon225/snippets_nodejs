@@ -111,6 +111,18 @@ $dkgrey: #3f3f3f;
     }
 }
 
+.library-add
+{
+    background-color: rgba(0, 0, 0, 0);
+    border: none;
+
+    &:disabled
+    {
+        color: $ltgrey;
+        opacity: .5;
+    }
+}
+
 .format
 {
     display: none;

@@ -5,6 +5,8 @@ const router = express.Router();
 var User = require('../models/user');
 var Snippet = require('../models/snippet');
 var mid = require('../middleware');
+var mongoose = require('mongoose');
+
 
 const path = 'http://localhost:3000'
 
@@ -111,42 +113,137 @@ router.get('/library/:editor', (req, res, next) => {
 router.post('/add-snippet', (req, res, next) => {
     console.log(`add snippet! ${req.body.snipId}`);
     if (req.session && req.session.userId) 
-    {        
+    {
         const snipId = req.body.snipId;
         console.log(`add-snippet user loggedin snipId? ${snipId}`);
         if (snipId) 
         {
-            User.findById(req.session.userId)
-                .exec((error, user) => {
+            Snippet.findById(snipId)
+                .exec((error, snippet) => {
                     if (error) 
                     {
-                        console.log(`Error finding user!`);
+                        console.log(`Error finding snippet!`);
                         return next(error);    
                     } else {
 
-                        console.log(`add-snippet found user! ${user}`);
+                        console.log(`add-snippet found snippet! ${snippet}`);
 
-                        // TODO TODO TODO:  Add snippet to users snippetList
-                        user.snippets.push(snipId);
-                        user.save((err, theUser) => {
-                            if(err)
-                            {
-                                console.log(`add-snippet error saving snippet! ${err}`);
-                                
+                        var snippetData = {
+                            userId: req.session.userId,
+                            editor: snippet.editor,
+                            scope: snippet.scope,
+                            description: snippet.description,
+                            trigger: snippet.trigger,
+                            code: snippet.code,
+                            content: snippet.content
+                        };
+
+                        Snippet.create(snippetData, (error, newSnippet) => {
+        
+                            if (error) {
+                    
                                 return res.send({
-                                            success: null,
-                                            error: `There was an error saving snippet! ${err}`,
-                                            user: theUser
-                                        });
+                                    success: null,
+                                    error: `There was an error adding snippet!`,
+                                    user: null
+                                });
+                    
+                                // return next(error);
+                            } else {
+                                
+                                console.log(`Created newSnippet! ${newSnippet}`);
+                    
+                                // return success response
+                                // return snippet;
+                                User.findById(req.session.userId)
+                                .exec((error, user) => {
+                                    if (error) 
+                                    {
+                                        console.log(`Error finding user!`);
+                                        return next(error);    
+                                    } else {
+
+                                        console.log(`add-snippet found user! ${user}`);
+
+                                        // TODO TODO TODO:  Add snippet to users snippetList
+                                        user.snippets.push(newSnippet._id);
+                                        user.save((err, theUser) => {
+                                            if(err)
+                                            {
+                                                console.log(`add-snippet error saving snippet! ${err}`);
+                                                
+                                                return res.send({
+                                                            success: null,
+                                                            error: `There was an error saving snippet! ${err}`,
+                                                            snippet: newSnippet
+                                                        });
+                                            }
+                                            console.log(`add-snippet saved snippet! ${newSnippet} ${theUser}`);
+                                            
+                                            return res.send({
+                                                        success: `Successfully added snippet.`,
+                                                        error: null,
+                                                        snippet: newSnippet
+                                                    });
+                                        });         
+                                    }
+                                });
+                    
                             }
-                            console.log(`add-snippet saved snippet! ${theUser}`);
+                        });
+
+                        // let copySnippet = snippet;
+                        // copySnippet._id = mongoose.Types.ObjectId();
+                        // copySnippet.userId = req.session.userId;
+
+                        // copySnippet.save((err, theSnippet) => {
+                        //     if(err)
+                        //     {
+                        //         console.log(`copy snippet error adding snippet! ${err}`);
+                                
+                        //         return res.send({
+                        //                     success: null,
+                        //                     error: `There was an error adding snippet! ${err}`,
+                        //                     user: theUser
+                        //                 });
+                        //     }
+                        //     console.log(`copy snippet added snippet! ${theSnippet}`);
                             
-                            return res.send({
-                                        success: `Successfully added snippet.`,
-                                        error: null,
-                                        user: theUser
-                                    });
-                        });         
+                        // }); 
+
+                        // User.findById(req.session.userId)
+                        //         .exec((error, user) => {
+                        //             if (error) 
+                        //             {
+                        //                 console.log(`Error finding user!`);
+                        //                 return next(error);    
+                        //             } else {
+
+                        //                 console.log(`add-snippet found user! ${user}`);
+
+                        //                 // TODO TODO TODO:  Add snippet to users snippetList
+                        //                 user.snippets.push(theSnippet._id);
+                        //                 user.save((err, theUser) => {
+                        //                     if(err)
+                        //                     {
+                        //                         console.log(`add-snippet error saving snippet! ${err}`);
+                                                
+                        //                         return res.send({
+                        //                                     success: null,
+                        //                                     error: `There was an error saving snippet! ${err}`,
+                        //                                     user: theUser
+                        //                                 });
+                        //                     }
+                        //                     console.log(`add-snippet saved snippet! ${theSnippet} ${theUser}`);
+                                            
+                        //                     return res.send({
+                        //                                 success: `Successfully added snippet.`,
+                        //                                 error: null,
+                        //                                 user: theUser
+                        //                             });
+                        //                 });         
+                        //             }
+                        //         });
                     }
                 });
         } else {
@@ -190,7 +287,7 @@ router.post('/save-snippet', (req, res, next) => {
         content: req.body.snippet_output
     };
 
-   console.log(`snippetData? ${snippetData}`);
+    console.log(`snippetData? ${snippetData}`);
 
     // use schema's  `create` method to insert document in Mongo
     Snippet.create(snippetData, (error, snippet) => {
@@ -229,7 +326,7 @@ router.post('/login', (req, res, next) => {
     {
         User.authenticate(req.body.email, req.body.password, function(error, user) {
             if (error || !user) 
-            {                
+            {
                 const err = new Error('Wrong email or password');
                 err.status = 401;
                 return next(err);    
@@ -257,7 +354,7 @@ router.post('/register', (req, res, next) => {
         req.body.confirmPassword)
     {
         // confirm that password and confirmPassword match
-        if (req.body.password !== req.body.confirmPassword) 
+        if (req.body.password !== req.body.confirmPassword)
         {
             const err = new Error('Passwords do not match.')
             err.status = 400;
