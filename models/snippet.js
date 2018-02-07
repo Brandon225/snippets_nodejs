@@ -33,18 +33,23 @@ var SnippetSchema = new mongoose.Schema({
 
 
 // hash password before saving to db
-SnippetSchema.pre('save', function(next) 
-{
-    var snippet = this;
-    if (snippet.editor === 'visual_code') {
-        snippet.editor = 'Visual Studio Code';
-    } else if(snippet.editor === 'sublime') {
-        snippet.editor = 'Sublime Text';
-    } else {
-        snippet.editor = snippet.editor.toUpperCase();
-    }
-    next();
-});
+// SnippetSchema.pre('save', function(next) 
+// {
+//     var snippet = this;
+//     if (snippet.editor === 'visual_code') {
+//         snippet.editor = 'Visual Studio Code';
+//     } else if(snippet.editor === 'sublime') {
+//         snippet.editor = 'Sublime Text';
+//     } else {
+//         snippet.editor = toTitleCase(snippet.editor);
+//     }
+//     next();
+// });
+
+// function toTitleCase(str)
+// {
+//     return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+// }
 
 var Snippet = mongoose.model('Snippet', SnippetSchema);
 module.exports = Snippet;

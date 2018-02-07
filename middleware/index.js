@@ -15,14 +15,6 @@ var requiresLogin = (req, res, next) => {
         err.status = 403;
         return next(err); 
     }
-    // My code
-    // if (!req.session.userId) 
-    // {
-        // const err = new Error('You are not authorized to view this page.');
-        // err.status = 403;
-        // return next(err); 
-    // }
-    // return next();
 }
 
 module.exports.loggedOut = loggedOut;

@@ -14,20 +14,6 @@ const year = date.getFullYear();
 
 const desc = 'A software develper tool. Create, convert, and download code snippets for your preferred code editor.';
 
-// router.param('editor', (req, res, next, editor) => {
-//     Snippet.find({editor: editor}, (err, snippets) => {
-//         if(err) return next(err);
-//         if (!snippets) {
-//             err = new Error('Not Found');
-//             err.status = 404;
-//             return next(err);
-//         }
-//         req.snippets = snippets;
-
-//         console.log(`Snippets? ${snippets}`);
-//         return next();      
-//     });
-// });
 
 // GET /
 router.get('/', (req, res, next) => {
@@ -53,6 +39,20 @@ router.get('/about', (req, res, next) => {
     return res.render('about', {title: 'About | Snippets', desc, canonical: `${path}about`, year: year, bgColor: '#ffffff'});
 });
 
+// GET /profile
+router.get('/profile', mid.requiresLogin, (req, res, next) => {
+
+    User.findById(req.session.userId)
+        .exec((error, user) => {
+            if (error) 
+            {
+                return next(error);    
+            } else {                
+                return res.render('profile', {title: 'Profile | Snippets', desc, canonical: `${path}profile`, year: year, bgColor: '#ffffff', name: user.name, editor: user.codeEditor});
+            }
+        });
+});
+
 // GET /register
 router.get('/register', (req, res, next) => {
     return res.render('register', { title: 'Sign Up | Snippets', desc, canonical: `${path}register`,  bgColor: '#ffffff' });
@@ -76,12 +76,18 @@ router.get("/logout", (req, res, next) =>
 
 // GET /login
 router.get('/login', (req, res, next) => {
-    return res.render('login', { title: 'Log In | Snippets', desc, canonical: `${path}login`, bgColor: '#ffffff' });
+    if (!res.session) 
+    {
+        return res.render('login', { title: 'Log In | Snippets', desc, canonical: `${path}login`, bgColor: '#ffffff' });
+    } else {
+        return res.redirect('/');
+    }
+    
 });
 
 
 // GET /library
-router.get('/library', (req, res, next) => {
+router.get('/library', mid.requiresLogin, (req, res, next) => {
 
     console.log(`editor? ${req.param.editor}`);
     Snippet.find({})
@@ -93,16 +99,9 @@ router.get('/library', (req, res, next) => {
 });
 
 // GET /library
-router.get('/library/:editor', (req, res, next) => {
+router.get('/library/:editor', mid.requiresLogin, (req, res, next) => {
 
     let { editor } = req.params;
-    if (editor === 'visual_code') 
-    {
-        editor = 'Visual Studio Code';
-
-    } else if (editor === 'sublime') {
-        editor = 'Sublime Text';        
-    }
 
     console.log(`editor? ${editor}`);
     Snippet.find({editor: editor})
@@ -115,6 +114,8 @@ router.get('/library/:editor', (req, res, next) => {
 
 // POST /save-snippet
 router.post('/save-snippet', (req, res, next) => {
+
+    console.log(`save snippet!`);
 
     // SETTING HEADER IS NECESSARY FOR AJAX CLIENTSIDE CALLS
     res.setHeader('Content-Type', 'application/json');
@@ -129,7 +130,8 @@ router.post('/save-snippet', (req, res, next) => {
         content: req.body.snippet_output
     };
 
-   
+   console.log(`snippetData? ${snippetData}`);
+
     // use schema's  `create` method to insert document in Mongo
     Snippet.create(snippetData, (error, snippet) => {
         
@@ -161,7 +163,7 @@ router.post('/save-snippet', (req, res, next) => {
 });
 
 // POST /login
-router.post('/login', (req, res, next) => {
+router.post('/login', mid.loggedOut, (req, res, next) => {
     if (req.body.email && 
         req.body.password)
     {
@@ -187,7 +189,7 @@ router.post('/login', (req, res, next) => {
 });
 
 // POST /register
-router.post('/register', (req, res, next) => {
+router.post('/register', mid.loggedOut, (req, res, next) => {
     if (req.body.email && 
         req.body.name && 
         req.body.codeEditor && 
