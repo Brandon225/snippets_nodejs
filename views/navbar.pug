@@ -14,19 +14,19 @@ nav.navbar.navbar-expand-lg.navbar-dark.back-black.fixed-top(role="navigation")
                         a.dropdown-item(href='/library/sublime') Sublime Text
                         a.dropdown-item(href='/library/visual_code') Visual Studio Code
                 li.nav-item
-                    a#nav-details.nav-link(href="details") Details
+                    a#nav-details.nav-link(href="/details") Details
                 li.nav-item                
-                    a#nav-about.nav-item.nav-link(href="about") About
+                    a#nav-about.nav-item.nav-link(href="/about") About
             if !currentUser
                 ul.navbar-nav.mr-2
                     li.nav-item
-                        a.nav-item.nav-link(href='login') Login
+                        a.nav-item.nav-link(href='/login') Login
                     li.nav-item
-                        a.nav-item.nav-link(href='register') Register
+                        a.nav-item.nav-link(href='/register') Register
             else
                 ul.navbar-nav.mr-2
                     li.nav-item
-                        a.nav-item.nav-link(href='profile') Profile
+                        a.nav-item.nav-link(href='/profile') Profile
                     li.nav-item
-                        a.nav-item.nav-link(href='logout') Logout
+                        a.nav-item.nav-link(href='/logout') Logout
                     

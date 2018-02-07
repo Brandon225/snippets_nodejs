@@ -54,8 +54,8 @@ $('#code-form').submit(function(event)
     url = form.attr('action');
     
     // Send the data using post
-    var posting = $.post( url, form.serialize(),
-    function( data )
+    var posting = $.post(url, form.serialize(),
+    function(data)
     {
     
         // if data returned no errors
@@ -66,23 +66,30 @@ $('#code-form').submit(function(event)
             console.log('Error loading data!', data.error);
         }
     } ,'json' );
-    
-    
 });
 
-function toJSONString( form ) {
-    var obj = {};
-    var elements = form.find('.form-control');
-    console.log('elements? ', elements);
-    for( var i = 0; i < elements.length; ++i ) {
-        var element = elements[i];
-        var name = element.name;
-        var value = element.value;
+$('.addSnip-form').submit(function(event) 
+{
+    event.preventDefault();
 
-        if( name ) {
-            obj[ name ] = value;
+    var form = $(this),
+    url = form.attr('action');
+    
+    // Send the data using post
+    var posting = $.post(url, form.serialize(),
+    function(data)
+    {
+        // if data returned no errors
+        if (data.success)
+        {
+            console.log(`Successfully loaded data! ${data.success}`);
+        } else {
+            console.log(`Error loading data! ${data.error}`);
+
+            // TODO TODO TODO:  Show login modal
+            alert(data.error);
         }
-    }
 
-    return JSON.stringify( obj );
-}
+    } ,'json' );
+    
+});

@@ -81,7 +81,7 @@ router.get('/login', mid.loggedOut, (req, res, next) => {
 
 
 // GET /library
-router.get('/library', mid.requiresLogin, (req, res, next) => {
+router.get('/library', (req, res, next) => {
 
     console.log(`editor? ${req.param.editor}`);
     Snippet.find({})
@@ -93,7 +93,7 @@ router.get('/library', mid.requiresLogin, (req, res, next) => {
 });
 
 // GET /library
-router.get('/library/:editor', mid.requiresLogin, (req, res, next) => {
+router.get('/library/:editor', (req, res, next) => {
 
     let { editor } = req.params;
 
@@ -104,6 +104,51 @@ router.get('/library/:editor', mid.requiresLogin, (req, res, next) => {
             // console.log(`Found snippets: ${snippets}`);
             res.render('library', { title: 'Library | Snippets', desc, canonical: `${path}library`, bgColor: '#ffffff', snippets, editor});
         });
+});
+
+
+// POST /add-snippet  -- Add snippet to users library
+router.post('/add-snippet', (req, res, next) => {
+    console.log(`add snippet! ${req.body.snipId}`);
+    if (req.session && req.session.userId) 
+    {        
+        console.log(`Add snippet SUCCESS!`);
+
+        // TODO TODO TODO:  Add snippet to users snippetList
+        Snippet.findById(req.body.snipId)
+        .exec((error, snippet) => {
+            if (error) 
+            {
+                // return success response
+                res.send({
+                    success: null,
+                    error: `Error adding snippet. ${error}`,
+                    snippet: snippet
+                });
+
+            } else { 
+
+                // return success response
+                res.send({
+                    success: `Successfully added snippet.`,
+                    error: null,
+                    snippet: snippet
+                });
+            }
+        });
+
+    } else {
+
+        console.log(`Add snippet ERROR!`);
+
+        // return error response
+        res.send({
+            success: null,
+            error: `You must be logged in to add snippets!`,
+            snippet: null
+        });
+    }
+    
 });
 
 // POST /save-snippet
