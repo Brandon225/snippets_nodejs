@@ -1,8 +1,12 @@
 var loggedOut = (req, res, next) => {
+    console.log(`loggedOut?!`);
+    
     if (req.session && req.session.userId) 
     {
+        console.log(`User is logged in!`);
         return res.redirect('/profile');
     }
+    console.log(`User is NOT logged in!`);
     return next();
 }
 

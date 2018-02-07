@@ -54,7 +54,7 @@ router.get('/profile', mid.requiresLogin, (req, res, next) => {
 });
 
 // GET /register
-router.get('/register', (req, res, next) => {
+router.get('/register', mid.loggedOut, (req, res, next) => {
     return res.render('register', { title: 'Sign Up | Snippets', desc, canonical: `${path}register`,  bgColor: '#ffffff' });
 });
 
@@ -65,24 +65,18 @@ router.get("/logout", (req, res, next) =>
     if (req.session) {
         // delete session object
         req.session.destroy(function(err) {
-          if(err) {
-            return next(err);
-          } else {
-            return res.redirect('/');
-          }
+            if(err) {
+                return next(err);
+            } else {
+                return res.redirect('/');
+            }
         });
       }
 });
 
 // GET /login
-router.get('/login', (req, res, next) => {
-    if (!res.session) 
-    {
-        return res.render('login', { title: 'Log In | Snippets', desc, canonical: `${path}login`, bgColor: '#ffffff' });
-    } else {
-        return res.redirect('/');
-    }
-    
+router.get('/login', mid.loggedOut, (req, res, next) => {
+    return res.render('login', { title: 'Log In | Snippets', desc, canonical: `${path}login`, bgColor: '#ffffff' });
 });
 
 
@@ -163,7 +157,7 @@ router.post('/save-snippet', (req, res, next) => {
 });
 
 // POST /login
-router.post('/login', mid.loggedOut, (req, res, next) => {
+router.post('/login', (req, res, next) => {
     if (req.body.email && 
         req.body.password)
     {
@@ -176,7 +170,7 @@ router.post('/login', mid.loggedOut, (req, res, next) => {
             } else {
 
                 req.session.userId = user._id;                
-                return res.redirect('/');
+                return res.redirect('/profile');
             }
         });
         
@@ -189,7 +183,7 @@ router.post('/login', mid.loggedOut, (req, res, next) => {
 });
 
 // POST /register
-router.post('/register', mid.loggedOut, (req, res, next) => {
+router.post('/register', (req, res, next) => {
     if (req.body.email && 
         req.body.name && 
         req.body.codeEditor && 
