@@ -112,30 +112,51 @@ router.post('/add-snippet', (req, res, next) => {
     console.log(`add snippet! ${req.body.snipId}`);
     if (req.session && req.session.userId) 
     {        
-        console.log(`Add snippet SUCCESS!`);
+        const snipId = req.body.snipId;
+        console.log(`add-snippet user loggedin snipId? ${snipId}`);
+        if (snipId) 
+        {
+            User.findById(req.session.userId)
+                .exec((error, user) => {
+                    if (error) 
+                    {
+                        console.log(`Error finding user!`);
+                        return next(error);    
+                    } else {
 
-        // TODO TODO TODO:  Add snippet to users snippetList
-        Snippet.findById(req.body.snipId)
-        .exec((error, snippet) => {
-            if (error) 
-            {
-                // return success response
-                res.send({
-                    success: null,
-                    error: `Error adding snippet. ${error}`,
-                    snippet: snippet
+                        console.log(`add-snippet found user! ${user}`);
+
+                        // TODO TODO TODO:  Add snippet to users snippetList
+                        user.snippets.push(snipId);
+                        user.save((err, theUser) => {
+                            if(err)
+                            {
+                                console.log(`add-snippet error saving snippet! ${err}`);
+                                
+                                return res.send({
+                                            success: null,
+                                            error: `There was an error saving snippet! ${err}`,
+                                            user: theUser
+                                        });
+                            }
+                            console.log(`add-snippet saved snippet! ${theUser}`);
+                            
+                            return res.send({
+                                        success: `Successfully added snippet.`,
+                                        error: null,
+                                        user: theUser
+                                    });
+                        });         
+                    }
                 });
+        } else {
+            
+            console.log(`Error! No snipId! ${snipId}`);
 
-            } else { 
-
-                // return success response
-                res.send({
-                    success: `Successfully added snippet.`,
-                    error: null,
-                    snippet: snippet
-                });
-            }
-        });
+            const error = new Error('There was an issue adding snippet!');
+            error.status = 404;
+            return next(error);
+        }
 
     } else {
 
@@ -247,7 +268,8 @@ router.post('/register', (req, res, next) => {
             email: req.body.email,
             name: req.body.name,
             codeEditor: req.body.codeEditor,
-            password: req.body.password
+            password: req.body.password,
+            snippets: []
         };
        
         // use schema's  `create` method to insert document in Mongo

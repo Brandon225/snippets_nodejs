@@ -21,7 +21,13 @@ var UserSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true
+    },
+    snippets: {
+        type: Array
     }
+},
+{
+    usePushEach: true
 });
 
 // hash password before saving to db
@@ -61,6 +67,12 @@ UserSchema.statics.authenticate = function(email, password, callback)
             }
         });
 }
+
+// UserSchema.method('update', function(updates, callback)
+// {
+//     Object.assign(this, updates, {updatedAt: new Date()});
+//     this.parent().save(callback);
+// });
 
 var User = mongoose.model('User', UserSchema);
 module.exports = User;

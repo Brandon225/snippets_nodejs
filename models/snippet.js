@@ -31,7 +31,6 @@ var SnippetSchema = new mongoose.Schema({
     }
 });
 
-
 // hash password before saving to db
 // SnippetSchema.pre('save', function(next) 
 // {
