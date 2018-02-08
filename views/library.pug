@@ -2,13 +2,11 @@ extends layout
 
 block content
     #library-container.container.page-container
-        .row.justify-content-center
+        .row
             - var snips = snippets;
             - console.log(`Library snips? ${snips}`);
             if snips.length
                 each snip in snips
-                    //- - var disabled = snip.userId === currentUser ? 'true' : 'false';
-                    //- - console.log(`disabled? ${disabled}`)
                     .col-sm-4
                         .card.bg-dark.mb-5
                             .card-header.text-info
@@ -26,7 +24,6 @@ block content
                                 form.addSnip-form.form.mb-0(action="/add-snippet", method="POST")
                                     input.form-control(type="hidden", name="snipId", value=snip._id)
                                     button.library-add.card-link.text-green.hover-ltgrey(type="submit", disabled=snip.userId===currentUser) add
-                                //- a.library-add.card-link.text-green.hover-ltgrey(href='#', target='_blank', data-id=snip._id) add
             else
                 .col-md-6.p-t-2.text-center
                     i.icn-person.material-icons error

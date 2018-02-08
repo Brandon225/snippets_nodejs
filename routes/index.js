@@ -50,7 +50,7 @@ router.get('/profile', mid.requiresLogin, (req, res, next) => {
             {
                 return next(error);    
             } else {                
-                return res.render('profile', {title: 'Profile | Snippets', desc, canonical: `${path}profile`, year: year, bgColor: '#ffffff', name: user.name, editor: user.codeEditor});
+                return res.render('profile', {title: 'Profile | Snippets', desc, canonical: `${path}profile`, year: year, bgColor: '#ffffff', name: user.name, email: user.email, editor: user.codeEditor});
             }
         });
 });
@@ -148,7 +148,6 @@ router.post('/add-snippet', (req, res, next) => {
                                     user: null
                                 });
                     
-                                // return next(error);
                             } else {
                                 
                                 console.log(`Created newSnippet! ${newSnippet}`);
