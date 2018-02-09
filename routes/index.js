@@ -83,28 +83,37 @@ router.get('/login', mid.loggedOut, (req, res, next) => {
 
 
 // GET /library
-router.get('/library', (req, res, next) => {
+// router.get('/library', (req, res, next) => {
 
-    console.log(`editor? ${req.param.editor}`);
-    Snippet.find({})
-        .exec((err, snippets) => {
-            if (err) return next(err);
-            console.log(`Found snippets: ${snippets}`);
-            res.render('library', { title: 'Library | Snippets', desc, canonical: `${path}library`, bgColor: '#ffffff', snippets});
-        });
-});
+    
+//     Snippet.find({})
+//         .exec((err, snippets) => {
+//             if (err) return next(err);
+//             console.log(`Found snippets: ${snippets}`);
+//             res.render('library', { title: 'Library | Snippets', desc, canonical: `${path}library`, bgColor: '#ffffff', editor: req.param.editor, snippets});
+//         });
+// });
 
 // GET /library
 router.get('/library/:editor', (req, res, next) => {
 
     let { editor } = req.params;
+    let editorName = editor.toUpperCase();
+    if (editor === 'visual_code') 
+    {
+        editorName = 'VISUAL STUDIO CODE';
+    }
+
+    
 
     console.log(`editor? ${editor}`);
-    Snippet.find({editor: editor})
+    Snippet.find({editor: editor, duplicated: {$ne: true}})
         .exec((err, snippets) => {
             if (err) return next(err);
-            // console.log(`Found snippets: ${snippets}`);
-            res.render('library', { title: 'Library | Snippets', desc, canonical: `${path}library`, bgColor: '#ffffff', snippets, editor});
+            console.log(`Found snippets: ${snippets}`);
+
+            res.render('library', { title: 'Library | Snippets', desc, canonical: `${path}library`, bgColor: '#ffffff', snippets, editor: editorName});
+
         });
 });
 
@@ -135,7 +144,8 @@ router.post('/add-snippet', (req, res, next) => {
                             description: snippet.description,
                             trigger: snippet.trigger,
                             code: snippet.code,
-                            content: snippet.content
+                            content: snippet.content,
+                            duplicated: true
                         };
 
                         Snippet.create(snippetData, (error, newSnippet) => {
@@ -187,62 +197,8 @@ router.post('/add-snippet', (req, res, next) => {
                                         });         
                                     }
                                 });
-                    
                             }
                         });
-
-                        // let copySnippet = snippet;
-                        // copySnippet._id = mongoose.Types.ObjectId();
-                        // copySnippet.userId = req.session.userId;
-
-                        // copySnippet.save((err, theSnippet) => {
-                        //     if(err)
-                        //     {
-                        //         console.log(`copy snippet error adding snippet! ${err}`);
-                                
-                        //         return res.send({
-                        //                     success: null,
-                        //                     error: `There was an error adding snippet! ${err}`,
-                        //                     user: theUser
-                        //                 });
-                        //     }
-                        //     console.log(`copy snippet added snippet! ${theSnippet}`);
-                            
-                        // }); 
-
-                        // User.findById(req.session.userId)
-                        //         .exec((error, user) => {
-                        //             if (error) 
-                        //             {
-                        //                 console.log(`Error finding user!`);
-                        //                 return next(error);    
-                        //             } else {
-
-                        //                 console.log(`add-snippet found user! ${user}`);
-
-                        //                 // TODO TODO TODO:  Add snippet to users snippetList
-                        //                 user.snippets.push(theSnippet._id);
-                        //                 user.save((err, theUser) => {
-                        //                     if(err)
-                        //                     {
-                        //                         console.log(`add-snippet error saving snippet! ${err}`);
-                                                
-                        //                         return res.send({
-                        //                                     success: null,
-                        //                                     error: `There was an error saving snippet! ${err}`,
-                        //                                     user: theUser
-                        //                                 });
-                        //                     }
-                        //                     console.log(`add-snippet saved snippet! ${theSnippet} ${theUser}`);
-                                            
-                        //                     return res.send({
-                        //                                 success: `Successfully added snippet.`,
-                        //                                 error: null,
-                        //                                 user: theUser
-                        //                             });
-                        //                 });         
-                        //             }
-                        //         });
                     }
                 });
         } else {
@@ -387,5 +343,7 @@ router.post('/register', (req, res, next) => {
         return next(err);
     }
 });
+
+
 
 module.exports = router;

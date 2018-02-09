@@ -57,7 +57,6 @@ $('#code-form').submit(function(event)
     var posting = $.post(url, form.serialize(),
     function(data)
     {
-    
         // if data returned no errors
         if (data.success)
         {
@@ -65,6 +64,7 @@ $('#code-form').submit(function(event)
         } else {
             console.log('Error loading data!', data.error);
         }
+
     } ,'json' );
 });
 
@@ -72,6 +72,9 @@ $('.addSnip-form').submit(function(event)
 {
     event.preventDefault();
 
+    var submit = $(this).find('[type="submit"]');
+    $(submit).attr('disabled', true)
+    
     var form = $(this),
     url = form.attr('action');
     
@@ -85,6 +88,9 @@ $('.addSnip-form').submit(function(event)
             console.log(`Successfully loaded data! ${data.success}`);
         } else {
             console.log(`Error loading data! ${data.error}`);
+
+            // Re-enable submit button
+            $(submit).attr('disabled', false);
 
             // TODO TODO TODO:  Show login modal
             alert(data.error);

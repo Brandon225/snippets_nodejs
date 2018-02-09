@@ -164,7 +164,7 @@ footer {
 .page-container {
   margin-top: 116px; }
 
-#about-container .row:first-of-type, #details-container .row:first-of-type, .page-container .row:first-of-type {
+#about-container .row:first-of-type, #details-container .row:first-of-type, .fullsize-container .row:first-of-type {
   min-height: 100vh; }
 
 textarea {

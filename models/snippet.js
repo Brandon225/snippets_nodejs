@@ -28,6 +28,10 @@ var SnippetSchema = new mongoose.Schema({
     content: {
         type: String,
         required: true
+    },
+    duplicated: {
+        type: Boolean,
+        default: false
     }
 });
 

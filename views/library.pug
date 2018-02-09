@@ -3,8 +3,11 @@ extends layout
 block content
     #library-container.container.page-container
         .row
+            .col-12
+                h1.text-black #{editor} - Code Snippet Library
+                hr
+        .row
             - var snips = snippets;
-            - console.log(`Library snips? ${snips}`);
             if snips.length
                 each snip in snips
                     .col-sm-4
@@ -18,7 +21,7 @@ block content
                                 p.card-text.text-yellow.mb-0 scope: 
                                     span.text-ltgrey #{snip.scope}
                                 p.card-text.text-yellow trigger: 
-                                    span.text-ltgrey #{snip.trigger}
+                                    //- span.text-ltgrey #{snip.trigger}                                    
                             .card-footer.text-right
                                 // add snippet form
                                 form.addSnip-form.form.mb-0(action="/add-snippet", method="POST")
