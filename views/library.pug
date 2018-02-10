@@ -21,12 +21,17 @@ block content
                                 p.card-text.text-yellow.mb-0 scope: 
                                     span.text-ltgrey #{snip.scope}
                                 p.card-text.text-yellow trigger: 
-                                    //- span.text-ltgrey #{snip.trigger}                                    
+                                    span.text-ltgrey #{snip.trigger}                                    
                             .card-footer.text-right
                                 // add snippet form
                                 form.addSnip-form.form.mb-0(action="/add-snippet", method="POST")
                                     input.form-control(type="hidden", name="snipId", value=snip._id)
                                     button.library-add.card-link.text-green.hover-ltgrey(type="submit", disabled=snip.userId===currentUser) add
+                                if snip.userId === currentUser
+                                    // remove snippet form
+                                    form.addSnip-form.form.mb-0(action="/snippet/", method="POST")
+                                        input.form-control(type="hidden", name="snipId", value=snip._id)
+                                        button.library-add.card-link.text-green.hover-ltgrey(type="submit", disabled=snip.userId===currentUser) add
             else
                 .col-md-6.p-t-2.text-center
                     i.icn-person.material-icons error

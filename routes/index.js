@@ -6,7 +6,9 @@ var User = require('../models/user');
 var Snippet = require('../models/snippet');
 var mid = require('../middleware');
 var mongoose = require('mongoose');
+var bcrypt = require('bcrypt');
 
+var db = mongoose.connection;
 
 const path = 'http://localhost:3000'
 
@@ -28,17 +30,17 @@ console.log('$1: ', $2);
 	<scope>source.js</scope>
 	<description>Log to the Console</description>
 </snippet>`;
-    return res.render('home', {title: 'Home | Snippets', desc, canonical: path, year: year, bgColor: '#222', code});
+    return res.render('home', {title: 'Home | Snippets', active: 'home', desc, canonical: path, year: year, bgColor: '#222', code});
 });
 
 // GET /details
 router.get('/details', (req, res, next) => {
-    return res.render('details', {title: 'Details | Snippets', desc, canonical: `${path}details`, year: year, bgColor: '#ffffff', scroll: 'scroll', scrollTarget: '#sidebar-content'});
+    return res.render('details', {title: 'Details | Snippets', active: 'details', desc, canonical: `${path}details`, year: year, bgColor: '#ffffff', scroll: 'scroll', scrollTarget: '#sidebar-content'});
 });
 
 // GET /about
 router.get('/about', (req, res, next) => {
-    return res.render('about', {title: 'About | Snippets', desc, canonical: `${path}about`, year: year, bgColor: '#ffffff'});
+    return res.render('about', {title: 'About | Snippets', active: 'about', desc, canonical: `${path}about`, year: year, bgColor: '#ffffff'});
 });
 
 // GET /profile
@@ -50,14 +52,14 @@ router.get('/profile', mid.requiresLogin, (req, res, next) => {
             {
                 return next(error);    
             } else {                
-                return res.render('profile', {title: 'Profile | Snippets', desc, canonical: `${path}profile`, year: year, bgColor: '#ffffff', name: user.name, email: user.email, editor: user.codeEditor});
+                return res.render('profile', {title: 'Profile | Snippets', active: 'profile', desc, canonical: `${path}profile`, year: year, bgColor: '#ffffff', name: user.name, email: user.email, editor: user.codeEditor});
             }
         });
 });
 
 // GET /register
 router.get('/register', mid.loggedOut, (req, res, next) => {
-    return res.render('register', { title: 'Sign Up | Snippets', desc, canonical: `${path}register`,  bgColor: '#ffffff' });
+    return res.render('register', { title: 'Sign Up | Snippets', active: 'register', desc, canonical: `${path}register`,  bgColor: '#ffffff' });
 });
 
 // GET /logout
@@ -78,21 +80,8 @@ router.get("/logout", (req, res, next) =>
 
 // GET /login
 router.get('/login', mid.loggedOut, (req, res, next) => {
-    return res.render('login', { title: 'Log In | Snippets', desc, canonical: `${path}login`, bgColor: '#ffffff' });
+    return res.render('login', { title: 'Log In | Snippets', active: 'login', desc, canonical: `${path}login`, bgColor: '#ffffff' });
 });
-
-
-// GET /library
-// router.get('/library', (req, res, next) => {
-
-    
-//     Snippet.find({})
-//         .exec((err, snippets) => {
-//             if (err) return next(err);
-//             console.log(`Found snippets: ${snippets}`);
-//             res.render('library', { title: 'Library | Snippets', desc, canonical: `${path}library`, bgColor: '#ffffff', editor: req.param.editor, snippets});
-//         });
-// });
 
 // GET /library
 router.get('/library/:editor', (req, res, next) => {
@@ -104,17 +93,20 @@ router.get('/library/:editor', (req, res, next) => {
         editorName = 'VISUAL STUDIO CODE';
     }
 
-    
-
     console.log(`editor? ${editor}`);
     Snippet.find({editor: editor, duplicated: {$ne: true}})
         .exec((err, snippets) => {
             if (err) return next(err);
             console.log(`Found snippets: ${snippets}`);
 
-            res.render('library', { title: 'Library | Snippets', desc, canonical: `${path}library`, bgColor: '#ffffff', snippets, editor: editorName});
+            res.render('library', { title: 'Library | Snippets', active: 'library', desc, canonical: `${path}library`, bgColor: '#ffffff', snippets, editor: editorName});
 
         });
+});
+
+// GET /details
+router.get('/password', (req, res, next) => {
+    return res.render('password', {title: 'Password Support | Snippets', desc, canonical: `${path}password`, year: year, bgColor: '#ffffff'});
 });
 
 
@@ -316,29 +308,104 @@ router.post('/register', (req, res, next) => {
             return next(err);
         }
 
-        var userData = {
-            email: req.body.email,
-            name: req.body.name,
-            codeEditor: req.body.codeEditor,
-            password: req.body.password,
-            snippets: []
-        };
-       
-        // use schema's  `create` method to insert document in Mongo
-        User.create(userData, (error, user) => {
-
-            console.log(`Created user! ${user}`);
-            
-            if (error) {
-                return next(error);
-            } else {
-                req.session.userId = user._id;
-                return res.redirect('/');
+        // hash password
+        bcrypt.hash(req.body.password, 10, function(err, hash)
+        {
+            if (err) 
+            {
+                return next(err);
             }
+
+            var userData = {
+                email: req.body.email,
+                name: req.body.name,
+                codeEditor: req.body.codeEditor,
+                password: hash,
+                snippets: []
+            };
+           
+            // use schema's  `create` method to insert document in Mongo
+            User.create(userData, (error, user) => {
+    
+                console.log(`Created user! ${user}`);
+                
+                if (error) {
+                    return next(error);
+                } else {
+                    req.session.userId = user._id;
+                    return res.redirect('/');
+                }
+            });
+        });
+
+
+
+    } else {
+        const err = new Error('All fields required.');
+        err.status = 400;
+        return next(err);
+    }
+});
+
+
+// POST /register
+router.post('/update-password', (req, res, next) => {
+    if (req.body.email && 
+        req.body.password && 
+        req.body.confirmPassword)
+    {
+        // confirm that password and confirmPassword match
+        if (req.body.password !== req.body.confirmPassword)
+        {
+            const err = new Error('Passwords do not match.')
+            err.status = 400;
+            return next(err);
+        }
+
+        // hash password
+        bcrypt.hash(req.body.password, 10, function(err, hash)
+        {
+            if (err) 
+            {
+                return next(err);
+            }
+
+            // TODO TODO TODO:  Eventually an email will need to be sent to verify user
+            db.collection('users').findAndModify(
+                    {email: req.body.email}, 
+                    [['_id','asc']], 
+                    {$set: {password: hash}},
+                    {new: true, upsert: false}, 
+                    (err, result) => {
+                        console.log(`update-passord results: ${result}`);
+                        if(err) return next(err);
+                        return res.redirect('/login');
+                    });
+            
+            // TODO TODO TODO:  Grab user and update password
+            // User.findOne({email: req.body.email})
+            // .exec(function(error, user) {
+            //     if (error) {
+            //         return callback(error);
+            //     } else if (!user) {
+            //         console.log(`User not found!`);
+            //         const error = new Error('User not found.');
+            //         error.status = 401;
+            //         return callback(error);
+            //     } else {
+                
+            //         // TODO TODO TODO:  Eventually an email will need to be sent to verify user
+            //         user.findAndModify({_id: user._id},  {$set: {password: hash}}, (err, result) => {
+            //             console.log(`update-passord results: `);
+            //             if(err) return next(err);
+            //             return res.redirect('/login');
+            //         });
+            //     }
+            // });
         });
 
     } else {
-        const err = new Error('All fields required.')
+        const err = new Error('All fields required.');
         err.status = 400;
         return next(err);
     }

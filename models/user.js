@@ -31,19 +31,19 @@ var UserSchema = new mongoose.Schema({
 });
 
 // hash password before saving to db
-UserSchema.pre('save', function(next) 
-{
-    var user = this;
-    bcrypt.hash(user.password, 10, function(err, hash)
-    {
-        if (err) 
-        {
-            return next(err);
-        }
-        user.password = hash;
-        next();
-    });
-});
+// UserSchema.pre('save', function(next) 
+// {
+//     var user = this;
+//     bcrypt.hash(user.password, 10, function(err, hash)
+//     {
+//         if (err) 
+//         {
+//             return next(err);
+//         }
+//         user.password = hash;
+//         next();
+//     });
+// });
 
 UserSchema.statics.authenticate = function(email, password, callback)
 {
