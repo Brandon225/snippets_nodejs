@@ -19,6 +19,35 @@ const year = date.getFullYear();
 const desc = 'A software develper tool. Create, convert, and download code snippets for your preferred code editor.';
 
 
+router.param('uID', (req, res, next, id) => {
+    User.findById(id, (err, doc) => {
+        if(err) return next(err);
+        if (!doc) {
+            err = new Error('Not Found');
+            err.status = 404;
+            return next(err);
+        }
+        req.user = doc;
+        console.log(`req.user? ${req.user}`);
+        return next();
+    });
+});
+
+router.param('snipID', (req, res, next, id) => {
+    Snippet.findById(id, (err, doc) => {
+        if(err) return next(err);
+        if (!doc) {
+            err = new Error('Not Found');
+            err.status = 404;
+            return next(err);
+        }
+        req.snippet = doc;
+        console.log(`req.snippet? ${req.snippet}`);
+        
+        return next();
+    });
+});
+
 // GET /
 router.get('/', (req, res, next) => {
 
@@ -93,12 +122,9 @@ router.get('/library/:editor', (req, res, next) => {
         editorName = 'VISUAL STUDIO CODE';
     }
 
-    console.log(`editor? ${editor}`);
     Snippet.find({editor: editor, duplicated: {$ne: true}})
         .exec((err, snippets) => {
             if (err) return next(err);
-            console.log(`Found snippets: ${snippets}`);
-
             res.render('library', { title: 'Library | Snippets', active: 'library', desc, canonical: `${path}library`, bgColor: '#ffffff', snippets, editor: editorName});
 
         });
@@ -110,92 +136,55 @@ router.get('/password', (req, res, next) => {
 });
 
 
-// POST /add-snippet  -- Add snippet to users library
-router.post('/add-snippet', (req, res, next) => {
-    console.log(`add snippet! ${req.body.snipId}`);
+// POST /snippet/:snipID/:uID  -- Add snippet to user's library
+router.post('/snippet/:snipID/:uID', (req, res, next) => {
+    console.log(`add snippet! ${req.snippet}`);
+    
     if (req.session && req.session.userId) 
     {
-        const snipId = req.body.snipId;
-        console.log(`add-snippet user loggedin snipId? ${snipId}`);
-        if (snipId) 
+        console.log(`add-snippet user logged in req.snippet? ${req.snippet}`);
+        if (req.snippet) 
         {
-            Snippet.findById(snipId)
-                .exec((error, snippet) => {
-                    if (error) 
-                    {
-                        console.log(`Error finding snippet!`);
-                        return next(error);    
-                    } else {
+            var snippetData = {
+                userId: req.user._id,
+                editor: req.snippet.editor,
+                scope: req.snippet.scope,
+                description: req.snippet.description,
+                trigger: req.snippet.trigger,
+                code: req.snippet.code,
+                content: req.snippet.content,
+                duplicated: true
+            };
 
-                        console.log(`add-snippet found snippet! ${snippet}`);
+            Snippet.create(snippetData, (error, snippet) => {
 
-                        var snippetData = {
-                            userId: req.session.userId,
-                            editor: snippet.editor,
-                            scope: snippet.scope,
-                            description: snippet.description,
-                            trigger: snippet.trigger,
-                            code: snippet.code,
-                            content: snippet.content,
-                            duplicated: true
-                        };
-
-                        Snippet.create(snippetData, (error, newSnippet) => {
+                if (error) {
         
-                            if (error) {
+                    return res.send({
+                        success: null,
+                        error: `There was an error adding snippet!`,
+                        user: null
+                    });
+        
+                } else {
                     
-                                return res.send({
-                                    success: null,
-                                    error: `There was an error adding snippet!`,
-                                    user: null
-                                });
-                    
-                            } else {
-                                
-                                console.log(`Created newSnippet! ${newSnippet}`);
-                    
-                                // return success response
-                                // return snippet;
-                                User.findById(req.session.userId)
-                                .exec((error, user) => {
-                                    if (error) 
-                                    {
-                                        console.log(`Error finding user!`);
-                                        return next(error);    
-                                    } else {
-
-                                        console.log(`add-snippet found user! ${user}`);
-
-                                        // TODO TODO TODO:  Add snippet to users snippetList
-                                        user.snippets.push(newSnippet._id);
-                                        user.save((err, theUser) => {
-                                            if(err)
-                                            {
-                                                console.log(`add-snippet error saving snippet! ${err}`);
-                                                
-                                                return res.send({
-                                                            success: null,
-                                                            error: `There was an error saving snippet! ${err}`,
-                                                            snippet: newSnippet
-                                                        });
-                                            }
-                                            console.log(`add-snippet saved snippet! ${newSnippet} ${theUser}`);
-                                            
-                                            return res.send({
-                                                        success: `Successfully added snippet.`,
-                                                        error: null,
-                                                        snippet: newSnippet
-                                                    });
-                                        });         
-                                    }
-                                });
-                            }
+                    console.log(`Created newSnippet! ${snippet}`);
+        
+                    // Add snippet's id to user's snippets
+                    req.user.addSnippet(snippet._id, function(err, result) {
+                        if(err) return next(err);
+                        console.log(`Updated user's snippets!  ${result}`);
+                        res.json({
+                            success: `Successfully added snippet!`,
+                            error: null,
+                            snippet: snippet
                         });
-                    }
-                });
+                    });
+                }
+            });
         } else {
             
-            console.log(`Error! No snipId! ${snipId}`);
+            console.log(`Error! No req snippet! ${req.snippet}`);
 
             const error = new Error('There was an issue adding snippet!');
             error.status = 404;
@@ -349,7 +338,7 @@ router.post('/register', (req, res, next) => {
 
 
 // POST /register
-router.post('/update-password', (req, res, next) => {
+router.post('/password', (req, res, next) => {
     if (req.body.email && 
         req.body.password && 
         req.body.confirmPassword)
@@ -376,32 +365,12 @@ router.post('/update-password', (req, res, next) => {
                     [['_id','asc']], 
                     {$set: {password: hash}},
                     {new: true, upsert: false}, 
-                    (err, result) => {
+                    (err, result) => 
+                    {
                         console.log(`update-passord results: ${result}`);
                         if(err) return next(err);
                         return res.redirect('/login');
                     });
-            
-            // TODO TODO TODO:  Grab user and update password
-            // User.findOne({email: req.body.email})
-            // .exec(function(error, user) {
-            //     if (error) {
-            //         return callback(error);
-            //     } else if (!user) {
-            //         console.log(`User not found!`);
-            //         const error = new Error('User not found.');
-            //         error.status = 401;
-            //         return callback(error);
-            //     } else {
-                
-            //         // TODO TODO TODO:  Eventually an email will need to be sent to verify user
-            //         user.findAndModify({_id: user._id},  {$set: {password: hash}}, (err, result) => {
-            //             console.log(`update-passord results: `);
-            //             if(err) return next(err);
-            //             return res.redirect('/login');
-            //         });
-            //     }
-            // });
         });
 
     } else {
@@ -412,5 +381,43 @@ router.post('/update-password', (req, res, next) => {
 });
 
 
+// DELETE ROUTES //
+
+// DELETE /snippet/:snipID/:uID  -- Delete snippet from user's library
+router.delete('/snippet/:snipID/:uID', (req, res, next) => {
+    
+    if (req.session && req.session.userId && req.snippet.userId === req.session.userId) 
+    {
+        if (req.snippet) 
+        {
+            // Remove snippet from user's snippets
+            req.user.removeSnippet(req.snippet._id, function(err, result) {
+                // Remove snippet from snippets collection
+                req.snippet.remove((err) => {
+                    if(err) return next(err);
+                    return res.json({
+                        success: `Successfully removed snippet!`,
+                        error: null
+                    });
+                });
+            });
+
+        } else {
+            
+            return res.json({
+                success: null,
+                error: 'There was an issue removing this snippet!'
+            });
+        }
+    } else {
+
+        // return error response
+        return res.json({
+            success: null,
+            error: `You don't have permission to remove this snippet!`,
+        });
+    }
+    
+});
 
 module.exports = router;

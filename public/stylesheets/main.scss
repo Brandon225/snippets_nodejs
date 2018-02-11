@@ -111,7 +111,12 @@ $dkgrey: #3f3f3f;
     }
 }
 
-.library-add
+.lib-form
+{
+    display: inline;
+}
+
+.lib-add, .lib-remove
 {
     background-color: rgba(0, 0, 0, 0);
     border: none;

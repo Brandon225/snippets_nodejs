@@ -33,7 +33,7 @@ var UserSchema = new mongoose.Schema({
 // hash password before saving to db
 // UserSchema.pre('save', function(next) 
 // {
-//     var user = this;
+//     // var user = this;
 //     bcrypt.hash(user.password, 10, function(err, hash)
 //     {
 //         if (err) 
@@ -43,7 +43,31 @@ var UserSchema = new mongoose.Schema({
 //         user.password = hash;
 //         next();
 //     });
+//     next();
 // });
+
+UserSchema.method('update', function(updates, callback)
+{
+    Object.assign(this, updates);
+    this.save(callback);
+});
+
+
+UserSchema.method('addSnippet', function(snippet, callback)
+{
+    this.snippets.push(snippet);
+    this.save(callback);
+});
+
+UserSchema.method('removeSnippet', function(snippet, callback)
+{
+    this.snippets.pull(snippet);
+    this.save(callback);
+});
+
+function remove(array, element) {
+    return array.filter(e => e !== element);
+}
 
 UserSchema.statics.authenticate = function(email, password, callback)
 {

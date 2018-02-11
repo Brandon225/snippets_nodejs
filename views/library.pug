@@ -14,24 +14,29 @@ block content
                         .card.bg-dark.mb-5
                             .card-header.text-info
                                 h5 #{snip.description}
-                            .card-body
-                                p.card-text.text-offwhite= snip.content
-                                p.card-text.text-yellow.mb-0 editor: 
+                            ul.list-group.list-group-flush
+                                li.list-group-item.text-black= snip.content
+                                li.list-group-item editor:
                                     span.text-ltgrey #{snip.editor}
-                                p.card-text.text-yellow.mb-0 scope: 
+                                li.list-group-item scope:
                                     span.text-ltgrey #{snip.scope}
-                                p.card-text.text-yellow trigger: 
+                                li.list-group-item trigger:
                                     span.text-ltgrey #{snip.trigger}                                    
-                            .card-footer.text-right
-                                // add snippet form
-                                form.addSnip-form.form.mb-0(action="/add-snippet", method="POST")
-                                    input.form-control(type="hidden", name="snipId", value=snip._id)
-                                    button.library-add.card-link.text-green.hover-ltgrey(type="submit", disabled=snip.userId===currentUser) add
+                            .card-body
                                 if snip.userId === currentUser
-                                    // remove snippet form
-                                    form.addSnip-form.form.mb-0(action="/snippet/", method="POST")
-                                        input.form-control(type="hidden", name="snipId", value=snip._id)
-                                        button.library-add.card-link.text-green.hover-ltgrey(type="submit", disabled=snip.userId===currentUser) add
+                                    //- // remove snippet form
+                                    form.lib-form.form-inline.removeSnip-form.form.mb-0(action='/snippet/' + snip._id + '/' + currentUser, method="DELETE")
+                                        input.form-control(type="hidden", name="snipID", value=snip._id)
+                                        input.form-control(type="hidden", name="uID", value=currentUser)
+                                        button.lib-remove.card-link.text-red.hover-ltgrey(type="submit") remove
+                                else if currentUser
+                                    // add snippet form
+                                    form.lib-form.addSnip-form.form.mb-0(action='/snippet/' + snip._id + '/' + currentUser, method="POST")
+                                        input.form-control(type="hidden", name="snipID", value=snip._id)
+                                        input.form-control(type="hidden", name="uID", value=currentUser)
+                                        button.lib-add.card-link.text-green.hover-ltgrey(type="submit") add
+                                else 
+                                    a.lib-add.card-link.text-green.hover-ltgrey(href="#") add
             else
                 .col-md-6.p-t-2.text-center
                     i.icn-person.material-icons error

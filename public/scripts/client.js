@@ -99,3 +99,58 @@ $('.addSnip-form').submit(function(event)
     } ,'json' );
     
 });
+
+$('.removeSnip-form').submit(function(event) 
+{
+    event.preventDefault();
+
+    console.log(`removeSnip-form submit!`);
+
+    var submit = $(this).find('[type="submit"]');
+    $(submit).attr('disabled', true)
+    
+    var form = $(this),
+    url = form.attr('action');
+    
+    var ajax = $.ajax({url, type: 'DELETE', data: form.serialize()})
+        .then(res => {
+            console.log("Results from remove snippet", res);
+            return res;
+        })
+        .fail(err => {
+
+            console.log("Error in remove snippet", err);
+            
+            // Re-enable submit button
+            $(submit).attr('disabled', false);
+
+            // TODO TODO TODO:  Show login modal
+            alert(err);
+            
+            throw err;
+        }
+    );
+
+    console.log(`ajax? ${ajax}`);
+    
+    // Send the data using post
+    // $.post(url, form.serialize(),
+    // function(data)
+    // {
+    //     // if data returned no errors
+    //     if (data.success)
+    //     {
+    //         console.log(`Successfully loaded data! ${data.success}`);
+    //     } else {
+    //         console.log(`Error loading data! ${data.error}`);
+
+            // // Re-enable submit button
+            // $(submit).attr('disabled', false);
+
+            // // TODO TODO TODO:  Show login modal
+            // alert(data.error);
+    //     }
+
+    // } ,'json' );
+    
+});

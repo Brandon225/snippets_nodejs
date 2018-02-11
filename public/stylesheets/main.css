@@ -54,10 +54,13 @@
     background-color: #4fb1be;
     border-color: #4fb1be; }
 
-.library-add {
+.lib-form {
+  display: inline; }
+
+.lib-add, .lib-remove {
   background-color: transparent;
   border: none; }
-  .library-add:disabled {
+  .lib-add:disabled, .lib-remove:disabled {
     color: #9d9d9d;
     opacity: .5; }
 
