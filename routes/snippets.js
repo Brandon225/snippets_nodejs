@@ -1,7 +1,7 @@
 // routes/snippets
 
 const express = require('express');
-const router = express.Router();
+const snippetRouter = express.Router();
 var User = require('../models/user');
 var Snippet = require('../models/snippet');
 var mid = require('../middleware');
@@ -9,11 +9,41 @@ var mongoose = require('mongoose');
 var bcrypt = require('bcrypt');
 
 
+// PARAM OBJECT LOADING
+// snippetRouter.param('uID', (req, res, next, id) => {
+//     User.findById(id, (err, doc) => {
+//         if(err) return next(err);
+//         if (!doc) {
+//             err = new Error('Not Found');
+//             err.status = 404;
+//             return next(err);
+//         }
+//         req.user = doc;
+//         console.log(`snippets req.user? ${req.user}`);
+//         return next();
+//     });
+// });
+
+snippetRouter.param('snipID', (req, res, next, id) => {
+    Snippet.findById(id, (err, doc) => {
+        if(err) return next(err);
+        if (!doc) {
+            err = new Error('Not Found');
+            err.status = 404;
+            return next(err);
+        }
+        req.snippet = doc;
+        console.log(`snippets req.snippet? ${req.snippet}`);
+        
+        return next();
+    });
+});
+
 // GET ROUTES
 
 // GET /snippets
 // Route for getting snippets
-router.get('/', (req, res, next) => {
+snippetRouter.get('/', (req, res, next) => {
 
     Snippet.find()
         .exec((err, snippets) => {
@@ -23,28 +53,64 @@ router.get('/', (req, res, next) => {
         });
 });
 
-// GET /snippets/:editor
+// GET /snippets/editor/:editor
 // Route for getting snippets filtered by editor
-router.get('/editor/:editor', (req, res, next) => {
+snippetRouter.get('/editor/:editor', (req, res, next) => {
 
     let { editor } = req.params;
-    let editorName = editor.toUpperCase();
-    if (editor === 'visual_code') 
-    {
-        editorName = 'VISUAL STUDIO CODE';
-    }
 
     Snippet.find({editor: editor, duplicated: {$ne: true}})
         .exec((err, snippets) => {
-            if (err) return next(err);
-            res.render('library', { title: 'Library | Snippets', active: 'library', desc, canonical: `${path}library`, bgColor: '#ffffff', snippets, editor: editorName});
-
+            if (err)
+            {
+                console.log(`findUserSnippetsForEditor err: ${err}`);
+                return res.json({
+                    success: null,
+                    error: 'There was an issue removing this snippet!',
+                    snippets: null
+                });
+            } 
+            console.log(`findUserSnippetsForEditor success: ${snippets}`);
+            
+            return res.json({
+                success: 'Successfully loaded snippets',
+                error: null,
+                snippets: snippets
+            });
         });
+});
+
+// GET /snippets/user/:uID/editor/:editor
+// Route for getting snippets filtered by editor
+snippetRouter.get('/user/:uID/editor/:editor', (req, res, next) => {
+    
+    let { uID } = req.params;
+    let { editor } = req.params;
+
+    console.log(`get snippets for editor: ${editor}`);
+    Snippet.findUserSnippetsForEditor(uID, editor, (err, snippets) => {
+        if (err)
+        {
+            console.log(`findUserSnippetsForEditor err: ${err}`);
+            return res.json({
+                success: null,
+                error: 'There was an issue removing this snippet!',
+                snippets: null
+            });
+        } 
+        console.log(`findUserSnippetsForEditor success: ${snippets}`);
+        
+        return res.json({
+            success: 'Successfully loaded snippets',
+            error: null,
+            snippets: snippets
+        });
+    });
 });
 
 // POST /snippets
 // Route for creating snippets
-router.post('/', (req, res, next) => {
+snippetRouter.post('/', (req, res, next) => {
 
     console.log(`save snippet!`);
 
@@ -95,7 +161,7 @@ router.post('/', (req, res, next) => {
 
 // PUT /snippet/:snipID/user/:uID  -- 
 // Route for inserting duplicate snippet into user's library
-router.put('/:snipID/user/:uID', (req, res, next) => {
+snippetRouter.put('/:snipID/user/:uID', (req, res, next) => {
     console.log(`add snippet! ${req.snippet}`);
     
     if (req.session && req.session.userId) 
@@ -167,7 +233,7 @@ router.put('/:snipID/user/:uID', (req, res, next) => {
 
 // DELETE /snippet/:snipID/user/:uID
 // Route for deleting snippet from user's library
-router.delete('/:snipID/user/:uID', (req, res, next) => {
+snippetRouter.delete('/:snipID/user/:uID', (req, res, next) => {
     
     if (req.session && req.session.userId && req.snippet.userId === req.session.userId) 
     {
@@ -202,3 +268,5 @@ router.delete('/:snipID/user/:uID', (req, res, next) => {
     }
     
 });
+
+module.exports = snippetRouter;

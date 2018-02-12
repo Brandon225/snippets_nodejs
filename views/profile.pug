@@ -19,7 +19,7 @@ block content
             //-         a.list-group-item.list-group-item-action(data-toggle='list', href='#visual_code-prof', role='tab') Visual Studio Code
                 
             .col-sm-10
-                .row
+                .row#snippets-row.tab-pane.fade.show.active
                     - var snips = snippets;
                     if snips.length
                         each snip in snips
@@ -43,8 +43,8 @@ block content
                                             button.lib-remove.card-link.text-red.hover-ltgrey(type="submit") remove
 
             .col.d-none.d-sm-block
-                #myList.list-group.flex-column.sticky-top(role='tablist')
-                    a.list-group-item.list-group-item-action.active(data-toggle='list', href='#atom-prof', role='tab') Atom
-                    a.list-group-item.list-group-item-action(data-toggle='list', href='#brackets-prof', role='tab') Brackets
-                    a.list-group-item.list-group-item-action(data-toggle='list', href='#sublime-prof', role='tab') Sublime Text
-                    a.list-group-item.list-group-item-action(data-toggle='list', href='#visual_code-prof', role='tab') Visual Studio Code
+                #profileList.list-group.flex-column.sticky-top(role='tablist')
+                    a.list-group-item.list-group-item-action.active(data-toggle='list', data-editor='atom', data-uID=currentUser, href='#snippets-row', role='tab') Atom
+                    a.list-group-item.list-group-item-action(data-toggle='list', data-editor='brackets', data-uID=currentUser, href='#snippets-row', role='tab') Brackets
+                    a.list-group-item.list-group-item-action(data-toggle='list', data-editor='sublime', data-uID=currentUser, href='#snippets-row', role='tab') Sublime Text
+                    a.list-group-item.list-group-item-action(data-toggle='list', data-editor='visual_code', data-uID=currentUser, href='#snippets-row', role='tab') Visual Studio Code

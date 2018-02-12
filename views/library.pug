@@ -25,13 +25,13 @@ block content
                             .card-body
                                 if snip.userId === currentUser
                                     //- // remove snippet form
-                                    form.lib-form.form-inline.removeSnip-form.form.mb-0(action='/snippet/' + snip._id + '/' + currentUser, method="DELETE")
+                                    form.lib-form.form-inline.removeSnip-form.form.mb-0(action='/snippets/' + snip._id + '/user/' + currentUser, method="DELETE")
                                         input.form-control(type="hidden", name="snipID", value=snip._id)
                                         input.form-control(type="hidden", name="uID", value=currentUser)
                                         button.lib-remove.card-link.text-red.hover-ltgrey(type="submit") remove
                                 else if currentUser
                                     // add snippet form
-                                    form.lib-form.addSnip-form.form.mb-0(action='/snippet/' + snip._id + '/' + currentUser, method="PUT")
+                                    form.lib-form.addSnip-form.form.mb-0(action='/snippets/' + snip._id + '/user/' + currentUser, method="PUT")
                                         input.form-control(type="hidden", name="snipID", value=snip._id)
                                         input.form-control(type="hidden", name="uID", value=currentUser)
                                         button.lib-add.card-link.text-green.hover-ltgrey(type="submit") add

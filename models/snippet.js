@@ -37,7 +37,7 @@ var SnippetSchema = new mongoose.Schema({
 
 SnippetSchema.statics.findUserSnippetsForEditor = function(userId, editor, callback)
 {
-    Snippet.find({userId: userId, editor})
+    Snippet.find({userId: userId, editor: editor})
         .exec((err, snippets) => {
             if (err) 
             {

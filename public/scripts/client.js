@@ -78,25 +78,44 @@ $('.addSnip-form').submit(function(event)
     var form = $(this),
     url = form.attr('action');
     
-    // Send the data using post
-    var posting = $.post(url, form.serialize(),
-    function(data)
-    {
-        // if data returned no errors
-        if (data.success)
-        {
-            console.log(`Successfully loaded data! ${data.success}`);
-        } else {
-            console.log(`Error loading data! ${data.error}`);
+    var ajax = $.ajax({url, type: 'PUT', data: form.serialize()})
+        .then(res => {
+            console.log("Results from put snippet in user's library: ", res);
+            // return res;
+        })
+        .fail(err => {
 
+            console.log("Error in put snippet in user's library", err);
+            
             // Re-enable submit button
             $(submit).attr('disabled', false);
 
             // TODO TODO TODO:  Show login modal
-            alert(data.error);
+            alert(err);
+            
+            throw err;
         }
+    );
 
-    } ,'json' );
+    // Send the data using post
+    // var posting = $.post(url, form.serialize(),
+    // function(data)
+    // {
+    //     // if data returned no errors
+    //     if (data.success)
+    //     {
+    //         console.log(`Successfully loaded data! ${data.success}`);
+    //     } else {
+    //         console.log(`Error loading data! ${data.error}`);
+
+    //         // Re-enable submit button
+    //         $(submit).attr('disabled', false);
+
+    //         // TODO TODO TODO:  Show login modal
+    //         alert(data.error);
+    //     }
+
+    // } ,'json' );
     
 });
 
@@ -115,7 +134,7 @@ $('.removeSnip-form').submit(function(event)
     var ajax = $.ajax({url, type: 'DELETE', data: form.serialize()})
         .then(res => {
             console.log("Results from remove snippet", res);
-            return res;
+            // return res;
         })
         .fail(err => {
 
@@ -133,9 +152,68 @@ $('.removeSnip-form').submit(function(event)
     
 });
 
-$('a[data-toggle="list"]').on('show.bs.tab', function (e) 
+$('#profileList a').on('click', function (e) 
 {
-    var target = e.target;
-    console.log(`target? ${target}`);
-    console.log(`this? ${this}`);
+    e.preventDefault()
+
+    var editor = $(this).data('editor');
+    var uID = $(this).data('uid');
+
+    console.log(`editor clicked ${editor}`);
+    
+    // Send the data using post
+    var posting = $.get(`/snippets/user/${uID}/editor/${editor}`,
+    function( data )
+    {
+        // if data returned no errors
+        if (data.success)
+        {
+            console.log('Successfully loaded data!', data.snippets);
+
+            $('#snippets-row').html(data.snippets);
+        
+        } else {
+            console.log('Error loading data!', data.error);
+        }
+
+        // $('#snippets-row').addClass('active show');
+        
+
+    } ,'json' );
+    
+    
+    // var ajax = $.ajax({url: `/snippets/user/${uID}/editor/${editor}`, type: 'GET'})
+    //     .then(res => {
+    //         console.log("Results:", res);
+            // if (res.success) 
+            // {
+            //     console.log(`loaded snippets ${res.snippets}`);
+            // } else {
+            //     alert(res.error);
+            // }
+    //     })
+    //     .fail(err => {
+    //         console.log("Error:", err);
+    //     });
+
+    // console.log(`tab clicked: ${this}`);
+    // $(this).tab('show')
 });
+
+
+// $('a[data-toggle="list"]').on('show.bs.tab', function (e) 
+// {
+//     var target = e.target;
+//     console.log(`target? ${target}`);
+//     console.log(`this? ${this}`);
+
+//     // #snippets-row
+    
+    // var ajax = $.ajax('/')
+    //     .then(res => {
+    //         console.log("Results:", res);
+    //     })
+    //     .fail(err => {
+    //         console.log("Error:", err);
+    //     });
+// });
