@@ -76,7 +76,6 @@ UserSchema.statics.authenticate = function(email, password, callback)
             if (error) {
                 return callback(error);
             } else if (!user) {
-                console.log(`User not found!`);
                 const error = new Error('User not found.');
                 error.status = 401;
                 return callback(error);
@@ -85,9 +84,7 @@ UserSchema.statics.authenticate = function(email, password, callback)
                     if (result === true)
                     {
                         return callback(null, user);
-                    } else {
-                        console.log(`Password wrong! ${result}`);
-                        
+                    } else {                        
                         return callback();
                     }
                 });

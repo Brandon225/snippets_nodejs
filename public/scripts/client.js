@@ -130,27 +130,12 @@ $('.removeSnip-form').submit(function(event)
             throw err;
         }
     );
-
-    console.log(`ajax? ${ajax}`);
     
-    // Send the data using post
-    // $.post(url, form.serialize(),
-    // function(data)
-    // {
-    //     // if data returned no errors
-    //     if (data.success)
-    //     {
-    //         console.log(`Successfully loaded data! ${data.success}`);
-    //     } else {
-    //         console.log(`Error loading data! ${data.error}`);
+});
 
-            // // Re-enable submit button
-            // $(submit).attr('disabled', false);
-
-            // // TODO TODO TODO:  Show login modal
-            // alert(data.error);
-    //     }
-
-    // } ,'json' );
-    
+$('a[data-toggle="list"]').on('show.bs.tab', function (e) 
+{
+    var target = e.target;
+    console.log(`target? ${target}`);
+    console.log(`this? ${this}`);
 });

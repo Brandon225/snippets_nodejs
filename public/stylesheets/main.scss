@@ -419,38 +419,38 @@ input
     {
         margin-bottom: 60px;
     }
-}
 
-.sticky-top
-{
-    top: 140px;
-}
-
-.flex-column .active:focus, .flex-column .active:hover
-{
-    background: $trublack;
-    -webkit-transition: all 200ms linear;
-    -moz-transition: all 200ms linear;
-    -o-transition: all 200ms linear;
-    -ms-transition: all 200ms linear;
-    transition: all 200ms linear;
-}
-
-.flex-column .active
-{
-    background-color: $trublack;
-    color: $blue!important;
-    border-radius: 0;
-}
-
-.flex-column a
-{
-    color: $ltgrey;
-    border-radius: 0;
-    &:hover
+    .sticky-top
     {
-        color: $blue;
-        background-color: rgba(0,0,0,0);
+        top: 140px;
+    }
+
+    .flex-column .active:focus, .flex-column .active:hover
+    {
+        background: $trublack;
+        -webkit-transition: all 200ms linear;
+        -moz-transition: all 200ms linear;
+        -o-transition: all 200ms linear;
+        -ms-transition: all 200ms linear;
+        transition: all 200ms linear;
+    }
+
+    .flex-column .active
+    {
+        background-color: $trublack;
+        color: $blue!important;
+        border-radius: 0;
+    }
+
+    .flex-column a
+    {
+        color: $ltgrey;
+        border-radius: 0;
+        &:hover
+        {
+            color: $blue;
+            background-color: rgba(0,0,0,0);
+        }
     }
 }
 
@@ -464,6 +464,16 @@ input
     }
 
 }
+
+/****** PROFILE PAGE STYLES ******/
+#profile-container
+{
+    .sticky-top
+    {
+        top: 66px;
+    }
+}
+
 
 /**************************** RESPONSIVE DATA ****************************/
 

@@ -1,7 +1,7 @@
 extends layout
 
 block content
-    .main.fullsize-container.page-container.container.clearfix
+    #profile-container.main.page-container.container
         .row
             .col-md-8.col-md-offset-2
                 h1.display-4
@@ -10,3 +10,41 @@ block content
                 p.lead #{email}
                 p.favorite-book Preferred Code Editor
                 | #{editor}
+        .row
+            //- .col-sm-2
+            //-     #myList.list-group(role='tablist')
+            //-         a.list-group-item.list-group-item-action.active(data-toggle='list', href='#atom-prof', role='tab') Atom
+            //-         a.list-group-item.list-group-item-action(data-toggle='list', href='#brackets-prof', role='tab') Brackets
+            //-         a.list-group-item.list-group-item-action(data-toggle='list', href='#sublime-prof', role='tab') Sublime Text
+            //-         a.list-group-item.list-group-item-action(data-toggle='list', href='#visual_code-prof', role='tab') Visual Studio Code
+                
+            .col-sm-10
+                .row
+                    - var snips = snippets;
+                    if snips.length
+                        each snip in snips
+                            .col-sm-6
+                                .card.bg-dark.mb-5
+                                    .card-header.text-info
+                                        h5 #{snip.description}
+                                    ul.list-group.list-group-flush
+                                        li.list-group-item.text-black= snip.content
+                                        li.list-group-item editor:
+                                            span.text-ltgrey #{snip.editor}
+                                        li.list-group-item scope:
+                                            span.text-ltgrey #{snip.scope}
+                                        li.list-group-item trigger:
+                                            span.text-ltgrey #{snip.trigger}                                    
+                                    .card-body
+                                        //- // remove snippet form
+                                        form.lib-form.form-inline.removeSnip-form.form.mb-0(action='/snippet/' + snip._id + '/' + currentUser, method="DELETE")
+                                            input.form-control(type="hidden", name="snipID", value=snip._id)
+                                            input.form-control(type="hidden", name="uID", value=currentUser)
+                                            button.lib-remove.card-link.text-red.hover-ltgrey(type="submit") remove
+
+            .col.d-none.d-sm-block
+                #myList.list-group.flex-column.sticky-top(role='tablist')
+                    a.list-group-item.list-group-item-action.active(data-toggle='list', href='#atom-prof', role='tab') Atom
+                    a.list-group-item.list-group-item-action(data-toggle='list', href='#brackets-prof', role='tab') Brackets
+                    a.list-group-item.list-group-item-action(data-toggle='list', href='#sublime-prof', role='tab') Sublime Text
+                    a.list-group-item.list-group-item-action(data-toggle='list', href='#visual_code-prof', role='tab') Visual Studio Code

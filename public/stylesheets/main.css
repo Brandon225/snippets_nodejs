@@ -214,10 +214,10 @@ input {
 #details-container .details-section {
   margin-bottom: 60px; }
 
-.sticky-top {
+#details-container .sticky-top {
   top: 140px; }
 
-.flex-column .active:focus, .flex-column .active:hover {
+#details-container .flex-column .active:focus, #details-container .flex-column .active:hover {
   background: #080808;
   -webkit-transition: all 200ms linear;
   -moz-transition: all 200ms linear;
@@ -225,21 +225,25 @@ input {
   -ms-transition: all 200ms linear;
   transition: all 200ms linear; }
 
-.flex-column .active {
+#details-container .flex-column .active {
   background-color: #080808;
   color: #51b6c3 !important;
   border-radius: 0; }
 
-.flex-column a {
+#details-container .flex-column a {
   color: #9d9d9d;
   border-radius: 0; }
-  .flex-column a:hover {
+  #details-container .flex-column a:hover {
     color: #51b6c3;
     background-color: transparent; }
 
 /****** ABOUT PAGE STYLES ******/
 #about-container p {
   color: #51b6c3; }
+
+/****** PROFILE PAGE STYLES ******/
+#profile-container .sticky-top {
+  top: 66px; }
 
 /**************************** RESPONSIVE DATA ****************************/
 /* Extra Small */

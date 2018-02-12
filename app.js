@@ -10,7 +10,11 @@ const app = express();
 app.use(logger('dev'));
 
 // mongodb connection
+// mongoose.Promise = require('bluebird');
+// mongoose.createConnection("mongodb://localhost:27017/snippets_db");
 mongoose.connect("mongodb://localhost:27017/snippets_db");
+
+
 var db = mongoose.connection;
 // mongo error
 db.on('error', console.error.bind(console, 'connection error: '));

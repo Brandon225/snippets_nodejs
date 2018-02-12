@@ -35,6 +35,20 @@ var SnippetSchema = new mongoose.Schema({
     }
 });
 
+SnippetSchema.statics.findUserSnippetsForEditor = function(userId, editor, callback)
+{
+    Snippet.find({userId: userId, editor})
+        .exec((err, snippets) => {
+            if (err) 
+            {
+                return callback(err);
+            } else {
+                return callback(null, snippets);
+            }
+        });
+};
+
+
 // hash password before saving to db
 // SnippetSchema.pre('save', function(next) 
 // {
