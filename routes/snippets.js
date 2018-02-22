@@ -89,22 +89,23 @@ snippetRouter.get('/user/:uID/editor/:editor', (req, res, next) => {
 
     console.log(`get snippets for editor: ${editor}`);
     Snippet.findUserSnippetsForEditor(uID, editor, (err, snippets) => {
-        if (err)
-        {
-            console.log(`findUserSnippetsForEditor err: ${err}`);
-            return res.json({
-                success: null,
-                error: 'There was an issue removing this snippet!',
-                snippets: null
-            });
-        } 
+        if (err) return next(err);
+        // {
+        //     console.log(`findUserSnippetsForEditor err: ${err}`);
+        //     return res.json({
+        //         success: null,
+        //         error: 'There was an issue removing this snippet!',
+        //         snippets: null
+        //     });
+        // } 
         console.log(`findUserSnippetsForEditor success: ${snippets}`);
         
-        return res.json({
-            success: 'Successfully loaded snippets',
-            error: null,
-            snippets: snippets
-        });
+        // return res.json({
+        //     success: 'Successfully loaded snippets',
+        //     error: null,
+        //     snippets: snippets
+        // });
+        return res.json(snippets);
     });
 });
 

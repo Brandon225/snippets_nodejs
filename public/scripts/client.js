@@ -96,26 +96,6 @@ $('.addSnip-form').submit(function(event)
             throw err;
         }
     );
-
-    // Send the data using post
-    // var posting = $.post(url, form.serialize(),
-    // function(data)
-    // {
-    //     // if data returned no errors
-    //     if (data.success)
-    //     {
-    //         console.log(`Successfully loaded data! ${data.success}`);
-    //     } else {
-    //         console.log(`Error loading data! ${data.error}`);
-
-    //         // Re-enable submit button
-    //         $(submit).attr('disabled', false);
-
-    //         // TODO TODO TODO:  Show login modal
-    //         alert(data.error);
-    //     }
-
-    // } ,'json' );
     
 });
 
@@ -156,30 +136,46 @@ $('#profileList a').on('click', function (e)
 {
     e.preventDefault()
 
+    console.log(`profileList a clicked!`);
+
     var editor = $(this).data('editor');
     var uID = $(this).data('uid');
 
     console.log(`editor clicked ${editor}`);
-    
+    const url = `/snippets/user/${uID}/editor/${editor}`;
+
+    const template = $('#snippet-template').html();
+    const compiledTemplate = Handlebars.compile(template);
+
+    // Then is a javascript "Promises"
+    getDataFromURL(url)
+        .then(snippets => {
+            console.log(`snippets? ${snippets}`);
+            const data = { snippets: snippets };
+            const html = compiledTemplate(data);
+
+            $('#snippets-row').html(html);
+        });
+
     // Send the data using post
-    var posting = $.get(`/snippets/user/${uID}/editor/${editor}`,
-    function( data )
-    {
-        // if data returned no errors
-        if (data.success)
-        {
-            console.log('Successfully loaded data!', data.snippets);
+    // var posting = $.get(`/snippets/user/${uID}/editor/${editor}`,
+    // function( data )
+    // {
+    //     // if data returned no errors
+    //     if (data.success)
+    //     {
+    //         console.log('Successfully loaded data!', data.snippets);
 
-            $('#snippets-row').html(data.snippets);
+    //         $('#snippets-row').html(data.snippets);
         
-        } else {
-            console.log('Error loading data!', data.error);
-        }
+    //     } else {
+    //         console.log('Error loading data!', data.error);
+    //     }
 
-        // $('#snippets-row').addClass('active show');
+    //     // $('#snippets-row').addClass('active show');
         
 
-    } ,'json' );
+    // } ,'json' );
     
     
     // var ajax = $.ajax({url: `/snippets/user/${uID}/editor/${editor}`, type: 'GET'})
@@ -199,6 +195,35 @@ $('#profileList a').on('click', function (e)
     // console.log(`tab clicked: ${this}`);
     // $(this).tab('show')
 });
+
+function getDataFromURL(url) {
+    console.log(`getDataFromURL? ${url}`);
+    // then and fail are like "Promises" fail is "Catch-ish"
+    return $.ajax(url)
+        .then(res => {
+            console.log("Results from getDataFromURL()", res);
+            return res;
+        })
+        .fail(err => {
+            console.log("Error in getDataFromURL()", err);
+            throw err;
+        });
+}
+
+// function refreshFileList() {
+//     const template = $('#list-template').html();
+//     const compiledTemplate = Handlebars.compile(template);
+
+//     // Then is a javascript "Promises"
+//     getFiles()
+//         .then(files => {
+//             const data = { files: files };
+//             const html = compiledTemplate(data);
+//             console.log(``);
+
+//             $('#list-container').html(html);
+//         });
+// }
 
 
 // $('a[data-toggle="list"]').on('show.bs.tab', function (e) 

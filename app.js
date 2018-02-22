@@ -1,5 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const config = require('./src/config');
 const mongoose = require('mongoose');
 const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
@@ -10,9 +11,7 @@ const app = express();
 app.use(logger('dev'));
 
 // mongodb connection
-// mongoose.Promise = require('bluebird');
-// mongoose.createConnection("mongodb://localhost:27017/snippets_db");
-mongoose.connect("mongodb://localhost:27017/snippets_db");
+mongoose.connection.openUri(`mongodb://${config.db.host}/${config.db.dbName}`);
 
 
 var db = mongoose.connection;

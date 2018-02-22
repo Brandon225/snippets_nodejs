@@ -1,0 +1,33 @@
+<!-- snippet_card_template.html -->
+<script id="snippet-template" type="text/x-handlebars-template">
+    {{#each snippets}}
+    <div class="col-sm-6">
+        <div class="card bg-dark mb-5">
+            <div class="card-header text-info">
+                <h5>{{description}}</h5>
+            </div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item text-black">
+                    {{content}}
+                </li>
+                <li class="list-group-item">
+                    <span class="text-ltgrey">editor: {{editor}}</span>
+                </li>
+                <li class="list-group-item">
+                    <span class="text-ltgrey">scope: {{scope}}</span>
+                </li>
+                <li class="list-group-item">
+                    <span class="text-ltgrey">trigger: {{trigger}}</span>
+                </li>
+            </ul>
+            <div class="card-body">
+                <form class="lib-form-form-inline removeSnip-form form mb-0" action=`/snippet/{{_id}}/{{userId}}` method="DELETE">
+                    <input type="hidden" class="form-control" name="snipid" value={{_id}}>
+                    <input type="hidden" class="form-control" name="uid" value={{userId}}>
+                    <button class="lib-remove card-link text-red hover-ltgrey" type="submit">remove</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    {{/each}}
+</script>
