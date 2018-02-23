@@ -167,6 +167,9 @@ footer {
 .page-container {
   margin-top: 116px; }
 
+.page-jumbotron {
+  margin-top: 56px; }
+
 #about-container .row:first-of-type, #details-container .row:first-of-type, .fullsize-container .row:first-of-type {
   min-height: 100vh; }
 

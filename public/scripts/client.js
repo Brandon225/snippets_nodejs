@@ -43,7 +43,7 @@ $('#code-form').submit(function(event)
         case 'sublime':
             populateToText('#snippet-output', createSublime(content, trigger, scope, desc));
             break;
-        case 'visual_code':
+        case 'visual_studio_code':
             populateToText('#snippet-output', createVisualCode(content, trigger, scope, desc));
             break;
         default:
@@ -141,7 +141,13 @@ $('#profileList a').on('click', function (e)
     var editor = $(this).data('editor');
     var uID = $(this).data('uid');
 
+    loadEditorSnippetsForUser(editor, uID);
+});
+
+function loadEditorSnippetsForUser(editor, uID)
+{
     console.log(`editor clicked ${editor}`);
+
     const url = `/snippets/user/${uID}/editor/${editor}`;
 
     const template = $('#snippet-template').html();
@@ -151,50 +157,14 @@ $('#profileList a').on('click', function (e)
     getDataFromURL(url)
         .then(snippets => {
             console.log(`snippets? ${snippets}`);
-            const data = { snippets: snippets };
+            const data = {
+                snippets: snippets
+            };
             const html = compiledTemplate(data);
 
             $('#snippets-row').html(html);
         });
-
-    // Send the data using post
-    // var posting = $.get(`/snippets/user/${uID}/editor/${editor}`,
-    // function( data )
-    // {
-    //     // if data returned no errors
-    //     if (data.success)
-    //     {
-    //         console.log('Successfully loaded data!', data.snippets);
-
-    //         $('#snippets-row').html(data.snippets);
-        
-    //     } else {
-    //         console.log('Error loading data!', data.error);
-    //     }
-
-    //     // $('#snippets-row').addClass('active show');
-        
-
-    // } ,'json' );
-    
-    
-    // var ajax = $.ajax({url: `/snippets/user/${uID}/editor/${editor}`, type: 'GET'})
-    //     .then(res => {
-    //         console.log("Results:", res);
-            // if (res.success) 
-            // {
-            //     console.log(`loaded snippets ${res.snippets}`);
-            // } else {
-            //     alert(res.error);
-            // }
-    //     })
-    //     .fail(err => {
-    //         console.log("Error:", err);
-    //     });
-
-    // console.log(`tab clicked: ${this}`);
-    // $(this).tab('show')
-});
+}
 
 function getDataFromURL(url) {
     console.log(`getDataFromURL? ${url}`);

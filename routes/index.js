@@ -84,10 +84,17 @@ router.get('/profile', mid.requiresLogin, (req, res, next) => {
                 return next(error);    
             } else {
 
-                Snippet.findUserSnippetsForEditor(req.session.userId, 'atom', (err, snippets) => {
+                let editor = user.codeEditor.toLowerCase().replace(/ /g, '_');
+
+                console.log(`load snippets for editor? ${editor}`);
+                
+                Snippet.findUserSnippetsForEditor(req.session.userId, editor, (err, snippets) => {
                     if (err) return next(err);
-                        return res.render('profile', {title: 'Profile | Snippets', active: 'profile', desc, canonical: `${path}profile`, year: year, bgColor: '#ffffff', name: user.name, email: user.email, editor: user.codeEditor, snippets});
+                    console.log(`profile snippets? ${snippets}`);
+                    return res.render('profile', { title: 'Profile | Snippets', active: 'profile', desc, canonical: `${path}profile`, year: year, bgColor: '#ffffff', name: user.name, email: user.email, editor: user.codeEditor, snippets, activeEditor: editor });
                 });
+
+                // return res.render('profile', { title: 'Profile | Snippets', active: 'profile', desc, canonical: `${path}profile`, year: year, bgColor: '#ffffff', name: user.name, email: user.email, editor: user.codeEditor, activeEditor: 'atom' });
             }
         });
 });
@@ -122,11 +129,12 @@ router.get('/login', mid.loggedOut, (req, res, next) => {
 router.get('/library/:editor', (req, res, next) => {
 
     let { editor } = req.params;
-    let editorName = editor.toUpperCase();
-    if (editor === 'visual_code') 
-    {
-        editorName = 'VISUAL STUDIO CODE';
-    }
+    let editorName = editor.toUpperCase().replace(/_/g, ' ');
+    console.log(`editorName? ${editorName}`);
+    // if (editor === 'visual_code') 
+    // {
+    //     editorName = 'VISUAL STUDIO CODE';
+    // }
 
     Snippet.find({editor: editor, duplicated: {$ne: true}})
         .exec((err, snippets) => {

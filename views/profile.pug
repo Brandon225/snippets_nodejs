@@ -1,25 +1,45 @@
 extends layout
 
 block content
+    .jumbotron.page-jumbotron
+        ul.list-unstyled
+            //- li.list-inline-item
+                //- img(src="/img/snip_logo_high.svg") 
+            li.list-unstyled-item 
+                p.display-4 #{name} 
+            li.list-unstyled-item 
+                p #{email}
+            li.list-unstyled-item   
+                p #{editor}
     #profile-container.main.page-container.container
-        .row.mb-4
-            .col-md-4.col-md-offset-2
-                ul.list-group
-                    li.list-group-item.list-group-item-dark
-                        h1.display-2
-                        //- img.hidden-xs-down(src="/img/snip_logo_high.svg", alt="Snippets Code Editor") 
-                        | #{name}
-                    li.list-group-item
-                        p.mb-0 #{email}
-                    li.list-group-item
-                        p.mb-0.favorite-book Preferred Code Editor: #{editor}
-        .row       
+        .row
             .col-sm-10
                 .row#snippets-row.tab-pane.fade.show.active
+                    - var snips = snippets;
+                    if snips.length
+                        each snip in snips
+                            .col-sm-6
+                                .card.bg-dark.mb-5
+                                    .card-header.text-info
+                                        h5 #{snip.description}
+                                    ul.list-group.list-group-flush
+                                        li.list-group-item.text-black= snip.content
+                                        li.list-group-item editor:
+                                            span.text-ltgrey #{snip.editor}
+                                        li.list-group-item scope:
+                                            span.text-ltgrey #{snip.scope}
+                                        li.list-group-item trigger:
+                                            span.text-ltgrey #{snip.trigger}                                    
+                                    .card-body
+                                        //- // remove snippet form
+                                        form.lib-form.form-inline.removeSnip-form.form.mb-0(action='/snippet/' + snip._id + '/' + currentUser, method="DELETE")
+                                            input.form-control(type="hidden", name="snipID", value=snip._id)
+                                            input.form-control(type="hidden", name="uID", value=currentUser)
+                                            button.lib-remove.card-link.text-red.hover-ltgrey(type="submit") remove
             .col.d-none.d-sm-block
                 #profileList.list-group.flex-column.sticky-top(role='tablist')
-                    a.list-group-item.list-group-item-action.active(data-toggle='list', data-editor='atom', data-uID=currentUser, href='/profile/atom', role='tab', class=activeEditor ==='atom' ? 'active' : '') Atom
-                    a.list-group-item.list-group-item-action(data-toggle='list', data-editor='brackets', data-uID=currentUser, href='/profile/brackets', role='tab', class=activeEditor==='brackets' ? 'active' : '') Brackets
-                    a.list-group-item.list-group-item-action(data-toggle='list', data-editor='sublime', data-uID=currentUser, href='/profile/sublime', role='tab', class=activeEditor==='sublime' ? 'active' : '') Sublime Text
-                    a.list-group-item.list-group-item-action(data-toggle='list', data-editor='visual_code', data-uID=currentUser, href='/profile/visual_code', role='tab', class=activeEditor==='visual_code' ? 'active' : '') Visual Studio Code
+                    a.list-group-item.list-group-item-action(data-toggle='list', data-editor='atom', data-uID=currentUser, href='/profile/atom', role='tab', class=activeEditor ==='atom' ? 'active' : '') Atom
+                    a.list-group-item.list-group-item-action(data-toggle='list', data-editor='brackets', data-uID=currentUser, href='/profile/brackets', role='tab', class=activeEditor ==='brackets' ? 'active' : '') Brackets
+                    a.list-group-item.list-group-item-action(data-toggle='list', data-editor='sublime', data-uID=currentUser, href='/profile/sublime', role='tab', class=activeEditor ==='sublime' ? 'active' : '') Sublime Text
+                    a.list-group-item.list-group-item-action(data-toggle='list', data-editor='visual_studio_code', data-uID=currentUser, href='/profile/visual_studio_code', role='tab', class=activeEditor ==='visual_studio_code' ? 'active' : '') Visual Studio Code
             include snippet_template.html

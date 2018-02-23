@@ -53,7 +53,7 @@ SnippetSchema.statics.findUserSnippetsForEditor = function(userId, editor, callb
 // SnippetSchema.pre('save', function(next) 
 // {
 //     var snippet = this;
-//     if (snippet.editor === 'visual_code') {
+//     if (snippet.editor === 'visual_studio_code') {
 //         snippet.editor = 'Visual Studio Code';
 //     } else if(snippet.editor === 'sublime') {
 //         snippet.editor = 'Sublime Text';
