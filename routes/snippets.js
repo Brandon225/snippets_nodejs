@@ -80,6 +80,28 @@ snippetRouter.get('/editor/:editor', (req, res, next) => {
         });
 });
 
+// GET /snippets/editor/:editor/scope/:scope
+// Route for getting snippets filtered by editor and scope
+snippetRouter.get('/editor/:editor/scope/:scope/:ext', (req, res, next) => {
+
+    let { editor } = req.params;
+    let fullScope = `${req.params.scope}.${req.params.ext}`;
+
+    console.log(`fullScope? ${fullScope}`);
+
+    Snippet.find({ editor: editor, scope: fullScope , duplicated: { $ne: true } })
+        .exec((err, snippets) => {
+            if (err) {
+                console.log(`findUserSnippetsForEditor err: ${err}`);
+                return res.status(404).end(`Could not find snippets for '${editor}'`)
+
+            }
+            console.log(`findUserSnippetsForEditor success: ${snippets}`);
+
+            return res.json(snippets);
+        });
+});
+
 // GET /snippets/user/:uID/editor/:editor
 // Route for getting snippets filtered by editor
 snippetRouter.get('/user/:uID/editor/:editor', (req, res, next) => {
@@ -181,6 +203,7 @@ snippetRouter.put('/:snipID/user/:uID', (req, res, next) => {
                 duplicated: true
             };
 
+            // TODO: Insert the Snippets scope into the users scopes array
             Snippet.create(snippetData, (error, snippet) => {
 
                 if (error) {

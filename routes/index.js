@@ -131,10 +131,6 @@ router.get('/library/:editor', (req, res, next) => {
     let { editor } = req.params;
     let editorName = editor.toUpperCase().replace(/_/g, ' ');
     console.log(`editorName? ${editorName}`);
-    // if (editor === 'visual_code') 
-    // {
-    //     editorName = 'VISUAL STUDIO CODE';
-    // }
 
     Snippet.find({editor: editor, duplicated: {$ne: true}})
         .exec((err, snippets) => {

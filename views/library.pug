@@ -4,8 +4,23 @@ block content
     #library-container.container.page-container
         .row
             .col-12
-                h1.text-black #{editor} - Code Snippet Library
-                hr
+                h1.text-black.text-center.text-yellow.mb-5 #{editor}
+                    br 
+                    |
+                    span.text-blue Code Snippet Library
+                ul#lib-nav.nav.nav-tabs.justify-content-center.my-5
+                    - let linkEditor = editor.toLowerCase();
+                    li.nav-item
+                        a.nav-link.active(href='#', data-editor=linkEditor, data-lang="source.js") Javascript
+                    li.nav-item
+                        a.nav-link(href="#", data-editor=linkEditor, data-scope="text", data-ext="html") HTML
+                    li.nav-item
+                        a.nav-link(href="#", data-editor=linkEditor, data-scope="source.css", data-ext="css") CSS
+                    li.nav-item
+                        a.nav-link(href="#", data-editor=linkEditor, data-scope="source.php", data-ext="php") PHP
+                    li.nav-item
+                        a.nav-link(href="#", data-editor=linkEditor, data-scope="source.json", data-ext="json") JSON
+
         .row
             - var snips = snippets;
             if snips.length
@@ -42,5 +57,6 @@ block content
                     i.icn-person.material-icons error
                     h1 oops!
                     p.lead.m-t-2 No snippets found for #{editor}
+        include snippet_template.html
 
 

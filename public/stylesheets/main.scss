@@ -111,6 +111,18 @@ $dkgrey: #3f3f3f;
     }
 }
 
+#lib-nav
+{
+    .nav-link
+    {
+        color: $black;        
+        &.active, &:active, &:hover
+        {
+            color: $red;
+        }
+    }
+
+}
 .lib-form
 {
     display: inline;

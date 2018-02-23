@@ -54,6 +54,11 @@
     background-color: #4fb1be;
     border-color: #4fb1be; }
 
+#lib-nav .nav-link {
+  color: #222; }
+  #lib-nav .nav-link.active, #lib-nav .nav-link:active, #lib-nav .nav-link:hover {
+    color: #D85360; }
+
 .lib-form {
   display: inline; }
 

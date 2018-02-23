@@ -24,6 +24,9 @@ var UserSchema = new mongoose.Schema({
     },
     snippets: {
         type: Array
+    },
+    scopes: {
+        type: Array
     }
 },
 {

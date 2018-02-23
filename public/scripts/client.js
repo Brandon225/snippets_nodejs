@@ -141,16 +141,30 @@ $('#profileList a').on('click', function (e)
     var editor = $(this).data('editor');
     var uID = $(this).data('uid');
 
-    loadEditorSnippetsForUser(editor, uID);
+    const url = `/snippets/user/${uID}/editor/${editor}`;
+    
+    loadSnippetsAtUrlIntoTemplate(url, '#snippet-template');
 });
 
-function loadEditorSnippetsForUser(editor, uID)
+
+$('#lib-nav a').on('click', (e) => {
+
+    console.log(`Library nav clicked!`);
+
+    var editor = $(this).data('editor');
+    var scope = $(this).data('scope');
+    var ext = $(this).data('ext');
+
+    const url = `/snippets/editor/${editor}/scope/${scope}/${ext}`;
+    
+    loadSnippetsAtUrlIntoTemplate(url, '#snippet-template');
+});
+
+function loadSnippetsAtUrlIntoTemplate(url, tempId)
 {
-    console.log(`editor clicked ${editor}`);
+    // const url = `/snippets/user/${uID}/editor/${editor}`;
 
-    const url = `/snippets/user/${uID}/editor/${editor}`;
-
-    const template = $('#snippet-template').html();
+    const template = $(tempId).html();
     const compiledTemplate = Handlebars.compile(template);
 
     // Then is a javascript "Promises"
@@ -165,6 +179,8 @@ function loadEditorSnippetsForUser(editor, uID)
             $('#snippets-row').html(html);
         });
 }
+
+
 
 function getDataFromURL(url) {
     console.log(`getDataFromURL? ${url}`);
