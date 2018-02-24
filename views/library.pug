@@ -25,25 +25,25 @@ block content
             - var snips = snippets;
             if snips.length
                 each snip in snips
-                    .col-sm-4
+                    .col-sm-4(id=`card-${snip._id}`)
                         .card.bg-dark.mb-5
                             .card-header.text-info
                                 h5 #{snip.description}
                             ul.list-group.list-group-flush
                                 li.list-group-item.text-black= snip.content
                                 li.list-group-item editor:
-                                    span.text-ltgrey #{snip.editor}
+                                    span.text-ltgrey  #{snip.editor}
                                 li.list-group-item scope:
-                                    span.text-ltgrey #{snip.scope}
+                                    span.text-ltgrey  #{snip.scope}
                                 li.list-group-item trigger:
-                                    span.text-ltgrey #{snip.trigger}                                    
+                                    span.text-ltgrey  #{snip.trigger}                                    
                             .card-body
                                 if snip.userId === currentUser
                                     //- // remove snippet form
                                     form.lib-form.form-inline.removeSnip-form.form.mb-0(action='/snippets/' + snip._id + '/user/' + currentUser, method="DELETE")
                                         input.form-control(type="hidden", name="snipID", value=snip._id)
                                         input.form-control(type="hidden", name="uID", value=currentUser)
-                                        button.lib-remove.card-link.text-red.hover-ltgrey(type="submit") remove
+                                        button.lib-remove.card-link.text-red.hover-ltgrey(type="submit", data-target=`#card-${snip._id}`) remove
                                 else if currentUser
                                     // add snippet form
                                     form.lib-form.addSnip-form.form.mb-0(action='/snippets/' + snip._id + '/user/' + currentUser, method="PUT")
@@ -57,6 +57,5 @@ block content
                     i.icn-person.material-icons error
                     h1 oops!
                     p.lead.m-t-2 No snippets found for #{editor}
-        include snippet_template.html
 
 

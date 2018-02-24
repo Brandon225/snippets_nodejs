@@ -10,21 +10,22 @@ var bcrypt = require('bcrypt');
 
 
 // PARAM OBJECT LOADING
-// snippetRouter.param('uID', (req, res, next, id) => {
-//     User.findById(id, (err, doc) => {
-//         if(err) return next(err);
-//         if (!doc) {
-//             err = new Error('Not Found');
-//             err.status = 404;
-//             return next(err);
-//         }
-//         req.user = doc;
-//         console.log(`snippets req.user? ${req.user}`);
-//         return next();
-//     });
-// });
+snippetRouter.param('uID', (req, res, next, id) => {
+    User.findById(id, (err, doc) => {
+        if(err) return next(err);
+        if (!doc) {
+            err = new Error('Not Found');
+            err.status = 404;
+            return next(err);
+        }
+        req.user = doc;
+        console.log(`req.user? ${req.user}`);
+        return next();
+    });
+});
 
 snippetRouter.param('snipID', (req, res, next, id) => {
+    console.log(`param snipID? ${id}`);
     Snippet.findById(id, (err, doc) => {
         if(err) return next(err);
         if (!doc) {
@@ -63,14 +64,14 @@ snippetRouter.get('/editor/:editor', (req, res, next) => {
         .exec((err, snippets) => {
             if (err)
             {
-                console.log(`findUserSnippetsForEditor err: ${err}`);
+                // console.log(`findUserSnippetsForEditor err: ${err}`);
                 return res.json({
                     success: null,
                     error: 'There was an issue removing this snippet!',
                     snippets: null
                 });
             } 
-            console.log(`findUserSnippetsForEditor success: ${snippets}`);
+            // console.log(`findUserSnippetsForEditor success: ${snippets}`);
             
             return res.json({
                 success: 'Successfully loaded snippets',
@@ -87,18 +88,18 @@ snippetRouter.get('/editor/:editor/scope/:scope/:ext', (req, res, next) => {
     let { editor } = req.params;
     let fullScope = `${req.params.scope}.${req.params.ext}`;
 
-    console.log(`fullScope? ${fullScope}`);
+    // console.log(`fullScope? ${fullScope}`);
 
     Snippet.find({ editor: editor, scope: fullScope , duplicated: { $ne: true } })
         .exec((err, snippets) => {
             if (err) {
-                console.log(`findUserSnippetsForEditor err: ${err}`);
+                // console.log(`findUserSnippetsForEditor err: ${err}`);
                 return res.status(404).end(`Could not find snippets for '${editor}'`)
 
             }
-            console.log(`findUserSnippetsForEditor success: ${snippets}`);
+            // console.log(`findUserSnippetsForEditor success: ${res.locals.currentUser}`);
 
-            return res.json(snippets);
+            return res.json({ snippets, currentUser: res.locals.currentUser});
         });
 });
 
@@ -120,14 +121,14 @@ snippetRouter.get('/user/:uID/editor/:editor', (req, res, next) => {
         //         snippets: null
         //     });
         // } 
-        console.log(`findUserSnippetsForEditor success: ${snippets}`);
+        // console.log(`findUserSnippetsForEditor success: ${snippets}`);
         
         // return res.json({
         //     success: 'Successfully loaded snippets',
         //     error: null,
         //     snippets: snippets
         // });
-        return res.json(snippets);
+        return res.json({ snippets, currentUser: res.locals.currentUser });
     });
 });
 
@@ -257,17 +258,38 @@ snippetRouter.put('/:snipID/user/:uID', (req, res, next) => {
 
 // DELETE /snippet/:snipID/user/:uID
 // Route for deleting snippet from user's library
-snippetRouter.delete('/:snipID/user/:uID', (req, res, next) => {
+snippetRouter.delete('/:snipID/user/:uID', mid.requiresLogin, (req, res, next) => {
     
-    if (req.session && req.session.userId && req.snippet.userId === req.session.userId) 
+    console.log(`Delete snippet called!`);
+
+    if (req.snippet.userId === req.session.userId) 
     {
+        console.log(`Snippet is owned by logged in user!`);
         if (req.snippet) 
         {
+            console.log(`Req snippet does exist!`);
+            
             // Remove snippet from user's snippets
-            req.user.removeSnippet(req.snippet._id, function(err, result) {
+            req.user.removeSnippet(req.snippet._id, function(err, result) 
+            {
+                if (err) {
+                    return res.json({
+                        success: null,
+                        error: 'There was an issue removing this snippet!'
+                    });
+                }
+                console.log(`Removed snippet from users list!`);
+                
                 // Remove snippet from snippets collection
                 req.snippet.remove((err) => {
-                    if(err) return next(err);
+                    // if(err) return next(err);
+                    if (err) 
+                    {
+                        return res.json({
+                            success: null,
+                            error: 'There was an issue removing this snippet!'
+                        });
+                    }
                     return res.json({
                         success: `Successfully removed snippet!`,
                         error: null
@@ -276,6 +298,8 @@ snippetRouter.delete('/:snipID/user/:uID', (req, res, next) => {
             });
 
         } else {
+        
+            console.log(`Req snippet does NOT exist!`);
             
             return res.json({
                 success: null,
@@ -284,6 +308,8 @@ snippetRouter.delete('/:snipID/user/:uID', (req, res, next) => {
         }
     } else {
 
+        console.log(`Snippet is NOT owned by logged in user!`);
+        
         // return error response
         return res.json({
             success: null,

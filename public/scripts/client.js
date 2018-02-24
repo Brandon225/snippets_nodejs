@@ -68,7 +68,11 @@ $('#code-form').submit(function(event)
     } ,'json' );
 });
 
-$('.addSnip-form').submit(function(event) 
+$('.lib-add').on('click', (e) => {
+    console.log(`lib-add clicked!`);
+});
+
+$('.addSnip-form').on('submit', function(event) 
 {
     event.preventDefault();
 
@@ -99,40 +103,68 @@ $('.addSnip-form').submit(function(event)
     
 });
 
-$('.removeSnip-form').submit(function(event) 
+$(document.body).on('submit', '.removeSnip-form', function(event) 
 {
     event.preventDefault();
 
-    console.log(`removeSnip-form submit!`);
+    console.log(`removeSnip-form submit! ${event.target}`);
 
     var submit = $(this).find('[type="submit"]');
-    $(submit).attr('disabled', true)
-    
-    var form = $(this),
-    url = form.attr('action');
-    
-    var ajax = $.ajax({url, type: 'DELETE', data: form.serialize()})
-        .then(res => {
-            console.log("Results from remove snippet", res);
-            // return res;
-        })
-        .fail(err => {
+    $(submit).attr('disabled', true);  
 
-            console.log("Error in remove snippet", err);
-            
-            // Re-enable submit button
-            $(submit).attr('disabled', false);
+    var target = $(submit.data('target'));
 
-            // TODO TODO TODO:  Show login modal
-            alert(err);
-            
-            throw err;
-        }
-    );
+    console.log(`remove target? ${target}`);
+
+
+    // &#128542;
+    const remove = confirm('You really wanna remove me? 😞');
+    console.log(`remove? ${remove}`);
+    if (remove) 
+    {
+        var form = $(this),
+            url = form.attr('action');
+
+        var ajax = $.ajax({ url, type: 'DELETE', data: form.serialize() })
+            .then(res => {
+
+                console.log("Results from remove snippet", res);
+
+                if (res.error) {
+
+                    // Show user the error
+                    alert(res.error);
+
+                    // Re-enable submit button
+                    $(submit).attr('disabled', false);
+                    
+                } else {
+                    target.remove();
+                }
+            })
+            .fail(err => {
+
+                console.log("Error in remove snippet", err);
+
+                // Re-enable submit button
+                $(submit).attr('disabled', false);
+
+                // Show user the error
+                alert(err);
+
+                throw err;
+            }
+            );
+    } else {
+
+        // Re-enable submit button
+        $(submit).attr('disabled', false);
+
+    }
     
 });
 
-$('#profileList a').on('click', function(e) 
+$('#profileList a').click(function(e) 
 {
     e.preventDefault()
 
@@ -143,13 +175,13 @@ $('#profileList a').on('click', function(e)
 
     const url = `/snippets/user/${uID}/editor/${editor}`;
     
-    loadSnippetsAtUrlIntoTemplate(url, '#snippet-template', '#snippets-row');
+    loadSnippetsAtUrlIntoTemplate(url, '#snippet-card-template', '#snippets-row');
 });
 
 
-$('#lib-nav a').on('click', function(e) {
+$('#lib-nav a').click(function(e) {
 
-    console.log(`Library nav clicked! ${e}`);
+    console.log(`Library nav clicked! ${e.target}`);
 
     var editor = $(this).data('editor');
     var scope = $(this).data('scope');
@@ -161,23 +193,21 @@ $('#lib-nav a').on('click', function(e) {
     
     const url = `/snippets/editor/${editor}/scope/${scope}/${ext}`;
     
-    loadSnippetsAtUrlIntoTemplate(url, '#snippet-template', '#lib-snippets-row');
+    loadSnippetsAtUrlIntoTemplate(url, '#snippet-card-template', '#lib-snippets-row');
 });
 
 function loadSnippetsAtUrlIntoTemplate(url, tempId, parentId)
 {
-    // const url = `/snippets/user/${uID}/editor/${editor}`;
-
     const template = $(tempId).html();
     const compiledTemplate = Handlebars.compile(template);
-
+    
     // Then is a javascript "Promises"
     getDataFromURL(url)
-        .then(snippets => {
-            console.log(`snippets? ${snippets}`);
+        .then(results => {
+            console.log(`snippets? ${results.currentUser}`);
             const data = {
-                snippets: snippets,
-                cols:'6'
+                snippets: results.snippets,
+                currentUser: results.currentUser
             };
             const html = compiledTemplate(data);
 
@@ -200,36 +230,3 @@ function getDataFromURL(url) {
             throw err;
         });
 }
-
-// function refreshFileList() {
-//     const template = $('#list-template').html();
-//     const compiledTemplate = Handlebars.compile(template);
-
-//     // Then is a javascript "Promises"
-//     getFiles()
-//         .then(files => {
-//             const data = { files: files };
-//             const html = compiledTemplate(data);
-//             console.log(``);
-
-//             $('#list-container').html(html);
-//         });
-// }
-
-
-// $('a[data-toggle="list"]').on('show.bs.tab', function (e) 
-// {
-//     var target = e.target;
-//     console.log(`target? ${target}`);
-//     console.log(`this? ${this}`);
-
-//     // #snippets-row
-    
-    // var ajax = $.ajax('/')
-    //     .then(res => {
-    //         console.log("Results:", res);
-    //     })
-    //     .fail(err => {
-    //         console.log("Error:", err);
-    //     });
-// });

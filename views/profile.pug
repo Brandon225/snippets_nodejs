@@ -19,28 +19,27 @@ block content
                     - var snips = snippets;
                     if snips.length
                         each snip in snips
-                            .col-sm-4
+                            .col-sm-4(id=`card-${snip._id}`)
                                 .card.bg-dark.mb-5
                                     .card-header.text-info
                                         h5 #{snip.description}
                                     ul.list-group.list-group-flush
                                         li.list-group-item.text-black= snip.content
                                         li.list-group-item editor:
-                                            span.text-ltgrey #{snip.editor}
+                                            span.text-ltgrey  #{snip.editor}
                                         li.list-group-item scope:
-                                            span.text-ltgrey #{snip.scope}
+                                            span.text-ltgrey  #{snip.scope}
                                         li.list-group-item trigger:
-                                            span.text-ltgrey #{snip.trigger}                                    
+                                            span.text-ltgrey  #{snip.trigger}                                    
                                     .card-body
                                         //- // remove snippet form
-                                        form.lib-form.form-inline.removeSnip-form.form.mb-0(action='/snippet/' + snip._id + '/' + currentUser, method="DELETE")
+                                        form.lib-form.form-inline.removeSnip-form.form.mb-0(action='/snippets/' + snip._id + '/user/' + currentUser, method="DELETE")
                                             input.form-control(type="hidden", name="snipID", value=snip._id)
                                             input.form-control(type="hidden", name="uID", value=currentUser)
-                                            button.lib-remove.card-link.text-red.hover-ltgrey(type="submit") remove
+                                            button.lib-remove.card-link.text-red.hover-ltgrey(type="submit", data-target=`#card-${snip._id}`) remove
             .col.d-none.d-sm-block
                 #profileList.list-group.flex-column.sticky-top(role='tablist')
                     a.list-group-item.list-group-item-action(data-toggle='list', data-editor='atom', data-uID=currentUser, href='/profile/atom', role='tab', class=activeEditor ==='atom' ? 'active' : '') Atom
                     a.list-group-item.list-group-item-action(data-toggle='list', data-editor='brackets', data-uID=currentUser, href='/profile/brackets', role='tab', class=activeEditor ==='brackets' ? 'active' : '') Brackets
                     a.list-group-item.list-group-item-action(data-toggle='list', data-editor='sublime', data-uID=currentUser, href='/profile/sublime', role='tab', class=activeEditor ==='sublime' ? 'active' : '') Sublime Text
                     a.list-group-item.list-group-item-action(data-toggle='list', data-editor='visual_studio_code', data-uID=currentUser, href='/profile/visual_studio_code', role='tab', class=activeEditor ==='visual_studio_code' ? 'active' : '') Visual Studio Code
-            include snippet_template.html
