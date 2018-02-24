@@ -176,7 +176,8 @@ function loadSnippetsAtUrlIntoTemplate(url, tempId, parentId)
         .then(snippets => {
             console.log(`snippets? ${snippets}`);
             const data = {
-                snippets: snippets
+                snippets: snippets,
+                cols:'6'
             };
             const html = compiledTemplate(data);
 

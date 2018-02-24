@@ -4,7 +4,7 @@ block content
     #library-container.container.page-container
         .row
             .col-12
-                h1.text-black.text-center.text-yellow.mb-5 #{editor}
+                h1.text-black.text-center.text-red.mb-5 #{editor}
                     br 
                     |
                     span.text-blue Code Snippet Library
@@ -21,7 +21,7 @@ block content
                     li.nav-item
                         a.nav-link(href="#", data-editor=linkEditor, data-scope="source", data-ext="json") JSON
 
-        .row#lib-snippets-row
+        .row#lib-snippets-row.fullsize-row
             - var snips = snippets;
             if snips.length
                 each snip in snips

@@ -1,7 +1,8 @@
 <!-- snippet_card_template.html -->
 <script id="snippet-template" type="text/x-handlebars-template">
+    {{#if snippets}}
     {{#each snippets}}
-    <div class="col-sm-6">
+    <div class="col-sm-4">
         <div class="card bg-dark mb-5">
             <div class="card-header text-info">
                 <h5>{{description}}</h5>
@@ -30,4 +31,14 @@
         </div>
     </div>
     {{/each}}
+    {{else}}
+
+     <!-- .main.page-container.container .row.justify-content-center .col-md-6.p-t-2.text-center i.icn-person.material-icons error
+    h1 oops! p.lead.m-t-2= message -->
+        <div class="col-md-12 pt-2 text-center">
+            <i class="icn-person material-icons text-red" style="font-size: 48px">local_gas_station</i>
+            <h1 class="text-red">empty!</h1>
+            <p class="lead mt-2 text-info">uh oh! looks like you need ta fill'r up!</p>
+        </div>
+    {{/if}}
 </script>
