@@ -132,7 +132,7 @@ router.get('/library/:editor', (req, res, next) => {
     let editorName = editor.toUpperCase().replace(/_/g, ' ');
     console.log(`editorName? ${editorName}`);
 
-    Snippet.find({editor: editor, duplicated: {$ne: true}})
+    Snippet.find({editor: editor, scope: 'source.js', duplicated: {$ne: true}})
         .exec((err, snippets) => {
             if (err) return next(err);
             res.render('library', { title: 'Library | Snippets', active: 'library', desc, canonical: `${path}library`, bgColor: '#ffffff', snippets, editor: editorName});

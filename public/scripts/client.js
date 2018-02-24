@@ -132,7 +132,7 @@ $('.removeSnip-form').submit(function(event)
     
 });
 
-$('#profileList a').on('click', function (e) 
+$('#profileList a').on('click', function(e) 
 {
     e.preventDefault()
 
@@ -143,24 +143,28 @@ $('#profileList a').on('click', function (e)
 
     const url = `/snippets/user/${uID}/editor/${editor}`;
     
-    loadSnippetsAtUrlIntoTemplate(url, '#snippet-template');
+    loadSnippetsAtUrlIntoTemplate(url, '#snippet-template', '#snippets-row');
 });
 
 
-$('#lib-nav a').on('click', (e) => {
+$('#lib-nav a').on('click', function(e) {
 
-    console.log(`Library nav clicked!`);
+    console.log(`Library nav clicked! ${e}`);
 
     var editor = $(this).data('editor');
     var scope = $(this).data('scope');
     var ext = $(this).data('ext');
 
+    $('#lib-nav a.active').removeClass('active');
+
+    $(this).addClass('active');
+    
     const url = `/snippets/editor/${editor}/scope/${scope}/${ext}`;
     
-    loadSnippetsAtUrlIntoTemplate(url, '#snippet-template');
+    loadSnippetsAtUrlIntoTemplate(url, '#snippet-template', '#lib-snippets-row');
 });
 
-function loadSnippetsAtUrlIntoTemplate(url, tempId)
+function loadSnippetsAtUrlIntoTemplate(url, tempId, parentId)
 {
     // const url = `/snippets/user/${uID}/editor/${editor}`;
 
@@ -176,7 +180,7 @@ function loadSnippetsAtUrlIntoTemplate(url, tempId)
             };
             const html = compiledTemplate(data);
 
-            $('#snippets-row').html(html);
+            $(parentId).html(html);
         });
 }
 

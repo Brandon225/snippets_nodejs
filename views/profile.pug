@@ -1,16 +1,17 @@
 extends layout
 
 block content
-    .jumbotron.page-jumbotron
-        ul.list-unstyled
-            //- li.list-inline-item
-                //- img(src="/img/snip_logo_high.svg") 
-            li.list-unstyled-item 
-                p.display-4 #{name} 
-            li.list-unstyled-item 
-                p #{email}
-            li.list-unstyled-item
-                p #{editor}
+    .jumbotron.jumbotron-fluid.page-jumbotron.bg-info
+        .container
+            ul.list-unstyled.text-white
+                //- li.list-inline-item
+                    //- img(src="/img/snip_logo_high.svg") 
+                li.list-unstyled-item 
+                    p.display-4.text-red #{name} 
+                li.list-unstyled-item 
+                    p #{email}
+                li.list-unstyled-item
+                    p #{editor}
     #profile-container.main.page-container.container
         .row
             .col-sm-10

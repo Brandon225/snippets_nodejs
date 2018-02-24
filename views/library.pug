@@ -9,19 +9,19 @@ block content
                     |
                     span.text-blue Code Snippet Library
                 ul#lib-nav.nav.nav-tabs.justify-content-center.my-5
-                    - let linkEditor = editor.toLowerCase();
+                    - let linkEditor = editor.toLowerCase().replace(/ /g, '_');
                     li.nav-item
-                        a.nav-link.active(href='#', data-editor=linkEditor, data-lang="source.js") Javascript
+                        a.nav-link.active(href='#', data-editor=linkEditor, data-scope="source", data-ext="js") Javascript
                     li.nav-item
                         a.nav-link(href="#", data-editor=linkEditor, data-scope="text", data-ext="html") HTML
                     li.nav-item
-                        a.nav-link(href="#", data-editor=linkEditor, data-scope="source.css", data-ext="css") CSS
+                        a.nav-link(href="#", data-editor=linkEditor, data-scope="source", data-ext="css") CSS
                     li.nav-item
-                        a.nav-link(href="#", data-editor=linkEditor, data-scope="source.php", data-ext="php") PHP
+                        a.nav-link(href="#", data-editor=linkEditor, data-scope="source", data-ext="php") PHP
                     li.nav-item
-                        a.nav-link(href="#", data-editor=linkEditor, data-scope="source.json", data-ext="json") JSON
+                        a.nav-link(href="#", data-editor=linkEditor, data-scope="source", data-ext="json") JSON
 
-        .row
+        .row#lib-snippets-row
             - var snips = snippets;
             if snips.length
                 each snip in snips
