@@ -2,7 +2,7 @@
 
 const express = require('express');
 const router = express.Router();
-var snippetRouter = require('./snippets');
+var snippetRouter = require('./snippets').snippetRouter;
 var User = require('../models/user');
 var Snippet = require('../models/snippet');
 var mid = require('../middleware');
@@ -64,8 +64,6 @@ router.get('/profile', mid.requiresLogin, (req, res, next) => {
                     // console.log(`profile snippets? ${snippets}`);
                     return res.render('profile', { title: 'Profile | Snippets', active: 'profile', desc, canonical: `${path}profile`, year: year, bgColor: '#ffffff', name: user.name, email: user.email, editor: user.codeEditor, snippets, activeEditor: editor });
                 });
-
-                // return res.render('profile', { title: 'Profile | Snippets', active: 'profile', desc, canonical: `${path}profile`, year: year, bgColor: '#ffffff', name: user.name, email: user.email, editor: user.codeEditor, activeEditor: 'atom' });
             }
         });
 });
@@ -106,7 +104,7 @@ router.get('/library/:editor', (req, res, next) => {
     Snippet.find({editor: editor, scope: 'source.js', duplicated: {$ne: true}})
         .exec((err, snippets) => {
             if (err) return next(err);
-            res.render('library', { title: 'Library | Snippets', active: 'library', desc, canonical: `${path}library`, bgColor: '#ffffff', snippets, editor: editorName, currentUser: res.locals.currentUser});
+            res.render('library', { title: 'Library | Snippets', active: 'library', activeEditor: editorName, desc, canonical: `${path}library`, bgColor: '#ffffff', snippets, editor: editorName, currentUser: res.locals.currentUser});
 
         });
 });

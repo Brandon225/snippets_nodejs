@@ -1,7 +1,7 @@
 // routes/snippets
 
 const express = require('express');
-const snippetRouter = express.Router();
+const router = express.Router();
 var User = require('../models/user');
 var Snippet = require('../models/snippet');
 var mid = require('../middleware');
@@ -10,7 +10,7 @@ var bcrypt = require('bcrypt');
 
 
 // PARAM OBJECT LOADING
-snippetRouter.param('uID', (req, res, next, id) => {
+router.param('uID', (req, res, next, id) => {
     User.findById(id, (err, doc) => {
         if(err) return next(err);
         if (!doc) {
@@ -24,7 +24,7 @@ snippetRouter.param('uID', (req, res, next, id) => {
     });
 });
 
-snippetRouter.param('snipID', (req, res, next, id) => {
+router.param('snipID', (req, res, next, id) => {
     console.log(`param snipID? ${id}`);
     Snippet.findById(id, (err, doc) => {
         if(err) return next(err);
@@ -44,7 +44,7 @@ snippetRouter.param('snipID', (req, res, next, id) => {
 
 // GET /snippets
 // Route for getting snippets
-snippetRouter.get('/', (req, res, next) => {
+router.get('/', (req, res, next) => {
 
     Snippet.find()
         .exec((err, snippets) => {
@@ -56,7 +56,7 @@ snippetRouter.get('/', (req, res, next) => {
 
 // GET /snippets/editor/:editor
 // Route for getting snippets filtered by editor
-snippetRouter.get('/editor/:editor', (req, res, next) => {
+router.get('/editor/:editor', (req, res, next) => {
 
     let { editor } = req.params;
 
@@ -83,7 +83,7 @@ snippetRouter.get('/editor/:editor', (req, res, next) => {
 
 // GET /snippets/editor/:editor/scope/:scope
 // Route for getting snippets filtered by editor and scope
-snippetRouter.get('/editor/:editor/scope/:scope/:ext', (req, res, next) => {
+router.get('/editor/:editor/scope/:scope/:ext', (req, res, next) => {
 
     let { editor } = req.params;
     let fullScope = `${req.params.scope}.${req.params.ext}`;
@@ -105,7 +105,7 @@ snippetRouter.get('/editor/:editor/scope/:scope/:ext', (req, res, next) => {
 
 // GET /snippets/user/:uID/editor/:editor
 // Route for getting snippets filtered by editor
-snippetRouter.get('/user/:uID/editor/:editor', (req, res, next) => {
+router.get('/user/:uID/editor/:editor', (req, res, next) => {
     
     let { uID } = req.params;
     let { editor } = req.params;
@@ -113,28 +113,34 @@ snippetRouter.get('/user/:uID/editor/:editor', (req, res, next) => {
     console.log(`get snippets for editor: ${editor}`);
     Snippet.findUserSnippetsForEditor(uID, editor, (err, snippets) => {
         if (err) return next(err);
-        // {
-        //     console.log(`findUserSnippetsForEditor err: ${err}`);
-        //     return res.json({
-        //         success: null,
-        //         error: 'There was an issue removing this snippet!',
-        //         snippets: null
-        //     });
-        // } 
-        // console.log(`findUserSnippetsForEditor success: ${snippets}`);
-        
-        // return res.json({
-        //     success: 'Successfully loaded snippets',
-        //     error: null,
-        //     snippets: snippets
-        // });
+        return res.json({ snippets, currentUser: res.locals.currentUser });
+    });
+});
+
+// GET /snippets/export/user/:uID/editor/:editor
+// Route for exporting snippets for editor
+router.get('/export/user/:uID/editor/:editor', (req, res, next) => 
+{
+
+    let { uID } = req.params;
+    let { editor } = req.params;
+
+    console.log(`get snippets for editor: ${editor}`);
+    Snippet.findUserSnippetsForEditor(uID, editor, (err, snippets) => {
+        if (err) return next(err);
+
+        snippets.forEach(snippet => {
+
+            // TODO: GRAB SNIPPET CONTENT AND CHAIN TOGETHER INTO A STRING Formatted for the appropriately for editor type
+        });
+
         return res.json({ snippets, currentUser: res.locals.currentUser });
     });
 });
 
 // POST /snippets
 // Route for creating snippets
-snippetRouter.post('/', (req, res, next) => {
+router.post('/', (req, res, next) => {
 
     console.log(`save snippet!`);
 
@@ -153,39 +159,46 @@ snippetRouter.post('/', (req, res, next) => {
 
     console.log(`snippetData? ${snippetData}`);
 
-    // use schema's  `create` method to insert document in Mongo
-    Snippet.create(snippetData, (error, snippet) => {
-        
-        if (error) {
-
-            console.log(`Error creating snippet! ${error}`);
-
-            // return error response
-            res.send({
-                success: null,
-                error: `There was an error saving this snippet. ${error}`,
-                snippet: snippet
-            });
-
-            // return next(error);
-        } else {
-            
-            console.log(`Created snippet! ${snippet}`);
-
-            // return success response
-            res.send({
-                success: `Successfully saved snippet.`,
-                error: null,
-                snippet: snippet
-            });
-
-        }
+    var snippet = new Snippet(snippetData);
+    snippet.save((err, snippet) => {
+        if (err) return next(err);
+        res.status(201);
+        res.json(snippet);
     });
+
+    // use schema's  `create` method to insert document in Mongo
+    // Snippet.create(snippetData, (error, snippet) => {
+        
+    //     if (error) {
+
+    //         console.log(`Error creating snippet! ${error}`);
+
+    //         // return error response
+    //         res.send({
+    //             success: null,
+    //             error: `There was an error saving this snippet. ${error}`,
+    //             snippet: snippet
+    //         });
+
+    //         // return next(error);
+    //     } else {
+            
+    //         console.log(`Created snippet! ${snippet}`);
+
+    //         // return success response
+    //         res.send({
+    //             success: `Successfully saved snippet.`,
+    //             error: null,
+    //             snippet: snippet
+    //         });
+
+    //     }
+    // });
 });
 
 // PUT /snippet/:snipID/user/:uID  -- 
 // Route for inserting duplicate snippet into user's library
-snippetRouter.put('/:snipID/user/:uID', (req, res, next) => {
+router.put('/:snipID/user/:uID', (req, res, next) => {
     console.log(`add snippet! ${req.snippet}`);
     
     if (req.session && req.session.userId) 
@@ -204,7 +217,7 @@ snippetRouter.put('/:snipID/user/:uID', (req, res, next) => {
                 duplicated: true
             };
 
-            // TODO: Insert the Snippets scope into the users scopes array
+            // TODO: Insert the Snippets scope into the users scopes array -- SCOPE OF CODE LANGUAGES
             Snippet.create(snippetData, (error, snippet) => {
 
                 if (error) {
@@ -258,7 +271,7 @@ snippetRouter.put('/:snipID/user/:uID', (req, res, next) => {
 
 // DELETE /snippet/:snipID/user/:uID
 // Route for deleting snippet from user's library
-snippetRouter.delete('/:snipID/user/:uID', mid.requiresLogin, (req, res, next) => {
+router.delete('/:snipID/user/:uID', mid.requiresLogin, (req, res, next) => {
     
     console.log(`Delete snippet called!`);
 
@@ -319,4 +332,4 @@ snippetRouter.delete('/:snipID/user/:uID', mid.requiresLogin, (req, res, next) =
     
 });
 
-module.exports = snippetRouter;
+module.exports.snippetRouter = router;

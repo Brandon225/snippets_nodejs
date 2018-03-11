@@ -140,6 +140,12 @@ $dkgrey: #3f3f3f;
     }
 }
 
+.content-snip
+{
+    max-height: 200px!important;
+    overflow-y: scroll !important;
+}
+
 .format
 {
     display: none;

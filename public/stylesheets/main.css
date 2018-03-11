@@ -69,6 +69,10 @@
     color: #9d9d9d;
     opacity: .5; }
 
+.content-snip {
+  max-height: 200px !important;
+  overflow-y: scroll !important; }
+
 .format {
   display: none; }
 

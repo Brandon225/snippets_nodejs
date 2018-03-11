@@ -54,21 +54,36 @@ $('#code-form').submit(function(event)
     url = form.attr('action');
     
     // Send the data using post
-    var posting = $.post(url, form.serialize(),
-    function(data)
-    {
-        // if data returned no errors
-        if (data.success)
-        {
-            console.log('Successfully loaded data!', data.success);
-        } else {
-            console.log('Error loading data!', data.error);
-        }
+    $.ajax({
+            type: 'POST',
+            url: url,
+            data: form.serialize(),
+            dataType: 'json',
+            contentType: 'application/json',
+        })
+        .done(function (response) {
+            console.log("We have posted the data!");
+            // TODO: Update UI to notify user of success
+        })
+        .fail(function (error) {
+            console.log("Failures at posting, we are", error);
+            // TODO: Update UI to notify user of error
+        });
+    // var posting = $.post(url, form.serialize(),
+    // function(data)
+    // {
+    //     // if data returned no errors
+    //     if (data.success)
+    //     {
+    //         console.log('Successfully loaded data!', data.success);
+    //     } else {
+    //         console.log('Error loading data!', data.error);
+    //     }
 
-    } ,'json' );
+    // } ,'json' );
 });
 
-$('.lib-add').on('click', (e) => {
+$('.lib-add').on('click', function(e) {
     console.log(`lib-add clicked!`);
 });
 
@@ -230,3 +245,4 @@ function getDataFromURL(url) {
             throw err;
         });
 }
+

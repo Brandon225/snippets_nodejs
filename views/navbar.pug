@@ -10,7 +10,7 @@ nav.navbar.navbar-expand-lg.navbar-dark.back-black.fixed-top(role="navigation")
                     a#navbarDropdown.nav-link.dropdown-toggle(href='#', class=active ==='library' ? 'active' : '', role='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
                         | Library
                     .dropdown-menu(aria-labelledby='navbarDropdown')
-                        - let navEditor = editor ? editor.toLowerCase() : '';
+                        - let navEditor = activeEditor ? activeEditor.toLowerCase() : '';
                         a.dropdown-item(href='/library/atom', class=navEditor ==='atom' ? 'active' : '') Atom
                         a.dropdown-item(href='/library/brackets', class=navEditor ==='brackets' ? 'active' : '') Brackets
                         a.dropdown-item(href='/library/sublime', class=navEditor ==='sublime' ? 'active' : '') Sublime Text
