@@ -14,7 +14,7 @@ block content
                             .card-header Example
                             .card-body
                                 pre.text-green.
-                                    \n'.source.js':
+                                    '.source.js':
                                         'console.log':
                                             'prefix': 'log'
                                             'body': 'console.log($1);$2'                                
@@ -32,15 +32,15 @@ block content
                             .card-header Example
                             .card-body
                                 pre.text-green.
-                                    \n[
-                                    {
-                                        "name":"Log to the Console",
-                                        "trigger":"log",
-                                        "usage":"source.js",
-                                        "description":"Log to the Console",
-                                        "template":"\nconsole.log('$1: ', $2);\n"
-                                    }
-                                    ]                                
+                                    [
+                                        {
+                                            "name":"Log to the Console",
+                                            "trigger":"log",
+                                            "usage":"source.js",
+                                            "description":"Log to the Console",
+                                            "template":"\nconsole.log('$1: ', $2);\n"
+                                        }
+                                    ]
                         a.btn.btn-primary(href='http://blog.brackets.io/2012/12/19/snippets-brackets-extension/?lang=en', target='_blank') more info
                 #sublime.card.mb-5
                     .card-body
@@ -53,12 +53,13 @@ block content
                             .card-header Example
                             .card-body
                                 pre.text-green.
-                                    \n<snippet>
-                                        <content><![CDATA[console.log('$1: ', $2)]]></content>
-                                        <tabTrigger>log</tabTrigger>
-                                        <scope>source.js</scope>
-                                        <description>Log to the Console</description>
-                                    </snippet>                                
+                                    &lt;snippet&gt;
+                                        &lt;content&gt;&lt;![CDATA[console.log('$1: ', $2)]]&gt;&lt;/content&gt;
+                                        &lt;tabTrigger&gt;log&lt;/tabTrigger&gt;
+                                        &lt;scope&gt;source.js&lt;/scope&gt;
+                                        &lt;description&gt;Log to the Console&lt;/description&gt;
+                                    &lt;/snippet&gt;
+                            
                         a.btn.btn-primary(href='http://sublimetext.info/docs/en/extensibility/snippets.html', target='_blank') more info
                 #viscode.card.mb-5
                     .card-body
@@ -71,7 +72,7 @@ block content
                             .card-header Example
                             .card-body
                                 pre.text-green.
-                                    \n{
+                                    {
                                         "Console Log": {
                                             "prefix": "log",
                                             "body": [

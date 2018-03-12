@@ -344,12 +344,6 @@ footer
 }
 
 /****** CONTENT STYLES ******/
-.page-container
-{
-    margin-top: 116px;
-    // margin-top: 60px;
-}
-
 .page-jumbotron
 {
     margin-top: 56px;
@@ -500,6 +494,14 @@ input
     {
         top: 66px;
     }
+
+    #profileList
+    {
+        a.selected
+        {
+            background-color: red;
+        }
+    }
 }
 
 
@@ -513,5 +515,28 @@ input
         order: -1;
     }
 }
+
+// Small devices (landscape phones, 576px and up)
+@media (min-width: 576px) {
+    .page-container
+    {
+        margin-top: 140px;
+    }
+}
+
+// Medium devices (tablets, 768px and up)
+// @media (min-width: 768px) {
+    
+// }
+
+// // Large devices (desktops, 992px and up)
+// @media (min-width: 992px) {
+    
+// }
+
+// // Extra large devices (large desktops, 1200px and up)
+// @media (min-width: 1200px) {
+    
+// }
 
 /**************************** END RESPONSIVE DATA ****************************/

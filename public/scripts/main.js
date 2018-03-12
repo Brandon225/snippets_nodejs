@@ -438,7 +438,6 @@ function parseAtom(snipText)
 
 function parseBrackets(snipText)
 {
-    var json = '';
     try {
         //console.log('IS valid json: ', json);
         return JSON.parse(snipText);
@@ -452,7 +451,6 @@ function parseBrackets(snipText)
 
 function parseVisualCode(snipText)
 {
-    var json = '';
     try {
         //console.log('IS valid json: ', json);
         return JSON.parse(snipText);

@@ -185,6 +185,13 @@ $('#profileList a').click(function(e)
 
     console.log(`profileList a clicked!`);
 
+    // add active class only on mobile devices -- other devices are auto selected
+    if (!$(this).hasClass('active')) 
+    {
+        $('#profileList a').removeClass('active');
+        $(this).addClass('active');
+    }
+
     var editor = $(this).data('editor');
     var uID = $(this).data('uid');
 
