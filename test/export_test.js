@@ -1,32 +1,34 @@
 var expect = require('chai').expect;
+var chai = require('chai');
+chai.use(require('chai-json'));
 
 // Test suite
-describe('getSnippets', () =>
+describe('getSnippetsForEditor', () =>
 {
-    let getSnippets = require('../src/logic/export_logic.js').getSnippets;
+    let getSnippetsForEditor = require('../src/logic/export_logic.js').getSnippetsForEditor;
 
     // Verify snippets is an array
     it('should load an array of snippets', () => 
     {
-        expect(getSnippets('atom')).to.be.an('array');
+        expect(getSnippetsForEditor('atom')).to.be.an('array');
     });
 
     // Verify snippets is an array of objects
     it('should contain json objects', () => 
     {
-        expect(getSnippets('visual_studio_code')[0]).to.be.an('object');
+        expect(getSnippetsForEditor('visual_studio_code')[0]).to.be.an('object');
     });
 
     // Return false when no snippets found for editor
     it('it should correctly report no snippets found for editor', () => 
     {
-        expect(getSnippets('sublime')).to.be.false;
+        expect(getSnippetsForEditor('sublime')).to.be.false;
     });
 
     // Return true when WERE snippets found for editor
     it('it should correctly report snippets WERE found for editor', () => 
     {
-        expect(getSnippets('atom')).to.be.an('array');
+        expect(getSnippetsForEditor('atom')).to.be.an('array');
     });
 });
 
@@ -34,17 +36,9 @@ describe('getSnippets', () =>
 describe('exportSnippets', () =>
 {
     let exportSnippetsForEditor = require('../src/logic/export_logic.js').exportSnippetsForEditor;
-    
-    // Return false when no snippets found for editor
-    it('it should correctly report no snippets found for editor', () => 
+    // // Return false when no snippets found for editor
+    it('should export visual studio code snipets in json format', () => 
     {
-        expect(exportSnippetsForEditor('sublime')).to.be.false;
+        expect(exportSnippetsForEditor('visual_studio_code')).to.be.jsonObj();
     });
-
-    // Return true when WERE snippets found for editor
-    it('it should correctly report snippets WERE found for editor', () => {
-        expect(exportSnippetsForEditor('atom')).to.be.an('array');
-    });
-
-
 });

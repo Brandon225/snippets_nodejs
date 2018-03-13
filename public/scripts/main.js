@@ -274,6 +274,7 @@ function createBrackets(content, trigger, scope, description)
     return JSON.stringify(jsonObj);
 }
 
+
 function createVisualCode(content, trigger, scope, description)
 {
 
