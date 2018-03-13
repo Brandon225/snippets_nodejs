@@ -1,0 +1,35 @@
+[
+    {
+        "userId": "5a7ba60439740db19a4441be",
+        "editor": "visual_studio_code",
+        "scope": "source.js",
+        "description": "AJAX DONE FAIL",
+        "trigger": "adf",
+        "code": " $.ajax({\r\n                type: ${1:method},\r\n                url: $2,\r\n                data: $3,\r\n                dataType: 'json',\r\n                contentType: 'application/json',\r\n            })\r\n            .done(function (response) {\r\n                console.log(\"We have posted the data\");\r\n            })\r\n            .fail(function (error) {\r\n                console.log(\"Failures at posting, we are\", error);\r\n            });",
+        "content": "{\"AJAX DONE FAIL\":{\"prefix\":\"adf\",\"body\":[\"$.ajax({\",\"type: ${1:method},\",\"url: $2,\",\"data: $3,\",\"dataType: 'json',\",\"contentType: 'application/json',\",\"})\",\".done(function (response) {\",\"console.log(\\\"We have posted the data\\\");\",\"})\",\".fail(function (error) {\",\"console.log(\\\"Failures at posting, we are\\\", error);\",\"});\",\"\"],\"description\":\"AJAX DONE FAIL\"}}",
+        "duplicated": false,
+        "__v": 0
+    },
+    {
+        "userId": "5a7ba60439740db19a4441be",
+        "editor": "visual_studio_code",
+        "scope": "source.js",
+        "description": "Mongoose Save Document",
+        "trigger": "monsave",
+        "code": "${1:document}.save((err, ${1:document}) => {\r\n        if (err) return next(err);\r\n        res.status(201);\r\n        res.json(${1:document});\r\n    })",
+        "content": "{\"Mongoose Save Document\":{\"prefix\":\"monsave\",\"body\":[\"${1:document}.save((err, ${1:document}) => {\",\"if (err) return next(err);\",\"res.status(201);\",\"res.json(${1:document});\",\"})\",\"\"],\"description\":\"Mongoose Save Document\"}}",
+        "duplicated": false,
+        "__v": 0
+    },
+    {
+        "userId": "5a7ba60439740db19a4441be",
+        "editor": "atom",
+        "scope": "text.html",
+        "description": "HTML5 Boilerplate",
+        "trigger": "html5",
+        "code": "<!doctype html>\r\n       <!--[if lt IE 7]>      <html class=\"no-js lt-ie9 lt-ie8 lt-ie7\" lang=\"\"> <![endif]-->\r\n       <!--[if IE 7]>         <html class=\"no-js lt-ie9 lt-ie8\" lang=\"\"> <![endif]-->\r\n       <!--[if IE 8]>         <html class=\"no-js lt-ie9\" lang=\"\"> <![endif]-->\r\n       <!--[if gt IE 8]><!--> <html class=\"no-js\" lang=\"\"> <!--<![endif]-->\r\n           <head>\r\n                <!-- Metadata -->\r\n                <meta charset=\"utf-8\">\r\n                <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge,chrome=1\">\r\n\r\n                <title>$1</title>\r\n                <meta name=\"description\" content=\"$2\">\r\n                <meta name=\"keywords\" content=\"$3\" />\r\n\r\n                <meta name=\"Author\" content=\"reimagin8d\" />\r\n                <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\r\n                <link rel=\"apple-touch-icon\" href=\"apple-touch-icon.png\">\r\n           </head>\r\n           <body>\r\n           </body>\r\n       </html>",
+        "content": "\".text.html\":\r\n   \"HTML5 Boilerplate\":\r\n       \"prefix\": \"html5\"\r\n       \"body\": \"\"\"<!doctype html>\r\n       <!--[if lt IE 7]>      <html class=\"no-js lt-ie9 lt-ie8 lt-ie7\" lang=\"\"> <![endif]-->\r\n       <!--[if IE 7]>         <html class=\"no-js lt-ie9 lt-ie8\" lang=\"\"> <![endif]-->\r\n       <!--[if IE 8]>         <html class=\"no-js lt-ie9\" lang=\"\"> <![endif]-->\r\n       <!--[if gt IE 8]><!--> <html class=\"no-js\" lang=\"\"> <!--<![endif]-->\r\n           <head>\r\n                <!-- Metadata -->\r\n                <meta charset=\"utf-8\">\r\n                <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge,chrome=1\">\r\n\r\n                <title>$1</title>\r\n                <meta name=\"description\" content=\"$2\">\r\n                <meta name=\"keywords\" content=\"$3\" />\r\n\r\n                <meta name=\"Author\" content=\"reimagin8d\" />\r\n                <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\r\n                <link rel=\"apple-touch-icon\" href=\"apple-touch-icon.png\">\r\n           </head>\r\n           <body>\r\n           </body>\r\n       </html>\"\"\" \r\n       ",
+        "duplicated": false,
+        "__v": 0
+    }
+]

@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "description": "A software develper tool. Create, convert, and download code snippets for your preferred code editor.",
   "scripts": {
-    "start": "node ./app"
+    "start": "node ./app",
+    "test": "mocha",
+    "test:watch": "mocha --watch ./test ./"
   },
   "author": "reimagin8d",
   "license": "ISC",
