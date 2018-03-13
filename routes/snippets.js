@@ -1,5 +1,3 @@
-import { exportSnippetsForEditor, createFile } from '../src/logic/export_logic';
-
 // routes/snippets
 
 const express = require('express');
@@ -127,7 +125,7 @@ router.get('/export/user/:uID/editor/:editor/:scope', (req, res, next) =>
 
     console.log(`export snippets for editor ${editor} scope ${scope}.`);
     console.log(`get snippets for editor: ${editor}`);
-    
+
     Snippet.findUserSnippetsForEditorAndScope(uID, editor, scope, (err, snippets) => {
         if (err) return next(err);
 
