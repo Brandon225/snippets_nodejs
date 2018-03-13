@@ -14,26 +14,24 @@ const getSnippetsForEditor = (editor) => {
     return false;
 }
 
-const exportSnippetsForEditor = (editor) => 
+const exportSnippetsForEditor = (snippets, editor, scope) => 
 {   
-    let snippets = getSnippetsForEditor(editor);
-
     if (snippets === false) 
     {
         return false;
     }
     switch (editor) {
         case 'atom':
-            return createAtom(getSnippetsForEditor(editor));
+            return createAtom(snippets);
             break;
         case 'brackets':
-            return createBrackets(getSnippetsForEditor(editor));
+            return createBrackets(snippets);
             break;
         case 'sublime': // Not yet supported
             return false;
             break;
         case 'visual_studio_code':
-            return createVisualCode(getSnippetsForEditor(editor));
+            return createVisualCode(snippets);
             break;
         default:
             return false;
@@ -72,8 +70,7 @@ const createAtom = (snippets) => {
         
         // append a period to the beginning of scope
         snipsFiltered.forEach(snippet => {
-            let atomSnip = "";
-            atomSnip += `    "${snippet.description}":\n`;
+            let atomSnip = `    "${snippet.description}":\n`;
             atomSnip += `        "prefix": "${snippet.trigger}"\n`;
             atomSnip += `        "body": """${snippet.code}"""\n`;
             scopeString += atomSnip;
@@ -106,23 +103,6 @@ const createBrackets = (snippets) => {
     return parentArray;
 }
 
-const createSublime = (snippets) => 
-{   
-    // NOT YET SUPPORTED
-    // Sublime requires one snippet per file
-    // snippets.forEach(snippet => 
-    // {
-
-    // });
-
-    // var subText = '<snippet><content><![CDATA[' + content + ']]></content>';
-    // subText += '<tabTrigger>' + trigger + '</tabTrigger>';
-    // subText += '<scope>' + scope + '</scope>';
-    // subText += '<description>' + description + '</description></snippet>';
-
-    // return subText;
-}
-
 const createVisualCode = (snippets) =>
 {   
     let parentObject = new Object();
@@ -142,9 +122,9 @@ const createVisualCode = (snippets) =>
     return parentObject;
 }
 
-const createFile = (res, type, text) => 
+const createFile = (res, title, type, text) => 
 {
-    res.setHeader('Content-disposition', 'attachment; filename=theDocument.txt');
+    res.setHeader('Content-disposition', `attachment; filename=${name}`);
     res.setHeader('Content-type', type);
     res.charset = 'UTF-8';
     res.write(text);
@@ -153,3 +133,4 @@ const createFile = (res, type, text) =>
 
 module.exports.getSnippetsForEditor = getSnippetsForEditor;
 module.exports.exportSnippetsForEditor = exportSnippetsForEditor;
+module.exports.createFile = createFile;

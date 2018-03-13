@@ -1,3 +1,5 @@
+import { exportSnippetsForEditor, createFile } from '../src/logic/export_logic';
+
 // routes/snippets
 
 const express = require('express');
@@ -7,7 +9,7 @@ var Snippet = require('../models/snippet');
 var mid = require('../middleware');
 var mongoose = require('mongoose');
 var bcrypt = require('bcrypt');
-
+var exportLogic = require('../src/logic/export_logic');
 
 // PARAM OBJECT LOADING
 router.param('uID', (req, res, next, id) => {
@@ -119,22 +121,20 @@ router.get('/user/:uID/editor/:editor', (req, res, next) => {
 
 // GET /snippets/export/user/:uID/editor/:editor
 // Route for exporting snippets for editor
-router.get('/export/user/:uID/editor/:editor', (req, res, next) => 
+router.get('/export/user/:uID/editor/:editor/:scope', (req, res, next) => 
 {
+    let { uID, editor, scope } = req.params;
 
-    let { uID } = req.params;
-    let { editor } = req.params;
-
+    console.log(`export snippets for editor ${editor} scope ${scope}.`);
     console.log(`get snippets for editor: ${editor}`);
-    Snippet.findUserSnippetsForEditor(uID, editor, (err, snippets) => {
+    
+    Snippet.findUserSnippetsForEditorAndScope(uID, editor, scope, (err, snippets) => {
         if (err) return next(err);
 
-        snippets.forEach(snippet => {
-
-            // TODO: GRAB SNIPPET CONTENT AND CHAIN TOGETHER INTO A STRING Formatted for the appropriately for editor type
-        });
-
-        return res.json({ snippets, currentUser: res.locals.currentUser });
+        var data = exportSnippetsForEditor(snippets, editor);
+        
+        createFile(res, )
+        // return res.json({ snippets, currentUser: res.locals.currentUser });
     });
 });
 

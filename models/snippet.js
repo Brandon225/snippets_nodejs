@@ -48,6 +48,17 @@ SnippetSchema.statics.findUserSnippetsForEditor = function(userId, editor, callb
         });
 };
 
+SnippetSchema.statics.findUserSnippetsForEditorAndScope = function (userId, editor, scope, callback) {
+    Snippet.find({ userId: userId, editor: editor, scope: scope })
+        .exec((err, snippets) => {
+            if (err) {
+                return callback(err);
+            } else {
+                return callback(null, snippets);
+            }
+        });
+};
+
 
 // hash password before saving to db
 // SnippetSchema.pre('save', function(next) 
