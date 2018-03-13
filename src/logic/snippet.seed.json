@@ -31,5 +31,35 @@
         "content": "\".text.html\":\r\n   \"HTML5 Boilerplate\":\r\n       \"prefix\": \"html5\"\r\n       \"body\": \"\"\"<!doctype html>\r\n       <!--[if lt IE 7]>      <html class=\"no-js lt-ie9 lt-ie8 lt-ie7\" lang=\"\"> <![endif]-->\r\n       <!--[if IE 7]>         <html class=\"no-js lt-ie9 lt-ie8\" lang=\"\"> <![endif]-->\r\n       <!--[if IE 8]>         <html class=\"no-js lt-ie9\" lang=\"\"> <![endif]-->\r\n       <!--[if gt IE 8]><!--> <html class=\"no-js\" lang=\"\"> <!--<![endif]-->\r\n           <head>\r\n                <!-- Metadata -->\r\n                <meta charset=\"utf-8\">\r\n                <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge,chrome=1\">\r\n\r\n                <title>$1</title>\r\n                <meta name=\"description\" content=\"$2\">\r\n                <meta name=\"keywords\" content=\"$3\" />\r\n\r\n                <meta name=\"Author\" content=\"reimagin8d\" />\r\n                <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\r\n                <link rel=\"apple-touch-icon\" href=\"apple-touch-icon.png\">\r\n           </head>\r\n           <body>\r\n           </body>\r\n       </html>\"\"\" \r\n       ",
         "duplicated": false,
         "__v": 0
+    },
+    {
+        "userId": "5a7a74e6a5415015cc637935",
+        "editor": "brackets",
+        "scope": "source.js",
+        "description": "Console Log Statement",
+        "trigger": "log",
+        "code": "console.log($1)$0",
+        "content": "[{\"name\":\"Console Log Statement\",\"trigger\":\"log\",\"usage\":\"source.js\",\"description\":\"Console Log Statement\",\"template\":\"console.log($1)$0\"}]",
+        "__v": 0
+    },
+    {
+        "userId": "5a7a74e6a5415015cc637935",
+        "editor": "atom",
+        "scope": "source.js",
+        "description": "Console Log Statement",
+        "trigger": "log",
+        "code": "console.log('$1')$0",
+        "content": "\".source.js\":\r\n   \"Console Log Statement\":\r\n       \"prefix\": \"log\"\r\n       \"body\": \"\"\"console.log('$1')$0\"\"\" \r\n       ",
+        "__v": 0
+    },
+    {
+        "userId": "5a7a74e6a5415015cc637935",
+        "editor": "atom",
+        "scope": "source.js",
+        "description": "jQuery element",
+        "trigger": "jelem",
+        "code": "$(`$1`)$0",
+        "content": "\".source.js\":\r\n   \"jQuery element\":\r\n       \"prefix\": \"jelem\"\r\n       \"body\": \"\"\"$(`$1`)$0\"\"\" \r\n       ",
+        "__v": 0
     }
 ]

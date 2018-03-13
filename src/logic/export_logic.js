@@ -16,9 +16,15 @@ const getSnippetsForEditor = (editor) => {
 
 const exportSnippetsForEditor = (editor) => 
 {   
+    let snippets = getSnippetsForEditor(editor);
+
+    if (snippets === false) 
+    {
+        return false;
+    }
     switch (editor) {
         case 'atom':
-            return createAtom(getSnippetsForEditor(editor);
+            return createAtom(getSnippetsForEditor(editor));
             break;
         case 'brackets':
             return createBrackets(getSnippetsForEditor(editor));
@@ -35,29 +41,58 @@ const exportSnippetsForEditor = (editor) =>
     }
 }
 
+const getScopes = (snippets) => 
+{
+    let scopes = [];
+    snippets.forEach(snippet => 
+    {
+        scopes.push(snippet.scope);
+    })
+    return scopes;
+}
+
 const createAtom = (snippets) => {
 
-    var atomSnip = "";
+    let scopes = getScopes(snippets);
 
-    snippets.forEach(snippet => {
+    console.log(`scopes? ${JSON.stringify(scopes)}`);
+
+    let parentString = "";
+    scopes.forEach(scope => 
+    {
+        // console.log(`scope? ${scope}`);
+
+        let snipsFiltered = snippets.filter((snippet) => {
+            return (snippet.scope === scope)
+        });
+
+        console.log(`snipsFiltered.length? ${JSON.stringify(snipsFiltered)}`);
+
+        let scopeString = '".' + scope + '":\n';
+        
+        // append a period to the beginning of scope
+        snipsFiltered.forEach(snippet => {
+            let atomSnip = "";
+            atomSnip += `    "${snippet.description}":\n`;
+            atomSnip += `        "prefix": "${snippet.trigger}"\n`;
+            atomSnip += `        "body": """${snippet.code}"""\n`;
+            scopeString += atomSnip;
+        });
+        parentString += scopeString;
     });
 
-    // append a period to the beginning of scope
-    atomSnip += '".' + scope + '":\n   ';
-    atomSnip += '"' + description + '":\n       ';
-    atomSnip += '"prefix": "' + trigger + '"\n       ';
-    atomSnip += '"body": """' + content + '""" \n       ';
-
-    return atomSnip;
+    console.log(`parentString? \n${parentString}`);
+    
+    return parentString;
 }
 
 const createBrackets = (snippets) => {
 
-    var parentArray = [];
+    let parentArray = [];
 
     snippets.forEach(snippet => 
     {
-        var jsonObj = new Object();
+        let jsonObj = new Object();
 
         jsonObj["name"] = snippet.description;
         jsonObj["trigger"] = snippet.trigger;
@@ -90,21 +125,30 @@ const createSublime = (snippets) =>
 
 const createVisualCode = (snippets) =>
 {   
-    var parentObject = new Object();
+    let parentObject = new Object();
 
     snippets.forEach(snippet => {
 
-        var jsonObj = new Object();
+        let jsonObj = new Object();
 
         jsonObj.prefix = snippets.trigger;
         jsonObj.body = snippets.code;
-        var description = snippets.description;
+        let description = snippets.description;
         jsonObj.description = description;
 
         parentObject[description] = jsonObj;
     });
 
     return parentObject;
+}
+
+const createFile = (res, type, text) => 
+{
+    res.setHeader('Content-disposition', 'attachment; filename=theDocument.txt');
+    res.setHeader('Content-type', type);
+    res.charset = 'UTF-8';
+    res.write(text);
+    res.end();
 }
 
 module.exports.getSnippetsForEditor = getSnippetsForEditor;

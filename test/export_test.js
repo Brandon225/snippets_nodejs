@@ -37,8 +37,23 @@ describe('exportSnippets', () =>
 {
     let exportSnippetsForEditor = require('../src/logic/export_logic.js').exportSnippetsForEditor;
     // // Return false when no snippets found for editor
-    it('should export visual studio code snipets in json format', () => 
+    it('should export visual studio code snippets in json format', () => 
     {
         expect(exportSnippetsForEditor('visual_studio_code')).to.be.jsonObj();
+    });
+
+    it('should return false if no snippets for editor', () => 
+    {
+        expect(exportSnippetsForEditor('sublime')).to.be.false;
+    });
+
+    it('should export brackets snippets in json array of objects', () => 
+    {
+        expect(exportSnippetsForEditor('brackets')).to.be.an('array');
+        expect(exportSnippetsForEditor('brackets')[0]).to.be.jsonObj();
+    });
+
+    it('should export atom snippets in a string', () => {
+        expect(exportSnippetsForEditor('atom')).to.be.an('string');
     });
 });
