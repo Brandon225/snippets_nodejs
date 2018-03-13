@@ -18,12 +18,12 @@ const exportSnippetsForEditor = (editor) =>
 {   
     switch (editor) {
         case 'atom':
-            return false;
+            return createAtom(getSnippetsForEditor(editor);
             break;
         case 'brackets':
-            return false;
+            return createBrackets(getSnippetsForEditor(editor));
             break;
-        case 'sublime':
+        case 'sublime': // Not yet supported
             return false;
             break;
         case 'visual_studio_code':
@@ -33,6 +33,59 @@ const exportSnippetsForEditor = (editor) =>
             return false;
             break;
     }
+}
+
+const createAtom = (snippets) => {
+
+    var atomSnip = "";
+
+    snippets.forEach(snippet => {
+    });
+
+    // append a period to the beginning of scope
+    atomSnip += '".' + scope + '":\n   ';
+    atomSnip += '"' + description + '":\n       ';
+    atomSnip += '"prefix": "' + trigger + '"\n       ';
+    atomSnip += '"body": """' + content + '""" \n       ';
+
+    return atomSnip;
+}
+
+const createBrackets = (snippets) => {
+
+    var parentArray = [];
+
+    snippets.forEach(snippet => 
+    {
+        var jsonObj = new Object();
+
+        jsonObj["name"] = snippet.description;
+        jsonObj["trigger"] = snippet.trigger;
+        jsonObj["usage"] = snippet.scope;
+        jsonObj["description"] = snippet.description;
+        jsonObj["template"] = snippet.code;
+
+        parentArray.push(jsonObj);
+    });
+
+    return parentArray;
+}
+
+const createSublime = (snippets) => 
+{   
+    // NOT YET SUPPORTED
+    // Sublime requires one snippet per file
+    // snippets.forEach(snippet => 
+    // {
+
+    // });
+
+    // var subText = '<snippet><content><![CDATA[' + content + ']]></content>';
+    // subText += '<tabTrigger>' + trigger + '</tabTrigger>';
+    // subText += '<scope>' + scope + '</scope>';
+    // subText += '<description>' + description + '</description></snippet>';
+
+    // return subText;
 }
 
 const createVisualCode = (snippets) =>
@@ -53,7 +106,6 @@ const createVisualCode = (snippets) =>
 
     return parentObject;
 }
-
 
 module.exports.getSnippetsForEditor = getSnippetsForEditor;
 module.exports.exportSnippetsForEditor = exportSnippetsForEditor;
