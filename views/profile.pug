@@ -36,11 +36,16 @@ block content
                                             input.form-control(type="hidden", name="uID", value=currentUser)
                                             button.lib-remove.card-link.text-red.hover-ltgrey(type="submit", data-target=`#card-${snip._id}`) remove
             .col.d-none.d-md-block.order-md-2
-                #profileList.list-group.list-group-flush.flex-column.sticky-top(role='tablist')
-                    a.list-group-item.list-group-item-action(data-toggle='list', data-editor='atom', data-uID=currentUser, href='/profile/atom', role='tab', class=activeEditor ==='atom' ? 'active' : '') Atom
-                    a.list-group-item.list-group-item-action(data-toggle='list', data-editor='brackets', data-uID=currentUser, href='/profile/brackets', role='tab', class=activeEditor ==='brackets' ? 'active' : '') Brackets
-                    a.list-group-item.list-group-item-action(data-toggle='list', data-editor='sublime', data-uID=currentUser, href='/profile/sublime', role='tab', class=activeEditor ==='sublime' ? 'active' : '') Sublime Text
-                    a.list-group-item.list-group-item-action(data-toggle='list', data-editor='visual_studio_code', data-uID=currentUser, href='/profile/visual_studio_code', role='tab', class=activeEditor ==='visual_studio_code' ? 'active' : '') Visual Studio Code
+                .sticky-top
+                    #profileList.list-group.list-group-flush.flex-column(role='tablist')
+                        a.list-group-item.list-group-item-action(data-toggle='list', data-editor='atom', data-uID=currentUser, href='/profile/atom', role='tab', class=activeEditor ==='atom' ? 'active' : '') Atom
+                        a.list-group-item.list-group-item-action(data-toggle='list', data-editor='brackets', data-uID=currentUser, href='/profile/brackets', role='tab', class=activeEditor ==='brackets' ? 'active' : '') Brackets
+                        a.list-group-item.list-group-item-action(data-toggle='list', data-editor='sublime', data-uID=currentUser, href='/profile/sublime', role='tab', class=activeEditor ==='sublime' ? 'active' : '') Sublime Text
+                        a.list-group-item.list-group-item-action(data-toggle='list', data-editor='visual_studio_code', data-uID=currentUser, href='/profile/visual_studio_code', role='tab', class=activeEditor ==='visual_studio_code' ? 'active' : '') Visual Studio Code
+                    form#export-form(action=`/export/user/${currentUser}/editor/${activeEditor}/source/js`, method="GET")
+                        input.form-control(type="hidden", name="uID", value=currentUser)
+                        button#export-btn.btn.btn-info.btn-block.mt-4(type="submit") Export
+
             .col.d-block.d-md-none.order-1
                 ul#profileList.list-inline.list-group-flush.p-0
                     li.list-inline-item
@@ -51,13 +56,3 @@ block content
                         a.list-group-item.list-group-item-action(data-toggle='list', data-editor='sublime', data-uID=currentUser, href='/profile/sublime', role='tab', class=activeEditor ==='sublime' ? 'active' : '') Sublime Text
                     li.list-inline-item
                         a.list-group-item.list-group-item-action(data-toggle='list', data-editor='visual_studio_code', data-uID=currentUser, href='/profile/visual_studio_code', role='tab', class=activeEditor ==='visual_studio_code' ? 'active' : '') Visual Studio Code
-                    
-                //- #profileList.nav.flex-sm-column.sticky-top
-                //-     li.nav-item
-                //-         a.nav-link(data-toggle='list', data-editor='atom', data-uID=currentUser, href='/profile/atom', role='tab', class=activeEditor ==='atom' ? 'active' : '') Atom
-                //-     li.nav-item
-                //-         a.nav-link(data-toggle='list', data-editor='brackets', data-uID=currentUser, href='/profile/brackets', role='tab', class=activeEditor ==='brackets' ? 'active' : '') Brackets
-                //-     li.nav-item
-                //-         a.nav-link(data-toggle='list', data-editor='sublime', data-uID=currentUser, href='/profile/sublime', role='tab', class=activeEditor ==='sublime' ? 'active' : '') Sublime Text
-                //-     li.nav-item
-                //-         a.nav-link(data-toggle='list', data-editor='visual_studio_code', data-uID=currentUser, href='/profile/visual_studio_code', role='tab', class=activeEditor ==='visual_studio_code' ? 'active' : '') Visual Studio Code

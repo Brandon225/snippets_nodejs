@@ -16,6 +16,7 @@ const getSnippetsForEditor = (editor) => {
 
 const exportSnippetsForEditor = (snippets, editor, scope) => 
 {   
+    console.log(`exportSnippetsForEditor ${snippets.length} ${editor} ${scope}`);
     if (snippets === false) 
     {
         return false;
@@ -111,24 +112,37 @@ const createVisualCode = (snippets) =>
 
         let jsonObj = new Object();
 
-        jsonObj.prefix = snippets.trigger;
-        jsonObj.body = snippets.code;
-        let description = snippets.description;
+        jsonObj.prefix = snippet.trigger;
+        jsonObj.body = snippet.code;
+        let description = snippet.description;
         jsonObj.description = description;
 
         parentObject[description] = jsonObj;
+
     });
 
     return parentObject;
 }
 
-const createFile = (res, title, type, text) => 
+
+const createFile = (res, name, type, text) => 
 {
-    res.setHeader('Content-disposition', `attachment; filename=${name}`);
-    res.setHeader('Content-type', type);
-    res.charset = 'UTF-8';
-    res.write(text);
-    res.end();
+    console.log(`createFile ${res} ${name} ${type} ${text}`);
+    // download(name, type, text);
+    // return new Promise((resolve, reject) => {
+    //     res.setHeader('Content-disposition', `attachment; filename=${name}`);
+    //     res.setHeader('Content-type', type);
+    //     res.charset = 'UTF-8';
+    //     // res.write(text);
+
+    //     if (res.write(text)) 
+    //     {
+    //         resolve(res);
+    //     } else {
+    //         reject(`Error writing file! ${text}`)
+    //     }
+    // });
+    // res.end();
 }
 
 module.exports.getSnippetsForEditor = getSnippetsForEditor;

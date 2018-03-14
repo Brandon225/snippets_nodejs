@@ -105,7 +105,6 @@ router.get('/library/:editor', (req, res, next) => {
         .exec((err, snippets) => {
             if (err) return next(err);
             res.render('library', { title: 'Library | Snippets', active: 'library', activeEditor: editorName, desc, canonical: `${path}library`, bgColor: '#ffffff', snippets, editor: editorName, currentUser: res.locals.currentUser});
-
         });
 });
 

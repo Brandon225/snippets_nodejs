@@ -200,7 +200,6 @@ $('#profileList a').click(function(e)
     loadSnippetsAtUrlIntoTemplate(url, '#snippet-card-template', '#snippets-row');
 });
 
-
 $('#lib-nav a').click(function(e) {
 
     console.log(`Library nav clicked! ${e.target}`);
@@ -216,6 +215,44 @@ $('#lib-nav a').click(function(e) {
     const url = `/snippets/editor/${editor}/scope/${scope}/${ext}`;
     
     loadSnippetsAtUrlIntoTemplate(url, '#snippet-card-template', '#lib-snippets-row');
+});
+
+const download = (filename, type, text) => {
+    var element = document.createElement('a');
+    element.setAttribute('href', `data:${type};charset=utf-8,${encodeURIComponent(text)}`);
+    element.setAttribute('download', filename);
+
+    element.style.display = 'none';
+    document.body.appendChild(element);
+
+    element.click();
+
+    document.body.removeChild(element);
+}
+
+$('#export-form').submit((e) => 
+{
+    // console.log(`Export form submit! ${$('this').attr('action')}`);
+
+    e.preventDefault();
+
+    // var form = $(this),
+    //     url = form.attr('action');
+    
+    var url = `/snippets/export/user/5a7ba60439740db19a4441be/editor/visual_studio_code/source/js`;
+        
+    console.log(`url? ${url}`);
+
+    $.ajax(url)
+        .then(res => {
+            console.log("Results export form submit", res);
+            download(res.name, res.type, res.text);
+        })
+        .fail(err => {
+            console.log("Error export form submit", err);
+            throw err;
+        });
+
 });
 
 function loadSnippetsAtUrlIntoTemplate(url, tempId, parentId)

@@ -19,13 +19,13 @@ router.param('uID', (req, res, next, id) => {
             return next(err);
         }
         req.user = doc;
-        console.log(`req.user? ${req.user}`);
+        // console.log(`req.user? ${req.user}`);
         return next();
     });
 });
 
 router.param('snipID', (req, res, next, id) => {
-    console.log(`param snipID? ${id}`);
+    // console.log(`param snipID? ${id}`);
     Snippet.findById(id, (err, doc) => {
         if(err) return next(err);
         if (!doc) {
@@ -34,7 +34,7 @@ router.param('snipID', (req, res, next, id) => {
             return next(err);
         }
         req.snippet = doc;
-        console.log(`snippets req.snippet? ${req.snippet}`);
+        // console.log(`snippets req.snippet? ${req.snippet}`);
         
         return next();
     });
@@ -110,7 +110,7 @@ router.get('/user/:uID/editor/:editor', (req, res, next) => {
     let { uID } = req.params;
     let { editor } = req.params;
 
-    console.log(`get snippets for editor: ${editor}`);
+    // console.log(`get snippets for editor: ${editor}`);
     Snippet.findUserSnippetsForEditor(uID, editor, (err, snippets) => {
         if (err) return next(err);
         return res.json({ snippets, currentUser: res.locals.currentUser });
@@ -119,22 +119,36 @@ router.get('/user/:uID/editor/:editor', (req, res, next) => {
 
 // GET /snippets/export/user/:uID/editor/:editor
 // Route for exporting snippets for editor
-router.get('/export/user/:uID/editor/:editor/:scope', (req, res, next) => 
+router.get('/export/user/:uID/editor/:editor/:scope/:ext', (req, res, next) => 
 {
-    let { uID, editor, scope } = req.params;
+    let { uID, editor } = req.params;
 
-    console.log(`export snippets for editor ${editor} scope ${scope}.`);
-    console.log(`get snippets for editor: ${editor}`);
+    let scope = `${req.params.scope}.${req.params.ext}`;
+    
+    // console.log(`export snippets for editor ${editor} scope ${scope}.`);
+    // console.log(`get snippets for editor: ${editor}`);
 
     Snippet.findUserSnippetsForEditorAndScope(uID, editor, scope, (err, snippets) => {
         if (err) return next(err);
 
-        var data = exportSnippetsForEditor(snippets, editor);
+        var data = exportLogic.exportSnippetsForEditor(snippets, editor, scope);
         
-        createFile(res, )
+        // console.log(`data? ${JSON.stringify(data)}`);
+
+        // exportLogic.createFile(res, 'javascipt.json', 'application/json', JSON.stringify(data)).then(end(res));
+        let text = JSON.stringify(data);
+        let name = 'javascript.json';
+        let type = 'application.json';
+        return res.json({text, type, name });
         // return res.json({ snippets, currentUser: res.locals.currentUser });
     });
 });
+
+const end = (res) => 
+{
+    console.log(`end: ${res}`);
+    res.end();
+}
 
 // POST /snippets
 // Route for creating snippets
