@@ -50,7 +50,6 @@ router.get('/', (req, res, next) => {
         .exec((err, snippets) => {
             if (err) return next(err);
             res.render('library', { title: 'Library | Snippets', active: 'library', desc, canonical: `${path}library`, bgColor: '#ffffff', snippets, editor: editorName});
-
         });
 });
 
@@ -153,7 +152,7 @@ const end = (res) =>
 
 // POST /snippets
 // Route for creating snippets
-router.post('/', (req, res, next) => {
+router.post('/post', (req, res, next) => {
 
     console.log(`save snippet!`);
 
@@ -174,39 +173,11 @@ router.post('/', (req, res, next) => {
 
     var snippet = new Snippet(snippetData);
     snippet.save((err, snippet) => {
+        console.log(`POST snippet err? ${err}`);
         if (err) return next(err);
         res.status(201);
         res.json(snippet);
     });
-
-    // use schema's  `create` method to insert document in Mongo
-    // Snippet.create(snippetData, (error, snippet) => {
-        
-    //     if (error) {
-
-    //         console.log(`Error creating snippet! ${error}`);
-
-    //         // return error response
-    //         res.send({
-    //             success: null,
-    //             error: `There was an error saving this snippet. ${error}`,
-    //             snippet: snippet
-    //         });
-
-    //         // return next(error);
-    //     } else {
-            
-    //         console.log(`Created snippet! ${snippet}`);
-
-    //         // return success response
-    //         res.send({
-    //             success: `Successfully saved snippet.`,
-    //             error: null,
-    //             snippet: snippet
-    //         });
-
-    //     }
-    // });
 });
 
 // PUT /snippet/:snipID/user/:uID  -- 
@@ -230,7 +201,7 @@ router.put('/:snipID/user/:uID', (req, res, next) => {
                 duplicated: true
             };
 
-            // TODO: Insert the Snippets scope into the users scopes array -- SCOPE OF CODE LANGUAGES
+            // Insert the Snippets scope into the users scopes array -- SCOPE OF CODE LANGUAGES
             Snippet.create(snippetData, (error, snippet) => {
 
                 if (error) {

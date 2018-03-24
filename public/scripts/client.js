@@ -30,7 +30,7 @@ $('#code-form').submit(function(event)
     var scope = $('#code-scope').val();
     var desc = $('#code-description').val();
 
-    //console.log('editor: ' + editor + ' scope: ' + scope + ' desc: ' + desc + ' trigger: ' + trigger + ' content: ' + content);
+    console.log('editor: ' + editor + ' scope: ' + scope + ' desc: ' + desc + ' trigger: ' + trigger + ' content: ' + content);
 
     switch (editor)
     {
@@ -47,40 +47,27 @@ $('#code-form').submit(function(event)
             populateToText('#snippet-output', createVisualCode(content, trigger, scope, desc));
             break;
         default:
-
     }
 
     var form = $(this),
     url = form.attr('action');
     
+    console.log(`code-form submit url? ${url}`);
     // Send the data using post
     $.ajax({
             type: 'POST',
             url: url,
             data: form.serialize(),
-            dataType: 'json',
-            contentType: 'application/json',
+            dataType: 'json'
         })
         .done(function (response) {
             console.log("We have posted the data!");
             // TODO: Update UI to notify user of success
         })
         .fail(function (error) {
-            console.log("Failures at posting, we are", error);
+            console.log("Failures at posting, we are", error.responseText);
             // TODO: Update UI to notify user of error
         });
-    // var posting = $.post(url, form.serialize(),
-    // function(data)
-    // {
-    //     // if data returned no errors
-    //     if (data.success)
-    //     {
-    //         console.log('Successfully loaded data!', data.success);
-    //     } else {
-    //         console.log('Error loading data!', data.error);
-    //     }
-
-    // } ,'json' );
 });
 
 $('.lib-add').on('click', function(e) {
@@ -199,7 +186,7 @@ $('#profileList a').click(function(e)
     // Update export forms url
     // #export-form(action=`/export/user/${currentUser}/editor/${activeEditor}/source/js`, method="GET")
 
-    const exportUrl = `/export/user/${uID}/editor/${editor}/`
+    const exportUrl = `/export/user/${uID}/editor/${editor}/`;
     const url = `/snippets/user/${uID}/editor/${editor}`;
     
     loadSnippetsAtUrlIntoTemplate(url, '#snippet-card-template', '#snippets-row');

@@ -13,7 +13,6 @@ app.use(logger('dev'));
 // mongodb connection
 mongoose.connection.openUri(`mongodb://${config.db.host}/${config.db.dbName}`);
 
-
 var db = mongoose.connection;
 // mongo error
 db.on('error', console.error.bind(console, 'connection error: '));
@@ -46,7 +45,7 @@ app.set('view engine', 'pug');
 app.set('views', __dirname + '/views');
 
 // include routes
-var routes = require('./routes/index');
+var routes = require('./routes/');
 app.use('/', routes);
 
 // catch 404 and forward to error handler

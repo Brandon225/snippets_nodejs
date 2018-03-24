@@ -1,6 +1,6 @@
 [
     {
-        "userId": "5a7ba60439740db19a4441be",
+        "userId": "",
         "editor": "visual_studio_code",
         "scope": "source.js",
         "description": "AJAX DONE FAIL",
@@ -11,7 +11,7 @@
         "__v": 0
     },
     {
-        "userId": "5a7ba60439740db19a4441be",
+        "userId": "",
         "editor": "visual_studio_code",
         "scope": "source.js",
         "description": "Mongoose Save Document",
@@ -22,7 +22,7 @@
         "__v": 0
     },
     {
-        "userId": "5a7ba60439740db19a4441be",
+        "userId": "",
         "editor": "atom",
         "scope": "text.html",
         "description": "HTML5 Boilerplate",
@@ -33,7 +33,7 @@
         "__v": 0
     },
     {
-        "userId": "5a7a74e6a5415015cc637935",
+        "userId": "",
         "editor": "brackets",
         "scope": "source.js",
         "description": "Console Log Statement",
@@ -43,7 +43,7 @@
         "__v": 0
     },
     {
-        "userId": "5a7a74e6a5415015cc637935",
+        "userId": "",
         "editor": "atom",
         "scope": "source.js",
         "description": "Console Log Statement",
@@ -53,13 +53,24 @@
         "__v": 0
     },
     {
-        "userId": "5a7a74e6a5415015cc637935",
+        "userId": "",
         "editor": "atom",
         "scope": "source.js",
         "description": "jQuery element",
         "trigger": "jelem",
         "code": "$(`$1`)$0",
         "content": "\".source.js\":\r\n   \"jQuery element\":\r\n       \"prefix\": \"jelem\"\r\n       \"body\": \"\"\"$(`$1`)$0\"\"\" \r\n       ",
+        "__v": 0
+    },
+    {
+        "userId": "",
+        "editor": "sublime",
+        "scope": "source.js",
+        "description": "log",
+        "trigger": "log",
+        "code": "console.log(`$1`)",
+        "content": "<snippet><content><![CDATA[console.log(`$1`)]]></content><tabTrigger>log</tabTrigger><scope>source.js</scope><description>log</description></snippet>",
+        "duplicated": false,
         "__v": 0
     }
 ]

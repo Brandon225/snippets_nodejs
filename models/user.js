@@ -58,8 +58,19 @@ UserSchema.method('update', function(updates, callback)
 
 UserSchema.method('addSnippet', function(snippet, callback)
 {
-    this.snippets.push(snippet);
-    this.save(callback);
+    // Check if scope already exits in scopes
+    let duplicates = this.snippets.filter(snpt => snpt.content === snippet.content);
+
+    console.log(`duplicates? ${duplicates}`);
+
+    if (!duplicates.length) 
+    {
+        this.snippets.push(snippet);
+        this.save(callback);
+    } else {
+        console.log(`Your library already has this snippet!`);
+    }
+
 });
 
 UserSchema.method('removeSnippet', function(snippet, callback)

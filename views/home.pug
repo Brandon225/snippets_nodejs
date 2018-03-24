@@ -12,7 +12,7 @@ block content
     #creation-container.container.mt-4
         h4.lead.text-white.text-center.my-5 Create code snippets formatted for your code editor!
         hr
-        form#code-form.row(action="/snippets", method="POST")
+        form#code-form.row(action="/snippets/post", method="POST")
             .col-sm
                 // Allow user to select From text editor
                 .form-group
@@ -21,8 +21,8 @@ block content
                         option(value='')
                         option(value='atom') Atom
                         option(value='brackets') Brackets
-                        option(value='sublime', selected='') Sublime Text
-                        option(value='visual_studio_code') Visual Studio Code
+                        option(value='sublime') Sublime Text
+                        option(value='visual_studio_code', selected='') Visual Studio Code
                 // List of scopes to apply to snippet
                 .form-group.scope-select
                     label.text-white(for='code_scope') Scope/Source
