@@ -133,12 +133,12 @@ router.get('/export/user/:uID/editor/:editor/:scope/:ext', (req, res, next) =>
         console.log(`export snippets for editor? ${editor}`);
         var data = exportLogic.exportSnippetsForEditor(snippets, editor, scope);
         
-        // console.log(`data? ${JSON.stringify(data)}`);
-
-        // exportLogic.createFile(res, 'javascipt.json', 'application/json', JSON.stringify(data)).then(end(res));
-        let text = JSON.stringify(data);
-        let name = 'javascript.json';
-        let type = 'application.json';
+        console.log(`data? ${JSON.stringify(data)}`);
+        if (data.error) return res.json({error});
+        
+        let text = JSON.stringify(data.text);
+        let type = data.type;
+        let name = data.name;
         return res.json({ text, type, name });
         // return res.json({ snippets, currentUser: res.locals.currentUser });
     });

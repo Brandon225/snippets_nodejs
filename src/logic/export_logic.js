@@ -14,6 +14,17 @@ const getSnippetsForEditor = (editor) => {
     return false;
 }
 
+const getFileNameForType = (type) => 
+{
+    var fileTypesFile = require('./file.types.json');
+
+    let fileTypes = fileTypesFile.filter((fileType) => {
+        return fileType.type === type;
+    });
+
+    return fileTypes[0].name.toLowerCase();
+}
+
 const exportSnippetsForEditor = (snippets, editor, scope) => 
 {   
     console.log(`exportSnippetsForEditor ${snippets.length} ${editor} ${scope}`);
@@ -21,23 +32,40 @@ const exportSnippetsForEditor = (snippets, editor, scope) =>
     {
         return false;
     }
+    
+    let text;
+    let type;
+    let name;
+    let error;
     switch (editor) {
         case 'atom':
-            return createAtom(snippets);
+            text = createAtom(snippets);
+            type = 'source.coffee';
+            name = 'snippets.cson';
             break;
         case 'brackets':
-            return createBrackets(snippets);
+            text = createBrackets(snippets);
+            type = scope;
+            name = `${getFileNameForType(scope)}.json`;
             break;
         case 'sublime': // Not yet supported
-            return false;
+            error = 'Exporting Sublime snippets is not yet supported';
             break;
         case 'visual_studio_code':
-            return createVisualCode(snippets);
+            text = createVisualCode(snippets);
+            type = scope;
+            name = `${getFileNameForType(scope)}.json`;
             break;
         default:
-            return false;
+            error = 'Invalid editor'
             break;
     }
+
+    console.log(`exportSnippetsForEditor text? ${text}`);
+    if (error) return {error};
+    return {text, type, name};
+
+
 }
 
 const getScopes = (snippets) => 

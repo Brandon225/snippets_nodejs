@@ -502,6 +502,11 @@ input
             background-color: red;
         }
     }
+
+    .list-group-item.list-group-item-action
+    {
+        border: none;
+    }
 }
 
 

@@ -184,13 +184,15 @@ $('#profileList a').click(function(e)
     var uID = $(this).data('uid');
 
     // Update export forms url
-    // #export-form(action=`/export/user/${currentUser}/editor/${activeEditor}/source/js`, method="GET")
+    // #export-form(action=`/snippets/export/user/${currentUser}/editor/${activeEditor}/source/js`, method="GET")
 
-    const exportUrl = `/export/user/${uID}/editor/${editor}/`;
+    const exportUrl = `/snippets/export/user/${uID}/editor/${editor}/source/js`;
+    // update forms url
+    $('#export-form').attr('action', exportUrl);
+
     const url = `/snippets/user/${uID}/editor/${editor}`;
-    
-    loadSnippetsAtUrlIntoTemplate(url, '#snippet-card-template', '#snippets-row');
 
+    loadSnippetsAtUrlIntoTemplate(url, '#snippet-card-template', '#snippets-row', editor);
 
 });
 
@@ -236,17 +238,24 @@ $('#export-form').submit((e) =>
 
     e.preventDefault();
 
-    // var form = $(this),
-    //     url = form.attr('action');
+    var form = $('#export-form'),
+        url = form.attr('action');
     
-    var url = `/snippets/export/user/5a7ba60439740db19a4441be/editor/visual_studio_code/source/js`;
+    // var url = `/snippets/export/user/5a7ba60439740db19a4441be/editor/visual_studio_code/source/js`;
         
-    console.log(`url? ${url}`);
+    console.log(`url? ${form.attr('action')}`);
 
     $.ajax(url)
         .then(res => {
-            console.log("Results export form submit", res);
-            download(res.name, res.type, res.text);
+            console.log("Results export form submit", res.error);
+            if (!res.error)
+            {
+                download(res.name, res.type, res.text);
+                
+            } else {
+                alert(res.error);
+            }
+            
         })
         .fail(err => {
             console.log("Error export form submit", err);
@@ -255,7 +264,7 @@ $('#export-form').submit((e) =>
 
 });
 
-function loadSnippetsAtUrlIntoTemplate(url, tempId, parentId)
+function loadSnippetsAtUrlIntoTemplate(url, tempId, parentId, editor=null)
 {
     const template = $(tempId).html();
     const compiledTemplate = Handlebars.compile(template);
@@ -263,7 +272,16 @@ function loadSnippetsAtUrlIntoTemplate(url, tempId, parentId)
     // Then is a javascript "Promises"
     getDataFromURL(url)
         .then(results => {
-            console.log(`snippets? ${results.currentUser}`);
+            // console.log(`currentUser? ${results.currentUser}`);
+
+            // Toggle export button if parent is snippets-row (profile)
+            if (parentId === '#snippets-row') 
+            {
+                let disabled = !results.snippets.length || editor==='sublime'
+                $('#export-btn').attr('disabled', disabled);
+            }
+            
+            
             const data = {
                 snippets: results.snippets,
                 currentUser: results.currentUser

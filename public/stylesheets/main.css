@@ -260,6 +260,9 @@ input {
 #profile-container #profileList a.selected {
   background-color: red; }
 
+#profile-container .list-group-item.list-group-item-action {
+  border: none; }
+
 /**************************** RESPONSIVE DATA ****************************/
 /* Extra Small */
 @media (min-width: 576px) and (max-width: 767px) {

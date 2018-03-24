@@ -10,7 +10,21 @@ block content
                     p #{email}
                 li.list-unstyled-item
                     p #{editor}
-    #profile-container.main.page-container.container-fluid
+    #profile-container.main.container-fluid
+        //- .row
+        //-     .col-10
+        //-         ul#lib-nav.nav.nav-tabs.justify-content-center.mb-5
+        //-             - let linkEditor = editor.toLowerCase().replace(/ /g, '_');
+        //-             li.nav-item
+        //-                 a.nav-link.active(href='#', data-editor=linkEditor, data-scope="source", data-ext="js") Javascript
+        //-             li.nav-item
+        //-                 a.nav-link(href="#", data-editor=linkEditor, data-scope="text", data-ext="html") HTML
+        //-             li.nav-item
+        //-                 a.nav-link(href="#", data-editor=linkEditor, data-scope="source", data-ext="css") CSS
+        //-             li.nav-item
+        //-                 a.nav-link(href="#", data-editor=linkEditor, data-scope="source", data-ext="php") PHP
+        //-             li.nav-item
+        //-                 a.nav-link(href="#", data-editor=linkEditor, data-scope="source", data-ext="json") JSON
         .row
             .col-md-10.order-md-1.order-2
                 .row#snippets-row.tab-pane.fade.show.active
@@ -42,9 +56,11 @@ block content
                         a.list-group-item.list-group-item-action(data-toggle='list', data-editor='brackets', data-uID=currentUser, href='/profile/brackets', role='tab', class=activeEditor ==='brackets' ? 'active' : '') Brackets
                         a.list-group-item.list-group-item-action(data-toggle='list', data-editor='sublime', data-uID=currentUser, href='/profile/sublime', role='tab', class=activeEditor ==='sublime' ? 'active' : '') Sublime Text
                         a.list-group-item.list-group-item-action(data-toggle='list', data-editor='visual_studio_code', data-uID=currentUser, href='/profile/visual_studio_code', role='tab', class=activeEditor ==='visual_studio_code' ? 'active' : '') Visual Studio Code
-                    form#export-form(action=`/export/user/${currentUser}/editor/${activeEditor}/source/js`, method="GET")
+                    form#export-form(action=`/snippets/export/user/${currentUser}/editor/${activeEditor}/source/js`, method="GET")
                         input.form-control(type="hidden", name="uID", value=currentUser)
                         button#export-btn.btn.btn-info.btn-block.mt-4(type="submit") Export
+
+                        //- a.nav-link.active(href='#', data-editor=linkEditor, data-scope="source", data-ext="js") Javascript
 
             .col.d-block.d-md-none.order-1
                 ul#profileList.list-inline.list-group-flush.p-0
@@ -56,3 +72,6 @@ block content
                         a.list-group-item.list-group-item-action(data-toggle='list', data-editor='sublime', data-uID=currentUser, href='/profile/sublime', role='tab', class=activeEditor ==='sublime' ? 'active' : '') Sublime Text
                     li.list-inline-item
                         a.list-group-item.list-group-item-action(data-toggle='list', data-editor='visual_studio_code', data-uID=currentUser, href='/profile/visual_studio_code', role='tab', class=activeEditor ==='visual_studio_code' ? 'active' : '') Visual Studio Code
+                form#export-form(action=`/snippets/export/user/${currentUser}/editor/${activeEditor}/source/js`, method="GET")
+                    input.form-control(type="hidden", name="uID", value=currentUser)
+                    button#export-btn.btn.btn-info.btn-block.mt-4(type="submit") Export

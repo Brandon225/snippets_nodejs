@@ -62,7 +62,7 @@ router.get('/profile', mid.requiresLogin, (req, res, next) => {
                 Snippet.findUserSnippetsForEditor(req.session.userId, editor, (err, snippets) => {
                     if (err) return next(err);
                     // console.log(`profile snippets? ${snippets}`);
-                    return res.render('profile', { title: 'Profile | Snippets', active: 'profile', desc, canonical: `${path}profile`, year: year, bgColor: '#ffffff', name: user.name, email: user.email, editor: user.codeEditor, snippets, activeEditor: editor });
+                    return res.render('profile', { title: 'Profile | Snippets', active: 'profile', desc, canonical: `${path}profile`, year: year, bgColor: '#ffffff', name: user.name, email: user.email, editor: user.codeEditor, scopes: user.scopes, snippets, activeEditor: editor });
                 });
             }
         });
