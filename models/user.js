@@ -72,6 +72,25 @@ function remove(array, element) {
     return array.filter(e => e !== element);
 }
 
+UserSchema.method('addScope', function (scope, callback) 
+{
+    // Check if scope already exits in scopes
+    let duplicates = this.scopes.filter(scpe => scpe === scope);
+    
+    console.log(`duplicates? ${duplicates}`);
+    if (!duplicates.length) 
+    {
+        this.scopes.push(scope);
+        this.save(callback);
+    }
+    
+});
+
+UserSchema.method('removeScope', function (scope, callback) {
+    this.snippets.pull(scope);
+    this.save(callback);
+});
+
 UserSchema.statics.authenticate = function(email, password, callback)
 {
     User.findOne({email: email})

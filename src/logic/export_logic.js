@@ -84,8 +84,9 @@ const createAtom = (snippets) => {
     return parentString;
 }
 
-const createBrackets = (snippets) => {
-
+const createBrackets = (snippets) => 
+{
+    console.log(`Export Brackets!`);
     let parentArray = [];
 
     snippets.forEach(snippet => 
@@ -106,6 +107,8 @@ const createBrackets = (snippets) => {
 
 const createVisualCode = (snippets) =>
 {   
+    console.log(`Export VisualCode!`);
+    
     let parentObject = new Object();
 
     snippets.forEach(snippet => {

@@ -131,6 +131,7 @@ router.get('/export/user/:uID/editor/:editor/:scope/:ext', (req, res, next) =>
     Snippet.findUserSnippetsForEditorAndScope(uID, editor, scope, (err, snippets) => {
         if (err) return next(err);
 
+        console.log(`export snippets for editor? ${editor}`);
         var data = exportLogic.exportSnippetsForEditor(snippets, editor, scope);
         
         // console.log(`data? ${JSON.stringify(data)}`);
@@ -139,7 +140,7 @@ router.get('/export/user/:uID/editor/:editor/:scope/:ext', (req, res, next) =>
         let text = JSON.stringify(data);
         let name = 'javascript.json';
         let type = 'application.json';
-        return res.json({text, type, name });
+        return res.json({ text, type, name });
         // return res.json({ snippets, currentUser: res.locals.currentUser });
     });
 });
@@ -248,11 +249,20 @@ router.put('/:snipID/user/:uID', (req, res, next) => {
                     req.user.addSnippet(snippet._id, function(err, result) {
                         if(err) return next(err);
                         console.log(`Updated user's snippets!  ${result}`);
-                        res.json({
-                            success: `Successfully added snippet!`,
-                            error: null,
-                            snippet: snippet
+
+                        req.user.addScope(snippet.scope, function (err, result) {
+                            if (err) return next(err);
+                            console.log(`Updated user's scopes!  ${result}`);
+                            
+                            res.json({
+                                success: `Successfully added snippet!`,
+                                error: null,
+                                snippet: snippet
+                            });
+
                         });
+
+                        
                     });
                 }
             });

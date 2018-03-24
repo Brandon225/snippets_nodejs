@@ -185,6 +185,7 @@ $('#profileList a').click(function(e)
 
     console.log(`profileList a clicked!`);
 
+    
     // add active class only on mobile devices -- other devices are auto selected
     if (!$(this).hasClass('active')) 
     {
@@ -195,9 +196,15 @@ $('#profileList a').click(function(e)
     var editor = $(this).data('editor');
     var uID = $(this).data('uid');
 
+    // Update export forms url
+    // #export-form(action=`/export/user/${currentUser}/editor/${activeEditor}/source/js`, method="GET")
+
+    const exportUrl = `/export/user/${uID}/editor/${editor}/`
     const url = `/snippets/user/${uID}/editor/${editor}`;
     
     loadSnippetsAtUrlIntoTemplate(url, '#snippet-card-template', '#snippets-row');
+
+
 });
 
 $('#lib-nav a').click(function(e) {
@@ -217,16 +224,22 @@ $('#lib-nav a').click(function(e) {
     loadSnippetsAtUrlIntoTemplate(url, '#snippet-card-template', '#lib-snippets-row');
 });
 
-const download = (filename, type, text) => {
+const download = (filename, type, text) => 
+{
+    // Create a temporary link element to allow file downloading
     var element = document.createElement('a');
     element.setAttribute('href', `data:${type};charset=utf-8,${encodeURIComponent(text)}`);
     element.setAttribute('download', filename);
 
+    // Hide the link
     element.style.display = 'none';
+
+    // Add the link to the document body
     document.body.appendChild(element);
 
     element.click();
 
+    // Remove the link
     document.body.removeChild(element);
 }
 
