@@ -116,19 +116,6 @@ router.get('/user/:uID/editor/:editor', (req, res, next) => {
     });
 });
 
-// GET /snippets/user/:uID/editor/:editor/:scope/:ext
-// Route for getting snippets filtered by editor
-// router.get('/user/:uID/editor/:editor/:scope/:ext', (req, res, next) => {
-
-//     let { uID, editor } = req.params;
-//     let scope = `${req.params.scope}.${req.params.ext}`;
-    
-//     // console.log(`get snippets for editor: ${editor}`);
-//     Snippet.findUserSnippetsForEditor(uID, editor, scope,(err, snippets) => {
-//         if (err) return next(err);
-//         return res.json({ snippets, currentUser: res.locals.currentUser });
-//     });
-// });
 
 // GET /snippets/export/user/:uID/editor/:editor
 // Route for exporting snippets for editor
@@ -150,7 +137,7 @@ router.get('/export/user/:uID/editor/:editor/:scope/:ext', (req, res, next) =>
         console.log(`data? ${JSON.stringify(data)}`);
         if (data.error) return res.json({error});
         
-        let text = JSON.stringify(data.text);
+        let text = data.text;//JSON.stringify(data.text);
         let type = data.type;
         let name = data.name;
         return res.json({ text, type, name });
@@ -198,7 +185,7 @@ router.post('/post', (req, res, next) => {
                 if (user) 
                 {
                     console.log(`post snippet user? ${user}`);
-// 
+
                     // Add snippet's id to user's snippets
                     user.addSnippet(snippet._id, function (err, result) {
                         if (err) return next(err);

@@ -130,7 +130,7 @@ const createBrackets = (snippets) =>
         parentArray.push(jsonObj);
     });
 
-    return parentArray;
+    return JSON.stringify(parentArray);
 }
 
 const createVisualCode = (snippets) =>
@@ -152,7 +152,7 @@ const createVisualCode = (snippets) =>
 
     });
 
-    return parentObject;
+    return JSON.stringify(parentObject);
 }
 
 
