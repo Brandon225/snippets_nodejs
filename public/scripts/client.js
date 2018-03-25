@@ -166,35 +166,40 @@ $(document.body).on('submit', '.removeSnip-form', function(event)
     
 });
 
-$('#profileList a').click(function(e) 
-{
-    e.preventDefault()
+// $('#profileList a').click(function(e) 
+// {
+//     e.preventDefault()
 
-    console.log(`profileList a clicked!`);
+//     console.log(`profileList a clicked!`);
 
     
-    // add active class only on mobile devices -- other devices are auto selected
-    if (!$(this).hasClass('active')) 
-    {
-        $('#profileList a').removeClass('active');
-        $(this).addClass('active');
-    }
+//     // add active class only on mobile devices -- other devices are auto selected
+//     if (!$(this).hasClass('active')) 
+//     {
+//         $('#profileList a').removeClass('active');
+//         $(this).addClass('active');
+//     }
 
-    var editor = $(this).data('editor');
-    var uID = $(this).data('uid');
+//     var editor = $(this).data('editor');
+//     var uID = $(this).data('uid');
+    
+//     const exportUrl = `/snippets/export/user/${uID}/editor/${editor}/source/js`;
 
-    // Update export forms url
-    // #export-form(action=`/snippets/export/user/${currentUser}/editor/${activeEditor}/source/js`, method="GET")
+//     // update forms url
+//     $('#export-form').attr('action', exportUrl);
 
-    const exportUrl = `/snippets/export/user/${uID}/editor/${editor}/source/js`;
-    // update forms url
-    $('#export-form').attr('action', exportUrl);
+//     // update filter scope buttons editor value
+//     var scopeBtns = document.getElementsByClassName('btn-scope-filter');
+//     for (let index = 0; index < scopeBtns.length; index++) {
+//         const btn = scopeBtns[index];
+//         btn.dataset.editor = editor;
+//     }
 
-    const url = `/snippets/user/${uID}/editor/${editor}`;
+//     const url = `/snippets/user/${uID}/editor/${editor}`;
 
-    loadSnippetsAtUrlIntoTemplate(url, '#snippet-card-template', '#snippets-row', editor);
+//     loadSnippetsAtUrlIntoTemplate(url, '#snippet-card-template', '#snippets-row', editor);
 
-});
+// });
 
 $('#lib-nav a').click(function(e) {
 
@@ -212,6 +217,25 @@ $('#lib-nav a').click(function(e) {
     
     loadSnippetsAtUrlIntoTemplate(url, '#snippet-card-template', '#lib-snippets-row');
 });
+
+// const filterClick = (e) => 
+// {
+//     console.log(`btn-scope-filter clicked! ${$(e).data('scope')}`);
+    
+//     var scope = $(e).data('scope');
+//     var ext = $(e).data('ext');
+
+//     // toggle selected state
+//     $('.btn-scope-filter.back-red').toggleClass('back-red').toggleClass('btn-secondary');
+//     $(e).toggleClass('back-red');
+
+//     // Remove the btn-secondary class to ensure double clicks don't disable selection
+//     $(e).removeClass('btn-secondary');
+
+//     const url = `/snippets/editor/${editor}/scope/${scope}/${ext}`;
+
+//     loadSnippetsAtUrlIntoTemplate(url, '#snippet-card-template', '#lib-snippets-row');
+// }
 
 const download = (filename, type, text) => 
 {
@@ -240,9 +264,7 @@ $('#export-form').submit((e) =>
 
     var form = $('#export-form'),
         url = form.attr('action');
-    
-    // var url = `/snippets/export/user/5a7ba60439740db19a4441be/editor/visual_studio_code/source/js`;
-        
+
     console.log(`url? ${form.attr('action')}`);
 
     $.ajax(url)

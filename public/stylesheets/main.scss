@@ -12,6 +12,7 @@ $purple: #c775df;
 $ltgrey: #9d9d9d;
 $offwhite: #f1f1f1;
 $dkgrey: #3f3f3f;
+$info: #17a2b8;
 
 /****** TEXT STYLES ******/
 .text-black
@@ -85,6 +86,17 @@ $dkgrey: #3f3f3f;
     background-color: $ltgrey;
 }
 
+.back-red 
+{
+    background-color: $red;
+    color: white;
+}
+
+.back-green {
+    background-color: $green;
+    color: white;
+}
+
 .back-black
 {
     background-color: $black;
@@ -109,6 +121,11 @@ $dkgrey: #3f3f3f;
         background-color: $brblue;
         border-color: $brblue;
     }
+}
+
+.list-group-item-action.active
+{
+    background-color: $info;
 }
 
 #lib-nav

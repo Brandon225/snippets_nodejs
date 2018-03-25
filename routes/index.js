@@ -33,7 +33,7 @@ console.log('$1: ', $2);
 	<scope>source.js</scope>
 	<description>Log to the Console</description>
 </snippet>`;
-    return res.render('home', { title: 'Home | Snippets', active: 'home', desc, canonical: path, year: year, bgColor: '#222', code });
+    return res.render('home', { title: 'Home | Snippets', active: 'home', desc, canonical: path, year: year, bgColor: '#222', code, currentUser: res.locals.currentUser });
 });
 
 // GET /details
@@ -47,7 +47,11 @@ router.get('/about', (req, res, next) => {
 });
 
 // GET /profile
-router.get('/profile', mid.requiresLogin, (req, res, next) => {
+router.get('/profile/:editor/:scope/:ext', mid.requiresLogin, (req, res, next) => {
+    
+    let {editor, scope, ext} = req.params;
+
+    let fullScope = `${scope}.${ext}`;
 
     User.findById(req.session.userId)
         .exec((error, user) => {
@@ -55,14 +59,15 @@ router.get('/profile', mid.requiresLogin, (req, res, next) => {
                 return next(error);
             } else {
 
-                let editor = user.codeEditor.toLowerCase().replace(/ /g, '_');
+                // let editor = user.codeEditor.toLowerCase().replace(/ /g, '_');
+                // let scope = 'source.js';
 
                 console.log(`load snippets for editor? ${editor}`);
 
-                Snippet.findUserSnippetsForEditor(req.session.userId, editor, (err, snippets) => {
+                Snippet.findUserSnippetsForEditorAndScope(req.session.userId, editor, fullScope, (err, snippets) => {
                     if (err) return next(err);
                     // console.log(`profile snippets? ${snippets}`);
-                    return res.render('profile', { title: 'Profile | Snippets', active: 'profile', desc, canonical: `${path}profile`, year: year, bgColor: '#ffffff', name: user.name, email: user.email, editor: user.codeEditor, scopes: user.scopes, snippets, activeEditor: editor });
+                    return res.render('profile', { title: 'Profile | Snippets', active: 'profile', desc, canonical: `${path}profile`, year: year, bgColor: '#ffffff', name: user.name, email: user.email, editor: user.codeEditor, activeEditor: editor, scopes: user.scopes, activeScope: scope, fullScope, ext: ext, snippets });
                 });
             }
         });

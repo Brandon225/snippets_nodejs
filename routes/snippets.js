@@ -19,7 +19,7 @@ router.param('uID', (req, res, next, id) => {
             return next(err);
         }
         req.user = doc;
-        // console.log(`req.user? ${req.user}`);
+        console.log(`req.user? ${req.user}`);
         return next();
     });
 });
@@ -116,6 +116,20 @@ router.get('/user/:uID/editor/:editor', (req, res, next) => {
     });
 });
 
+// GET /snippets/user/:uID/editor/:editor/:scope/:ext
+// Route for getting snippets filtered by editor
+// router.get('/user/:uID/editor/:editor/:scope/:ext', (req, res, next) => {
+
+//     let { uID, editor } = req.params;
+//     let scope = `${req.params.scope}.${req.params.ext}`;
+    
+//     // console.log(`get snippets for editor: ${editor}`);
+//     Snippet.findUserSnippetsForEditor(uID, editor, scope,(err, snippets) => {
+//         if (err) return next(err);
+//         return res.json({ snippets, currentUser: res.locals.currentUser });
+//     });
+// });
+
 // GET /snippets/export/user/:uID/editor/:editor
 // Route for exporting snippets for editor
 router.get('/export/user/:uID/editor/:editor/:scope/:ext', (req, res, next) => 
@@ -175,8 +189,41 @@ router.post('/post', (req, res, next) => {
     snippet.save((err, snippet) => {
         console.log(`POST snippet err? ${err}`);
         if (err) return next(err);
-        res.status(201);
-        res.json(snippet);
+        console.log(`res.locals.currentUser? ${res.locals.currentUser}`);
+        if (res.locals.currentUser) 
+        {   
+
+            User.findById(res.locals.currentUser, (err, user) => {
+                if (err) return next(err);
+                if (user) 
+                {
+                    console.log(`post snippet user? ${user}`);
+// 
+                    // Add snippet's id to user's snippets
+                    user.addSnippet(snippet._id, function (err, result) {
+                        if (err) return next(err);
+                        console.log(`Updated user's snippets!  ${result}`);
+
+                        user.addScope(snippet.scope, function (err, result) {
+                            if (err) return next(err);
+                            console.log(`Updated user's scopes!  ${result}`);
+
+                            res.status(201);
+                            res.json(snippet);
+
+                            
+                        });
+
+                    });
+                } else {
+                    res.status(201);
+                    res.json(snippet);
+                }
+            });            
+        } else {
+            res.status(201);
+            res.json(snippet);
+        }
     });
 });
 

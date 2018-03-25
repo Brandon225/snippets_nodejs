@@ -39,6 +39,14 @@
 .back-ltgrey {
   background-color: #9d9d9d; }
 
+.back-red {
+  background-color: #D85360;
+  color: white; }
+
+.back-green {
+  background-color: #85B861;
+  color: white; }
+
 .back-black {
   background-color: #222; }
 
@@ -53,6 +61,9 @@
   .btn-brblue:hover {
     background-color: #4fb1be;
     border-color: #4fb1be; }
+
+.list-group-item-action.active {
+  background-color: #17a2b8; }
 
 #lib-nav .nav-link {
   color: #222; }

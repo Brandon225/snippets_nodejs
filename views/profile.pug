@@ -51,16 +51,21 @@ block content
                                             button.lib-remove.card-link.text-red.hover-ltgrey(type="submit", data-target=`#card-${snip._id}`) remove
             .col.d-none.d-md-block.order-md-2
                 .sticky-top
-                    #profileList.list-group.list-group-flush.flex-column(role='tablist')
-                        a.list-group-item.list-group-item-action(data-toggle='list', data-editor='atom', data-uID=currentUser, href='/profile/atom', role='tab', class=activeEditor ==='atom' ? 'active' : '') Atom
-                        a.list-group-item.list-group-item-action(data-toggle='list', data-editor='brackets', data-uID=currentUser, href='/profile/brackets', role='tab', class=activeEditor ==='brackets' ? 'active' : '') Brackets
-                        a.list-group-item.list-group-item-action(data-toggle='list', data-editor='sublime', data-uID=currentUser, href='/profile/sublime', role='tab', class=activeEditor ==='sublime' ? 'active' : '') Sublime Text
-                        a.list-group-item.list-group-item-action(data-toggle='list', data-editor='visual_studio_code', data-uID=currentUser, href='/profile/visual_studio_code', role='tab', class=activeEditor ==='visual_studio_code' ? 'active' : '') Visual Studio Code
-                    form#export-form(action=`/snippets/export/user/${currentUser}/editor/${activeEditor}/source/js`, method="GET")
+                    #profileList.list-group.list-group-flush.flex-column()
+                        a.list-group-item.list-group-item-action(data-editor='atom', data-scope=activeScope, data-uID=currentUser, href=`/profile/atom/${activeScope}/${ext}`, class=activeEditor ==='atom' ? 'active' : '') Atom
+                        a.list-group-item.list-group-item-action(data-editor='brackets', data-scope=activeScope, data-uID=currentUser, href=`/profile/brackets/${activeScope}/${ext}`, class=activeEditor ==='brackets' ? 'active' : '') Brackets
+                        a.list-group-item.list-group-item-action(data-editor='sublime', data-scope=activeScope, data-uID=currentUser, href=`/profile/sublime/${activeScope}/${ext}`, class=activeEditor ==='sublime' ? 'active' : '') Sublime Text
+                        a.list-group-item.list-group-item-action(data-editor='visual_studio_code', data-scope=activeScope, data-uID=currentUser, href=`/profile/visual_studio_code/${activeScope}/${ext}`, class=activeEditor ==='visual_studio_code' ? 'active' : '') Visual Studio Code
+                    if scopes.length
+                        ul.list-inline.mt-4
+                            each aScope in scopes
+                                - var scopeStrArray = aScope.split('.')
+                                - var editorStr = activeEditor.replace(' ', '_').toLowerCase()
+                                li.list-inline-item
+                                    a.btn.btn-scope-filter(href=`/profile/${editorStr}/${scopeStrArray[0]}/${scopeStrArray[1]}`, class=fullScope === aScope ? 'back-red' : 'btn-secondary') #{scopeStrArray[1]}
+                    form#export-form(action=`/snippets/export/user/${currentUser}/editor/${activeEditor}/${activeScope}/${ext}`, method="GET")
                         input.form-control(type="hidden", name="uID", value=currentUser)
-                        button#export-btn.btn.btn-info.btn-block.mt-4(type="submit") Export
-
-                        //- a.nav-link.active(href='#', data-editor=linkEditor, data-scope="source", data-ext="js") Javascript
+                        button#export-btn.btn.back-green.btn-block.mt-4(type="submit") Export
 
             .col.d-block.d-md-none.order-1
                 ul#profileList.list-inline.list-group-flush.p-0
