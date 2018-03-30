@@ -27,7 +27,7 @@ router.get('/', (req, res, next) => {
 
     // create constants
     const code = `<snippet><content><![CDATA[
-console.log('$1: ', $2);
+//console.log('$1: ', $2);
 ]]></content>
 	<tabTrigger>log</tabTrigger>
 	<scope>source.js</scope>
@@ -47,8 +47,8 @@ router.get('/about', (req, res, next) => {
 });
 
 // GET /profile
-router.get('/profile/:editor/:scope/:ext', mid.requiresLogin, (req, res, next) => {
-    
+router.get('/profile/:editor/:scope/:ext', mid.requiresLogin, (req, res, next) => 
+{
     let {editor, scope, ext} = req.params;
 
     let fullScope = `${scope}.${ext}`;
@@ -62,11 +62,11 @@ router.get('/profile/:editor/:scope/:ext', mid.requiresLogin, (req, res, next) =
                 // let editor = user.codeEditor.toLowerCase().replace(/ /g, '_');
                 // let scope = 'source.js';
 
-                console.log(`load snippets for editor? ${editor}`);
+                //console.log(`load snippets for editor? ${editor}`);
 
                 Snippet.findUserSnippetsForEditorAndScope(req.session.userId, editor, fullScope, (err, snippets) => {
                     if (err) return next(err);
-                    // console.log(`profile snippets? ${snippets}`);
+                    // //console.log(`profile snippets? ${snippets}`);
                     return res.render('profile', { title: 'Profile | Snippets', active: 'profile', desc, canonical: `${path}profile`, year: year, bgColor: '#ffffff', name: user.name, email: user.email, editor: user.codeEditor, activeEditor: editor, scopes: user.scopes, activeScope: scope, fullScope, ext: ext, snippets });
                 });
             }
@@ -80,21 +80,29 @@ router.get('/register', mid.loggedOut, (req, res, next) => {
 
 // GET /logout
 // ERROR FIX: downgraded from Mongoose 5 to 4.50 to prevent error when destroying session
-router.get("/logout", (req, res, next) => {
-    if (req.session) {
+router.get("/logout", (req, res, next) => 
+{
+    if (req.session) 
+    {
         // delete session object
-        req.session.destroy(function (err) {
-            if (err) {
+        req.session.destroy(function (err) 
+        {
+            // req.session.userId = -1;
+            
+            if (err) 
+            {
                 return next(err);
             } else {
-                return res.redirect('/');
+                res.redirect('/');
             }
         });
     }
 });
 
 // GET /login
-router.get('/login', mid.loggedOut, (req, res, next) => {
+router.get('/login', mid.loggedOut, (req, res, next) => 
+{
+    console.log(`Logging In! `);
     return res.render('login', { title: 'Log In | Snippets', active: 'login', desc, canonical: `${path}login`, bgColor: '#ffffff' });
 });
 
@@ -135,7 +143,7 @@ router.get('/library/:editor', (req, res, next) =>
                             res.render('library', { title: 'Library | Snippets', active: 'library', activeEditor: editorName, desc, canonical: `${path}library`, bgColor: '#ffffff', snippets, editor: editorName, currentUser: res.locals.currentUser });
                         }
                     });
-                console.log(`allSnipLength? ${allSnipLength}`);
+                //console.log(`allSnipLength? ${allSnipLength}`);
                 
             } else {
                 res.render('library', { title: 'Library | Snippets', active: 'library', activeEditor: editorName, desc, canonical: `${path}library`, bgColor: '#ffffff', snippets, editor: editorName, currentUser: res.locals.currentUser });
@@ -150,9 +158,10 @@ router.get('/password', (req, res, next) => {
 
 // POST ROUTES //
 
-// POST /login
-router.post('/login', (req, res, next) => {
-    console.log(`POST login`);
+// POST /login 
+router.post('/login', (req, res, next) => 
+{
+    console.log(`POST login ${req.session.userId}`);
     if (req.body.email &&
         req.body.password) {
         console.log(`POST login have email and pass`);
@@ -168,7 +177,9 @@ router.post('/login', (req, res, next) => {
             } else {
 
                 req.session.userId = user._id;
-                return res.redirect('/profile');
+
+                // console.log(`Redirecting to profile!!!`);
+                return res.redirect(`profile/visual_studio_code/source/js`);
             }
         });
 
@@ -211,7 +222,7 @@ router.post('/register', (req, res, next) => {
             // use schema's  `create` method to insert document in Mongo
             User.create(userData, (error, user) => {
 
-                console.log(`Created user! ${user}`);
+                //console.log(`Created user! ${user}`);
 
                 if (error) {
                     return next(error);
@@ -275,7 +286,7 @@ const checkForSnippets = () =>
     Snippet.find()
         .exec((err, snippets) => {
             if (err) return 0;
-            console.log(`checkForSnippets snippets length? ${snippets.length}`);
+            //console.log(`checkForSnippets snippets length? ${snippets.length}`);
             
             return snippets.length;
         });
@@ -288,7 +299,7 @@ const seedTheData = () => {
     {
         let seed = seedData[index];
 
-        console.log(`seed? ${JSON.stringify(seed)}`);
+        //console.log(`seed? ${JSON.stringify(seed)}`);
         var snippetData = {
             editor: seed.editor,
             scope: seed.scope,
@@ -299,11 +310,11 @@ const seedTheData = () => {
             duplicated: seed.duplicated
         };
 
-        console.log(`snippetData? ${JSON.stringify(snippetData)}`);
+        //console.log(`snippetData? ${JSON.stringify(snippetData)}`);
         var snippet = new Snippet(snippetData);
         snippet.save((err, newSnippet) => {
             if (err) error = true;
-            console.log(`index? ${index} seed snippet saved. ${newSnippet} `);
+            //console.log(`index? ${index} seed snippet saved. ${newSnippet} `);
         });
         
         if ((index === seedData.length-1) && !error) 

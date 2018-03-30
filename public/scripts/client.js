@@ -1,17 +1,17 @@
 $('input[name="options"]').on('change', function()
 {
-    //console.log('HA radio changed! ', $(this).attr('data-type'));
+    ////console.log('HA radio changed! ', $(this).attr('data-type'));
 
     switch ($(this).attr('data-type'))
     {
         case 'creation':
-            //console.log('creation clicked! ', $(this).attr('name'));
+            ////console.log('creation clicked! ', $(this).attr('name'));
             $('#creation-container').toggle();
             $('#migration-container').toggle();
             break;
 
         case 'migration':
-            //console.log('migration clicked! ', $(this).attr('name'));
+            ////console.log('migration clicked! ', $(this).attr('name'));
             $('#creation-container').toggle();
             $('#migration-container').toggle();
             break;
@@ -22,7 +22,7 @@ $('#code-form').submit(function(event)
 {
     event.preventDefault();
 
-    console.log('code-form submitted!');
+    //console.log('code-form submitted!');
 
     var editor = $('#code-editor').val();
     var content = $('#code-content').val();
@@ -30,7 +30,7 @@ $('#code-form').submit(function(event)
     var scope = $('#code-scope').val();
     var desc = $('#code-description').val();
 
-    console.log('editor: ' + editor + ' scope: ' + scope + ' desc: ' + desc + ' trigger: ' + trigger + ' content: ' + content);
+    //console.log('editor: ' + editor + ' scope: ' + scope + ' desc: ' + desc + ' trigger: ' + trigger + ' content: ' + content);
 
     switch (editor)
     {
@@ -52,7 +52,7 @@ $('#code-form').submit(function(event)
     var form = $(this),
     url = form.attr('action');
     
-    console.log(`code-form submit url? ${url}`);
+    //console.log(`code-form submit url? ${url}`);
     // Send the data using post
     $.ajax({
             type: 'POST',
@@ -61,65 +61,109 @@ $('#code-form').submit(function(event)
             dataType: 'json'
         })
         .done(function (response) {
-            console.log("We have posted the data!");
+            //console.log("We have posted the data!");
             // TODO: Update UI to notify user of success
         })
         .fail(function (error) {
-            console.log("Failures at posting, we are", error.responseText);
+            //console.log("Failures at posting, we are", error.responseText);
             // TODO: Update UI to notify user of error
         });
 });
 
-$('.lib-add').on('click', function(e) {
+$('#login-add').on('click', function(e) 
+{
     console.log(`lib-add clicked!`);
+
+    const login = confirm('You need to login or register to add snippets to your library. 😎');
+    
+    if (login) 
+    {
+        window.location.href = "/register";
+    }
+
 });
 
-$('.addSnip-form').on('submit', function(event) 
+// $('.addSnip-form').on('submit', function(event) 
+// {
+//     event.preventDefault();
+
+//     console.log(`addSnip-form submit!!`);
+
+//     var submit = $(this).find('[type="submit"]');
+//     $(submit).attr('disabled', true)
+    
+//     var form = $(this),
+//     url = form.attr('action');
+    
+//     var ajax = $.ajax({url, type: 'PUT', data: form.serialize()})
+//         .then(res => {
+//             console.log("Results from put snippet in user's library: ", res);
+//             return res;
+//         })
+//         .fail(err => {
+
+//             //console.log("Error in put snippet in user's library", err);
+            
+//             // Re-enable submit button
+//             $(submit).attr('disabled', false);
+
+//             // TODO TODO TODO:  Show login modal
+//             alert(err);
+            
+//             throw err;
+//         }
+//     );
+    
+// });
+
+$(document.body).on('submit', '.addSnip-form', function(event)
 {
     event.preventDefault();
 
+    console.log(`addSnip-form submit!!`);
+
     var submit = $(this).find('[type="submit"]');
-    $(submit).attr('disabled', true)
-    
+    $(submit).attr('disabled', true);
+
     var form = $(this),
-    url = form.attr('action');
-    
-    var ajax = $.ajax({url, type: 'PUT', data: form.serialize()})
+        url = form.attr('action');
+
+    console.log(`addSnip-form action? ${url}`);
+
+    var ajax = $.ajax({ url, type: 'PUT', data: form.serialize() })
         .then(res => {
             console.log("Results from put snippet in user's library: ", res);
             // return res;
+            alert('Snippet saved!');
         })
         .fail(err => {
 
             console.log("Error in put snippet in user's library", err);
-            
+
             // Re-enable submit button
             $(submit).attr('disabled', false);
 
             // TODO TODO TODO:  Show login modal
             alert(err);
-            
+
             throw err;
         }
-    );
-    
+        );
 });
 
 $(document.body).on('submit', '.removeSnip-form', function(event) 
 {
     event.preventDefault();
 
-    console.log(`removeSnip-form submit! ${event.target}`);
+    //console.log(`removeSnip-form submit! ${event.target}`);
 
     var submit = $(this).find('[type="submit"]');
     $(submit).attr('disabled', true);  
 
     var target = $(submit.data('target'));
 
-    console.log(`remove target? ${target}`);
+    //console.log(`remove target? ${target}`);
 
-
-    // &#128542;
     const remove = confirm('You really wanna remove me? 😞');
     console.log(`remove? ${remove}`);
     if (remove) 
@@ -170,7 +214,7 @@ $(document.body).on('submit', '.removeSnip-form', function(event)
 // {
 //     e.preventDefault()
 
-//     console.log(`profileList a clicked!`);
+//     //console.log(`profileList a clicked!`);
 
     
 //     // add active class only on mobile devices -- other devices are auto selected
@@ -203,7 +247,7 @@ $(document.body).on('submit', '.removeSnip-form', function(event)
 
 $('#lib-nav a').click(function(e) {
 
-    console.log(`Library nav clicked! ${e.target}`);
+    //console.log(`Library nav clicked! ${e.target}`);
 
     var editor = $(this).data('editor');
     var scope = $(this).data('scope');
@@ -220,7 +264,7 @@ $('#lib-nav a').click(function(e) {
 
 // const filterClick = (e) => 
 // {
-//     console.log(`btn-scope-filter clicked! ${$(e).data('scope')}`);
+//     //console.log(`btn-scope-filter clicked! ${$(e).data('scope')}`);
     
 //     var scope = $(e).data('scope');
 //     var ext = $(e).data('ext');
@@ -258,18 +302,18 @@ const download = (filename, type, text) =>
 
 $('#export-form').submit((e) => 
 {
-    // console.log(`Export form submit! ${$('this').attr('action')}`);
+    // //console.log(`Export form submit! ${$('this').attr('action')}`);
 
     e.preventDefault();
 
     var form = $('#export-form'),
         url = form.attr('action');
 
-    console.log(`url? ${form.attr('action')}`);
+    //console.log(`url? ${form.attr('action')}`);
 
     $.ajax(url)
         .then(res => {
-            console.log("Results export form submit", res.error);
+            //console.log("Results export form submit", res.error);
             if (!res.error)
             {
                 download(res.name, res.type, res.text);
@@ -280,7 +324,7 @@ $('#export-form').submit((e) =>
             
         })
         .fail(err => {
-            console.log("Error export form submit", err);
+            //console.log("Error export form submit", err);
             throw err;
         });
 
@@ -294,7 +338,7 @@ function loadSnippetsAtUrlIntoTemplate(url, tempId, parentId, editor=null)
     // Then is a javascript "Promises"
     getDataFromURL(url)
         .then(results => {
-            // console.log(`currentUser? ${results.currentUser}`);
+            // //console.log(`currentUser? ${results.currentUser}`);
 
             // Toggle export button if parent is snippets-row (profile)
             if (parentId === '#snippets-row') 
@@ -302,8 +346,8 @@ function loadSnippetsAtUrlIntoTemplate(url, tempId, parentId, editor=null)
                 let disabled = !results.snippets.length || editor==='sublime'
                 $('#export-btn').attr('disabled', disabled);
             }
-            
-            
+
+            console.log(`loadSnippetsAtUrlIntoTemplate currentUser? ${results.currentUser}`);
             const data = {
                 snippets: results.snippets,
                 currentUser: results.currentUser
@@ -317,15 +361,15 @@ function loadSnippetsAtUrlIntoTemplate(url, tempId, parentId, editor=null)
 
 
 function getDataFromURL(url) {
-    console.log(`getDataFromURL? ${url}`);
+    //console.log(`getDataFromURL? ${url}`);
     // then and fail are like "Promises" fail is "Catch-ish"
     return $.ajax(url)
         .then(res => {
-            console.log("Results from getDataFromURL()", res);
+            //console.log("Results from getDataFromURL()", res);
             return res;
         })
         .fail(err => {
-            console.log("Error in getDataFromURL()", err);
+            //console.log("Error in getDataFromURL()", err);
             throw err;
         });
 }

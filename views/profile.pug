@@ -61,7 +61,7 @@ block content
                             each aScope in scopes
                                 - var scopeStrArray = aScope.split('.')
                                 - var editorStr = activeEditor.replace(' ', '_').toLowerCase()
-                                li.list-inline-item
+                                li.list-inline-item.mb-2
                                     a.btn.btn-scope-filter(href=`/profile/${editorStr}/${scopeStrArray[0]}/${scopeStrArray[1]}`, class=fullScope === aScope ? 'back-red' : 'btn-secondary') #{scopeStrArray[1]}
                     form#export-form(action=`/snippets/export/user/${currentUser}/editor/${activeEditor}/${activeScope}/${ext}`, method="GET")
                         input.form-control(type="hidden", name="uID", value=currentUser)

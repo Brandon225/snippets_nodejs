@@ -38,14 +38,16 @@ block content
                                 li.list-group-item trigger:
                                     span.text-ltgrey  #{snip.trigger}                                    
                             .card-body
-                                if snip.userId === currentUser
+                                //- user logged in and owns the snippet
+                                if snip.userId === currentUser 
                                     //- // remove snippet form
                                     form.lib-form.form-inline.removeSnip-form.form.mb-0(action='/snippets/' + snip._id + '/user/' + currentUser, method="DELETE")
                                         input.form-control(type="hidden", name="snipID", value=snip._id)
                                         input.form-control(type="hidden", name="uID", value=currentUser)
                                         button.lib-remove.card-link.text-red.hover-ltgrey(type="submit", data-target=`#card-${snip._id}`) remove
+                                //- user is logged in but does not own snippet
                                 else if currentUser
-                                    // add snippet form
+                                    //- // add snippet form
                                     form.lib-form.addSnip-form.form.mb-0(action='/snippets/' + snip._id + '/user/' + currentUser, method="PUT")
                                         input.form-control(type="hidden", name="snipID", value=snip._id)
                                         input.form-control(type="hidden", name="uID", value=currentUser)

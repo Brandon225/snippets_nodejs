@@ -1,6 +1,8 @@
 var mongoose = require('mongoose');
 var bcrypt = require('bcrypt');
 
+mongoose.Promise = global.Promise
+
 var UserSchema = new mongoose.Schema({
     email: {
         type: String,
@@ -31,7 +33,8 @@ var UserSchema = new mongoose.Schema({
 },
 {
     usePushEach: true
-});
+}
+);
 
 // hash password before saving to db
 // UserSchema.pre('save', function(next) 
@@ -78,12 +81,14 @@ UserSchema.method('addScope', function (scope, callback)
     // Check if scope already exits in scopes
     let duplicates = this.scopes.filter(scpe => scpe === scope);
     
-    console.log(`duplicates? ${duplicates}`);
-    if (!duplicates.length) 
-    {
+    // console.log(`duplicates? ${duplicates}`);
+    // if (!duplicates.length) 
+    // {
         this.scopes.push(scope);
         this.save(callback);
-    }
+    // } else {
+    //     return new Error('duplicate scope');
+    // }
     
 });
 

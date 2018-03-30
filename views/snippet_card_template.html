@@ -22,23 +22,25 @@
                 </li>
             </ul>
             <div class="card-body">
+                <p>{{../currentUser}}{{userId}}</p>
                 {{#if ../currentUser}}
                     {{#ifCond ../currentUser '===' userId}}
+                        
                         <form class="lib-form form-inline removeSnip-form form mb-0" action="/snippets/{{_id}}/user/{{userId}}?method=delete" method="POST">
                             <input type="hidden" class="form-control" name="snipId" value={{_id}}>
-                            <input type="hidden" class="form-control" name="uId" value={{userId}}>
+                            <input type="hidden" class="form-control" name="uID" value={{userId}}>
                             <button class="lib-remove card-link text-red hover-ltgrey" data-target="#card-{{_id}}" type="submit">remove</button>
                         </form>
                     {{/ifCond}}
                     {{#ifCond ../currentUser '!==' userId}}
-                        <form class="lib-form form-inline addSnip-form form mb-0" action="/snippets/{{_id}}/user/{{userId}}" method="PUT">
+                        <form class="lib-form form-inline addSnip-form form mb-0" action="/snippets/{{_id}}/user/{{../currentUser}}" method="PUT">
                             <input type="hidden" class="form-control" name="snipID" value={{_id}}>
-                            <input type="hidden" class="form-control" name="uID" value={{userId}}>
+                            <input type="hidden" class="form-control" name="uID" value={{../currentUser}}>
                             <button class="lib-add card-link text-green hover-ltgrey" type="submit">add</button>
                         </form>
                     {{/ifCond}}
                 {{else}}
-                <a class="lib-add card-link text-green hover-ltgrey" href="#">add</a>
+                <a id="login-add" class="lib-add card-link text-green hover-ltgrey" href="#">add</a>
                 {{/if}}
             </div>
         </div>

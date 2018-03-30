@@ -19,13 +19,13 @@ router.param('uID', (req, res, next, id) => {
             return next(err);
         }
         req.user = doc;
-        console.log(`req.user? ${req.user}`);
+        //console.log(`req.user? ${req.user}`);
         return next();
     });
 });
 
 router.param('snipID', (req, res, next, id) => {
-    // console.log(`param snipID? ${id}`);
+    // //console.log(`param snipID? ${id}`);
     Snippet.findById(id, (err, doc) => {
         if(err) return next(err);
         if (!doc) {
@@ -34,7 +34,7 @@ router.param('snipID', (req, res, next, id) => {
             return next(err);
         }
         req.snippet = doc;
-        // console.log(`snippets req.snippet? ${req.snippet}`);
+        // //console.log(`snippets req.snippet? ${req.snippet}`);
         
         return next();
     });
@@ -63,14 +63,14 @@ router.get('/editor/:editor', (req, res, next) => {
         .exec((err, snippets) => {
             if (err)
             {
-                // console.log(`findUserSnippetsForEditor err: ${err}`);
+                // //console.log(`findUserSnippetsForEditor err: ${err}`);
                 return res.json({
                     success: null,
                     error: 'There was an issue removing this snippet!',
                     snippets: null
                 });
             } 
-            // console.log(`findUserSnippetsForEditor success: ${snippets}`);
+            // //console.log(`findUserSnippetsForEditor success: ${snippets}`);
             
             return res.json({
                 success: 'Successfully loaded snippets',
@@ -87,18 +87,18 @@ router.get('/editor/:editor/scope/:scope/:ext', (req, res, next) => {
     let { editor } = req.params;
     let fullScope = `${req.params.scope}.${req.params.ext}`;
 
-    // console.log(`fullScope? ${fullScope}`);
+    // //console.log(`fullScope? ${fullScope}`);
 
     Snippet.find({ editor: editor, scope: fullScope , duplicated: { $ne: true } })
         .exec((err, snippets) => {
             if (err) {
-                // console.log(`findUserSnippetsForEditor err: ${err}`);
+                // //console.log(`findUserSnippetsForEditor err: ${err}`);
                 return res.status(404).end(`Could not find snippets for '${editor}'`)
 
             }
-            // console.log(`findUserSnippetsForEditor success: ${res.locals.currentUser}`);
+            //console.log(`findUserSnippetsForEditor success: ${req.session.userId}`);
 
-            return res.json({ snippets, currentUser: res.locals.currentUser});
+            return res.json({ snippets, currentUser: req.session.userId});
         });
 });
 
@@ -109,10 +109,10 @@ router.get('/user/:uID/editor/:editor', (req, res, next) => {
     let { uID } = req.params;
     let { editor } = req.params;
 
-    // console.log(`get snippets for editor: ${editor}`);
+    // //console.log(`get snippets for editor: ${editor}`);
     Snippet.findUserSnippetsForEditor(uID, editor, (err, snippets) => {
         if (err) return next(err);
-        return res.json({ snippets, currentUser: res.locals.currentUser });
+        return res.json({ snippets, currentUser: req.session.userId });
     });
 });
 
@@ -125,37 +125,37 @@ router.get('/export/user/:uID/editor/:editor/:scope/:ext', (req, res, next) =>
 
     let scope = `${req.params.scope}.${req.params.ext}`;
     
-    // console.log(`export snippets for editor ${editor} scope ${scope}.`);
-    // console.log(`get snippets for editor: ${editor}`);
+    // //console.log(`export snippets for editor ${editor} scope ${scope}.`);
+    // //console.log(`get snippets for editor: ${editor}`);
 
     Snippet.findUserSnippetsForEditorAndScope(uID, editor, scope, (err, snippets) => {
         if (err) return next(err);
 
-        console.log(`export snippets for editor? ${editor}`);
+        //console.log(`export snippets for editor? ${editor}`);
         var data = exportLogic.exportSnippetsForEditor(snippets, editor, scope);
         
-        console.log(`data? ${JSON.stringify(data)}`);
+        //console.log(`data? ${JSON.stringify(data)}`);
         if (data.error) return res.json({error});
         
         let text = data.text;//JSON.stringify(data.text);
         let type = data.type;
         let name = data.name;
         return res.json({ text, type, name });
-        // return res.json({ snippets, currentUser: res.locals.currentUser });
+        // return res.json({ snippets, currentUser: req.session.userId });
     });
 });
 
 const end = (res) => 
 {
-    console.log(`end: ${res}`);
+    //console.log(`end: ${res}`);
     res.end();
 }
 
 // POST /snippets
 // Route for creating snippets
-router.post('/post', (req, res, next) => {
-
-    console.log(`save snippet!`);
+router.post('/post', (req, res, next) => 
+{
+    //console.log(`save snippet!`);
 
     // SETTING HEADER IS NECESSARY FOR AJAX CLIENTSIDE CALLS
     res.setHeader('Content-Type', 'application/json');
@@ -170,35 +170,33 @@ router.post('/post', (req, res, next) => {
         content: req.body.snippet_output
     };
 
-    console.log(`snippetData? ${snippetData}`);
+    //console.log(`snippetData? ${snippetData}`);
 
     var snippet = new Snippet(snippetData);
     snippet.save((err, snippet) => {
-        console.log(`POST snippet err? ${err}`);
+        //console.log(`POST snippet err? ${err}`);
         if (err) return next(err);
-        console.log(`res.locals.currentUser? ${res.locals.currentUser}`);
-        if (res.locals.currentUser) 
+        //console.log(`req.session.userId? ${req.session.userId}`);
+        if (req.session.userId) 
         {   
 
-            User.findById(res.locals.currentUser, (err, user) => {
+            User.findById(req.session.userId, (err, user) => {
                 if (err) return next(err);
                 if (user) 
                 {
-                    console.log(`post snippet user? ${user}`);
+                    //console.log(`post snippet user? ${user}`);
 
                     // Add snippet's id to user's snippets
                     user.addSnippet(snippet._id, function (err, result) {
                         if (err) return next(err);
-                        console.log(`Updated user's snippets!  ${result}`);
+                        //console.log(`Updated user's snippets!  ${result}`);
 
                         user.addScope(snippet.scope, function (err, result) {
                             if (err) return next(err);
-                            console.log(`Updated user's scopes!  ${result}`);
+                            //console.log(`Updated user's scopes!  ${result}`);
 
                             res.status(201);
                             res.json(snippet);
-
-                            
                         });
 
                     });
@@ -216,16 +214,20 @@ router.post('/post', (req, res, next) => {
 
 // PUT /snippet/:snipID/user/:uID  -- 
 // Route for inserting duplicate snippet into user's library
-router.put('/:snipID/user/:uID', (req, res, next) => {
-    console.log(`add snippet! ${req.snippet}`);
+router.put('/:snipID/user/:uID', (req, res, next) => 
+{
+    //console.log(`PUT snippet in users library! ${req.snippet}`);
     
-    if (req.session && req.session.userId) 
+    
+    if (req.session && req.session.userId)
     {
-        console.log(`add-snippet user logged in req.snippet? ${req.snippet}`);
-        if (req.snippet) 
+        //console.log(`PUT snippet in users library user logged in req.session.userId? body ${req.params.uID} session ${req.session.userId} user ${req.user._id}`);
+        // //console.log(`PUT snippet in users library user scope? ${req.snippet.scope}`);
+
+        if (req.snippet)
         {
             var snippetData = {
-                userId: req.user._id,
+                userId: req.params.uID,
                 editor: req.snippet.editor,
                 scope: req.snippet.scope,
                 description: req.snippet.description,
@@ -234,6 +236,8 @@ router.put('/:snipID/user/:uID', (req, res, next) => {
                 content: req.snippet.content,
                 duplicated: true
             };
+
+            //console.log(`snippetData? ${JSON.stringify(snippetData)}`);
 
             // Insert the Snippets scope into the users scopes array -- SCOPE OF CODE LANGUAGES
             Snippet.create(snippetData, (error, snippet) => {
@@ -248,16 +252,17 @@ router.put('/:snipID/user/:uID', (req, res, next) => {
         
                 } else {
                     
-                    console.log(`Created newSnippet! ${snippet}`);
+                    //console.log(`Created newSnippet! ${snippet}`);
                     
                     // Add snippet's id to user's snippets
                     req.user.addSnippet(snippet._id, function(err, result) {
                         if(err) return next(err);
-                        console.log(`Updated user's snippets!  ${result}`);
+
+                        //console.log(`Updated user's snippets!  ${result}`);
 
                         req.user.addScope(snippet.scope, function (err, result) {
                             if (err) return next(err);
-                            console.log(`Updated user's scopes!  ${result}`);
+                            //console.log(`PUT snippet Updated user's scopes!  ${result}`);
                             
                             res.json({
                                 success: `Successfully added snippet!`,
@@ -273,7 +278,7 @@ router.put('/:snipID/user/:uID', (req, res, next) => {
             });
         } else {
             
-            console.log(`Error! No req snippet! ${req.snippet}`);
+            //console.log(`Error! No req snippet! ${req.snippet}`);
 
             const error = new Error('There was an issue adding snippet!');
             error.status = 404;
@@ -282,7 +287,7 @@ router.put('/:snipID/user/:uID', (req, res, next) => {
 
     } else {
 
-        console.log(`Add snippet ERROR!`);
+        //console.log(`Add snippet ERROR!`);
 
         // return error response
         res.send({
@@ -300,14 +305,14 @@ router.put('/:snipID/user/:uID', (req, res, next) => {
 // Route for deleting snippet from user's library
 router.delete('/:snipID/user/:uID', mid.requiresLogin, (req, res, next) => {
     
-    console.log(`Delete snippet called!`);
+    //console.log(`Delete snippet called!`);
 
     if (req.snippet.userId === req.session.userId) 
     {
-        console.log(`Snippet is owned by logged in user!`);
+        //console.log(`Snippet is owned by logged in user!`);
         if (req.snippet) 
         {
-            console.log(`Req snippet does exist!`);
+            //console.log(`Req snippet does exist!`);
             
             // Remove snippet from user's snippets
             req.user.removeSnippet(req.snippet._id, function(err, result) 
@@ -318,7 +323,7 @@ router.delete('/:snipID/user/:uID', mid.requiresLogin, (req, res, next) => {
                         error: 'There was an issue removing this snippet!'
                     });
                 }
-                console.log(`Removed snippet from users list!`);
+                //console.log(`Removed snippet from users list!`);
                 
                 // Remove snippet from snippets collection
                 req.snippet.remove((err) => {
@@ -339,7 +344,7 @@ router.delete('/:snipID/user/:uID', mid.requiresLogin, (req, res, next) => {
 
         } else {
         
-            console.log(`Req snippet does NOT exist!`);
+            //console.log(`Req snippet does NOT exist!`);
             
             return res.json({
                 success: null,
@@ -348,7 +353,7 @@ router.delete('/:snipID/user/:uID', mid.requiresLogin, (req, res, next) => {
         }
     } else {
 
-        console.log(`Snippet is NOT owned by logged in user!`);
+        //console.log(`Snippet is NOT owned by logged in user!`);
         
         // return error response
         return res.json({
