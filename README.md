@@ -59,7 +59,7 @@ nodemon
 
 ### Delete<a name="delete"></a>
 * Any snippet you have created can be deleted in the public library or your profile page (http://localhost:3000/library/atom) (http://localhost:3000/profile/visual_studio_code/source/js). The user's account is updated by removing the snippet from their snippet list.  The snippet is also removed from the snippets document.
-* Any snippet you have duplicate or created can be deleted from your profile page  (http://localhost:3000/profile/visual_studio_code/source/js). The user's account is updated by removing the snippet from their snippet list.  The snippet is also removed from the snippets document.
+* Any snippet you have duplicated or created can be deleted from your profile page  (http://localhost:3000/profile/visual_studio_code/source/js). The user's account is updated by removing the snippet from their snippet list.  The snippet is also removed from the snippets document.
 
 ## Formatting<a name="formatting"></a>
 
