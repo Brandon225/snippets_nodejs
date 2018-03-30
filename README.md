@@ -9,11 +9,57 @@ This app allows developers to easily migrate their snippets when moving to a new
 ### Table of Contents
 
 - [Snippets - A text editor snippet converter](#snippets)
+	- [Running on your computer](#running)
+	- [CRUD functionality](#crud)
+		- [Create](#create)
+		- [Read](#read)
+		- [Update](#update)
+		- [Delete](#delete)
 	- [Formatting](#formatting)
 		- [Atom](#atom)
 		- [Brackets](#brackets)
 		- [Sublime Text](#sublime-text)
 		- [Visual Studio Code](#vis-code)
+
+
+## Running on your computer<a name="running"></a>
+*Run the following scripts in terminal.*
+
+>**cd into the project's root directory**
+```
+cd <root directory>
+```
+>**Install packages**
+```
+npm install
+```
+>**Start Mongo**
+```
+mongod
+```
+
+>**Start server**
+```
+nodemon
+```
+
+## CRUD<a name="crud"></a>
+
+### Create<a name="create"></a>
+* Register an account (http://localhost:3000/register). A user document is created.
+* On the homepage (http://localhost:3000) create a snippet. A snippet document is created.
+
+### Read<a name="read"></a>
+* View snippets in the public library (http://localhost:3000/library/atom). Snippets documents are read.
+* View snippets you have created in your profile (http://localhost:3000/profile/visual_studio_code/source/js). Snippets documents associated with your account are read.
+
+### Update<a name="update"></a>
+*  Update your account by adding snippets from the public library (http://localhost:3000/library/atom).  Selected snippets are duplicated and the user document's snippets list is updated with the new snippets id.  The user documents scope list is also updated with the snippets scope.
+
+
+### Delete<a name="delete"></a>
+* Any snippet you have created can be deleted in the public library or your profile page (http://localhost:3000/library/atom) (http://localhost:3000/profile/visual_studio_code/source/js). The user's account is updated by removing the snippet from their snippet list.  The snippet is also removed from the snippets document.
+* Any snippet you have duplicate or created can be deleted from your profile page  (http://localhost:3000/profile/visual_studio_code/source/js). The user's account is updated by removing the snippet from their snippet list.  The snippet is also removed from the snippets document.
 
 ## Formatting<a name="formatting"></a>
 
@@ -91,3 +137,5 @@ You can define your own snippets for specific languages. To open up a snippet fi
 ```
 
 [more info](https://code.visualstudio.com/docs/editor/userdefinedsnippets)
+
+
